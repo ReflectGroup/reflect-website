@@ -35,11 +35,11 @@ p{margin:0}
 #splash{position:fixed;inset:0;z-index:50;background:var(--paper);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .9s ease,transform .9s ease;padding:env(safe-area-inset-top,0px) var(--gutter-r) env(safe-area-inset-bottom,0px) var(--gutter-l)}
 #splash.leaving{opacity:0;transform:scale(1.03);pointer-events:none}
 #fluid{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
-#splash .mark{position:relative;z-index:2;text-align:center;pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:.4rem;transform:translateY(calc(min(42vw,36vh) + 1.2rem))}
+#splash .mark{position:relative;z-index:2;text-align:center;pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:.4rem;transform:translateY(calc(min(17vw,14.5vh) + 1.4rem))}
 #splash .word{font-family:var(--body);font-weight:200;font-size:clamp(2rem,4.6vw,3.1rem);letter-spacing:.02em;line-height:1;color:var(--ink)}
 #splash .word small{display:block;font-size:.38em;font-weight:300;color:var(--mute);letter-spacing:.14em;text-transform:uppercase;margin-top:.55rem}
 #splash .tag{font-family:var(--display);font-style:italic;font-weight:300;font-size:1.05rem;color:var(--ink-2);margin-top:.4rem}
-#enter{position:absolute;z-index:3;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 7vh);transform:translateX(-50%);font:inherit;font-weight:400;font-size:.78rem;letter-spacing:.22em;text-transform:uppercase;color:var(--ink);background:transparent;border:1px solid var(--mute);border-radius:999px;padding:.8rem 2.1rem;cursor:pointer;transition:background .3s,color .3s,border-color .3s}
+#enter{position:relative;z-index:3;pointer-events:auto;margin-top:1.6rem;font:inherit;font-weight:400;font-size:.78rem;letter-spacing:.22em;text-transform:uppercase;color:var(--ink);background:transparent;border:1px solid var(--mute);border-radius:999px;padding:.8rem 2.1rem;cursor:pointer;transition:background .3s,color .3s,border-color .3s}
 #enter:hover{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 #hint{position:absolute;z-index:3;left:var(--gutter-l);top:calc(env(safe-area-inset-top,0px) + 1.4rem);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
 #splash .corner{position:absolute;z-index:3;right:var(--gutter-r);top:calc(env(safe-area-inset-top,0px) + 1.4rem);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);text-align:right}
@@ -139,8 +139,8 @@ footer.site .brand b{font-size:.9rem}
   <div class="mark">
     <div class="word">Reflect<small>Group</small></div>
     <div class="tag">Measured with care. Priced with confidence.</div>
+    <button id="enter" type="button">Enter</button>
   </div>
-  <button id="enter" type="button">Enter</button>
 </div>
 
 <header class="site">
@@ -319,7 +319,7 @@ function buildSvgRings(){
 function drawLogo(ctx,w,h,ghost){
   const stops=ringStops();
   ctx.clearRect(0,0,w,h);
-  const R=Math.min(w,h)*0.26, cx=w/2, cy=h/2-R*0.35;
+  const R=Math.min(w*0.26,h*0.22), cx=w/2, cy=h/2-R*0.35;
   const draw=(x,y,rad,alpha,rot)=>{
     const bw=(2*Math.PI*rad/BARS)*0.46;
     ctx.lineCap='butt'; ctx.lineWidth=bw; ctx.globalAlpha=alpha;
