@@ -148,6 +148,7 @@ main>section:nth-child(even){background:var(--paper-2)}
 #tagFixed{position:fixed;left:var(--gutter-l);top:calc(env(safe-area-inset-top,0px) + 1.35rem);z-index:20;font-family:var(--display);font-style:italic;font-size:clamp(1.05rem,1.6vw,1.4rem);line-height:1.25;color:#f5f1ea;text-shadow:0 1px 14px rgba(0,0,0,.45);max-width:calc(100vw - 7rem);white-space:nowrap;pointer-events:none;transition:color .5s,text-shadow .5s}
 #tagFixed.ink{color:var(--ink);text-shadow:none}
 
+.hero-band{padding-block:0;border-top:0}
 /* ---------- Menu (three lines, top right) ---------- */
 #menuBtn{position:fixed;top:calc(env(safe-area-inset-top,0px) + 1.1rem);right:calc(env(safe-area-inset-right,0px) + 1.1rem);z-index:30;width:3rem;height:3rem;border:0;border-radius:50%;background:color-mix(in srgb,var(--paper) 72%,transparent);backdrop-filter:blur(8px);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:0}
 #menuBtn span{display:block;width:1.15rem;height:1.5px;background:var(--ink);transition:transform .35s ease,opacity .25s ease}
@@ -334,7 +335,8 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
     <div class="cue" aria-hidden="true"></div>
   </section>
 
-  <section class="wrap hero">
+  <section class="band hero-band">
+  <div class="wrap hero">
     <div>
       <div class="eyebrow">Reflect Group</div>
       <p class="lede">Reflect Group is a quantity surveying and estimating practice providing pre-tender cost services to builders, developers and architects. The practice provides cost planning, builder's bills of quantities, estimating and subcontractor quote comparison as separate services, each prepared from the issued design documentation and delivered in the form in which it will be used.</p>
@@ -347,6 +349,7 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
       </dl>
       <button class="btn" type="button" data-open-form>Request a fee proposal <span aria-hidden="true">&rarr;</span></button>
     </div>
+  </div>
   </section>
 
   <section class="band statement" id="tagline">
