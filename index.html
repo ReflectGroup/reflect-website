@@ -155,8 +155,9 @@ main>section:nth-child(even){background:var(--paper-2)}
 /* Ring-fragment watermarks on the lighter sections */
 main>section{position:relative;overflow:hidden}
 main>section>.wrap{position:relative;z-index:1}
-.wm{position:absolute;z-index:0;pointer-events:none;opacity:.2}
-.wm line{stroke:var(--bronze);stroke-width:6;stroke-linecap:butt}
+.wmbox{position:absolute;top:0;bottom:0;z-index:0;overflow:hidden;pointer-events:none}
+.wm{position:absolute;opacity:.17;overflow:visible}
+.wm line{stroke:var(--bronze);stroke-width:9;stroke-linecap:butt}
 
 /* ---------- Menu (three lines, top right) ---------- */
 #menuBtn{position:fixed;top:calc(env(safe-area-inset-top,0px) + 1.1rem);right:calc(env(safe-area-inset-right,0px) + 1.1rem);z-index:30;width:3rem;height:3rem;border:0;border-radius:50%;background:color-mix(in srgb,var(--paper) 72%,transparent);backdrop-filter:blur(8px);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:0}
@@ -863,31 +864,37 @@ addEventListener('keydown',e=>{ if(!splash.hidden && (e.key==='Enter'||e.key==='
 })();
 
 
-/* Ring-fragment watermarks: a random arc of the mark, placed at a random edge of each lighter section, new each load */
+/* Ring-fragment watermarks: the mark emerges from the left or right edge of each lighter section, confined to the
+   margin outside the text column so it never sits under copy. Bars run from beyond the page edge to a smooth,
+   gently undulating inner curve. Side, size, position and curve are new on each load; rebuilt on resize. */
 (function(){
-  const secs=[...document.querySelectorAll('main>section')].filter((el,i)=>i>0 && i%2===0); /* odd-numbered sections after the reel = lighter tone */
-  const R=380, BARS=80;
-  secs.forEach(sec=>{
-    const span=70+Math.random()*90;            /* arc length, degrees */
-    const side=['left','right','top','bottom'][Math.floor(Math.random()*4)];
-    const facing={left:0,right:180,top:270,bottom:90}[side];   /* the arc faces into the page */
-    const start=facing-span/2+(Math.random()*40-20);
-    const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
-    svg.setAttribute('class','wm'); svg.setAttribute('viewBox','0 0 1000 1000'); svg.setAttribute('aria-hidden','true');
-    const size=900+Math.random()*500; svg.style.width=size+'px'; svg.style.height=size+'px';
-    const off=-(size*(0.45+Math.random()*0.2));
-    if(side==='left'){svg.style.left=off+'px';svg.style.top=(Math.random()*60-30)+'%';}
-    if(side==='right'){svg.style.right=off+'px';svg.style.top=(Math.random()*60-30)+'%';}
-    if(side==='top'){svg.style.top=off+'px';svg.style.left=(Math.random()*70)+'%';}
-    if(side==='bottom'){svg.style.bottom=off+'px';svg.style.left=(Math.random()*70)+'%';}
-    let h='';
-    for(let i=0;i<BARS;i++){
-      const deg=i*360/BARS; let d=((deg-start)%360+360)%360; if(d>span) continue;
-      const r=deg*Math.PI/180, x1=500+Math.cos(r)*R*0.69, y1=500-Math.sin(r)*R*0.69, x2=500+Math.cos(r)*R, y2=500-Math.sin(r)*R;
-      h+=`<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}"/>`;
-    }
-    svg.innerHTML=h; sec.prepend(svg);
-  });
+  const secs=[...document.querySelectorAll('main>section')].filter((el,i)=>i>0 && i%2===0);
+  const BARS=80, R=500;
+  function build(){
+    document.querySelectorAll('.wmbox').forEach(e=>e.remove());
+    const margin=Math.floor((innerWidth-1120)/2)-28;   /* space outside the text column */
+    if(margin<110) return;
+    secs.forEach(sec=>{
+      const side=Math.random()<0.5?'left':'right';
+      const box=document.createElement('div'); box.className='wmbox'; box.style[side]='0'; box.style.width=margin+'px';
+      const size=Math.max(1000,margin*4+Math.random()*600);
+      const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+      svg.setAttribute('class','wm'); svg.setAttribute('viewBox','0 0 1000 1000'); svg.setAttribute('aria-hidden','true');
+      svg.style.width=size+'px'; svg.style.height=size+'px';
+      /* centre beyond the page edge; the inner curve reaches about the margin width into the page */
+      const reach=margin*(0.75+Math.random()*0.25);
+      svg.style[side]=(reach-size*0.62-size/2)+'px';
+      svg.style.top=(Math.random()*60-30)+'%';
+      const phase=Math.random()*Math.PI*2, waves=2+Math.floor(Math.random()*3), amp=0.04+Math.random()*0.05;
+      let h='';
+      for(let i=0;i<BARS;i++){
+        const a=i/BARS*Math.PI*2, rin=R*(0.62+amp*Math.sin(waves*a+phase)), rout=R*1.7;
+        h+=`<line x1="${(500+Math.cos(a)*rin).toFixed(1)}" y1="${(500-Math.sin(a)*rin).toFixed(1)}" x2="${(500+Math.cos(a)*rout).toFixed(1)}" y2="${(500-Math.sin(a)*rout).toFixed(1)}"/>`;
+      }
+      svg.innerHTML=h; box.appendChild(svg); sec.prepend(box);
+    });
+  }
+  build(); let t; addEventListener('resize',()=>{clearTimeout(t);t=setTimeout(build,250);});
 })();
 
 document.querySelectorAll('.copy').forEach(b=>b.addEventListener('click',()=>{
