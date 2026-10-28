@@ -152,7 +152,7 @@ nav.main a:hover{color:var(--ink);border-color:var(--sand)}
 @media (max-width:820px){.svc-row{grid-template-columns:1fr;gap:1rem}.svc-row.principal{padding-left:1rem;margin-left:-1rem;padding-right:1rem;margin-right:-1rem}}
 @media (max-width:560px){.svc-cols{grid-template-columns:1fr}}
 
-#tagFixed{position:fixed;left:var(--gutter-l);top:calc(env(safe-area-inset-top,0px) + 1.35rem);z-index:20;font-family:var(--display);font-style:italic;font-size:clamp(1.05rem,1.6vw,1.4rem);line-height:1.2;color:#f5f1ea;text-shadow:0 1px 14px rgba(0,0,0,.45);max-width:calc(100vw - 7rem);pointer-events:none;transition:color .5s,text-shadow .5s}
+#tagFixed{position:fixed;left:var(--gutter-l);top:calc(env(safe-area-inset-top,0px) + 1.35rem);z-index:20;font-family:var(--display);font-style:italic;font-size:clamp(1.05rem,1.6vw,1.4rem);line-height:1.25;color:#f5f1ea;text-shadow:0 1px 14px rgba(0,0,0,.45);max-width:calc(100vw - 7rem);white-space:nowrap;pointer-events:none;transition:color .5s,text-shadow .5s}
 #tagFixed.ink{color:var(--ink);text-shadow:none}
 
 /* ---------- Menu (three lines, top right) ---------- */
@@ -271,7 +271,7 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
   </div>
 </div>
 
-<div id="tagFixed" aria-hidden="true">Measured with care. Priced with confidence.</div>
+<div id="tagFixed" aria-hidden="true">Measured with care.<br>Priced with confidence.</div>
 <button id="menuBtn" type="button" aria-label="Menu" aria-expanded="false" aria-controls="menu"><span></span><span></span><span></span></button>
 <div id="menu" aria-hidden="true">
   <div class="inner">
