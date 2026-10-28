@@ -541,20 +541,20 @@ addEventListener('keydown',e=>{ if(!splash.hidden && (e.key==='Enter'||e.key==='
   const slides=[...document.querySelectorAll('.reel .slide')]; if(!slides.length) return;
   /* One entry per image, in order (images/project-01.jpg ... project-14.jpg): [project name, one-line detail] */
   const PROJECTS=[
-    ['Project one','Residential apartments'],
-    ['Project two','Townhouses'],
-    ['Project three','Residential apartments'],
-    ['Project four','Residential apartments'],
-    ['Project five','Industrial'],
-    ['Project six','Commercial'],
-    ['Project seven','Townhouses'],
-    ['Project eight','Residential apartments'],
-    ['Project nine','Residential apartments'],
-    ['Project ten','Commercial fit-out'],
-    ['Project eleven','Townhouses'],
-    ['Project twelve','Townhouses'],
-    ['Project thirteen','Industrial'],
-    ['Project fourteen','Residential']
+    ['2-4 Urunga Parade, Miranda','Residential apartments'],
+    ['Babylon','Townhouses'],
+    ['Project 3806','Residential apartments'],
+    ['48 King Street, Kings Beach','Residential apartments'],
+    ['ESR Westlink','Industrial'],
+    ['29-41 Hutchinson Street, Surry Hills','Commercial'],
+    ['Project 3806','Residential apartments'],
+    ['48 King Street, Kings Beach','Residential apartments'],
+    ['2-4 Urunga Parade, Miranda','Residential apartments'],
+    ['29-41 Hutchinson Street, Surry Hills','Commercial'],
+    ['Babylon','Townhouses'],
+    ['Project 3806','Residential apartments'],
+    ['ESR Westlink','Industrial'],
+    ['48 King Street, Kings Beach','Residential apartments']
   ];
   const dots=document.getElementById('reelDots'), title=document.getElementById('reelTitle'); let i=0,t;
   const setTitle=k=>{const [nm,sub]=PROJECTS[k]||['','']; title.querySelector('.name').textContent=nm; title.querySelector('.sub').textContent=sub;};
