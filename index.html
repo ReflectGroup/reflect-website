@@ -152,16 +152,10 @@ main>section:nth-child(even){background:var(--paper-2)}
 #tagFixed.ink{color:var(--ink);text-shadow:none}
 
 .hero-band{padding-block:0;border-top:0}
-/* Ring-fragment watermarks on the lighter sections */
-main>section{position:relative;overflow:hidden}
-main>section>.wrap{position:relative;z-index:1}
-.wmbox{position:absolute;top:0;bottom:0;z-index:0;overflow:hidden;pointer-events:none}
-.wm{position:absolute;opacity:.17;overflow:visible}
-.wm line{stroke:var(--bronze);stroke-width:9;stroke-linecap:butt}
 
-.faq-wrap{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:2rem 4rem;align-items:center}
-.faq-mark{display:flex;justify-content:center;align-items:center}
-.faq-mark svg{width:min(100%,420px);height:auto}
+.faq-wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:2rem 4rem;align-items:stretch}
+.faq-mark{display:flex;justify-content:center;align-items:center;min-width:0}
+.faq-mark svg{width:100%;max-width:560px;max-height:100%;height:auto;aspect-ratio:1}
 .faq-mark svg line{stroke-width:1.4}
 @media (max-width:820px){.faq-wrap{grid-template-columns:1fr}.faq-mark svg{width:min(70%,320px)}}
 
@@ -873,38 +867,7 @@ addEventListener('keydown',e=>{ if(!splash.hidden && (e.key==='Enter'||e.key==='
 })();
 
 
-/* Ring-fragment watermarks: the mark emerges from the left or right edge of each lighter section, confined to the
-   margin outside the text column so it never sits under copy. Bars run from beyond the page edge to a smooth,
-   gently undulating inner curve. Side, size, position and curve are new on each load; rebuilt on resize. */
-(function(){
-  const secs=[...document.querySelectorAll('main>section')].filter((el,i)=>i>0 && i%2===0);
-  const BARS=80, R=500;
-  function build(){
-    document.querySelectorAll('.wmbox').forEach(e=>e.remove());
-    const margin=Math.floor((innerWidth-1120)/2)-28;   /* space outside the text column */
-    if(margin<110) return;
-    secs.forEach(sec=>{
-      const side=Math.random()<0.5?'left':'right';
-      const box=document.createElement('div'); box.className='wmbox'; box.style[side]='0'; box.style.width=margin+'px';
-      const size=Math.max(1000,margin*4+Math.random()*600);
-      const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
-      svg.setAttribute('class','wm'); svg.setAttribute('viewBox','0 0 1000 1000'); svg.setAttribute('aria-hidden','true');
-      svg.style.width=size+'px'; svg.style.height=size+'px';
-      /* centre beyond the page edge; the inner curve reaches about the margin width into the page */
-      const reach=margin*(0.75+Math.random()*0.25);
-      svg.style[side]=(reach-size*0.62-size/2)+'px';
-      svg.style.top=(Math.random()*60-30)+'%';
-      const phase=Math.random()*Math.PI*2, waves=2+Math.floor(Math.random()*3), amp=0.04+Math.random()*0.05;
-      let h='';
-      for(let i=0;i<BARS;i++){
-        const a=i/BARS*Math.PI*2, rin=R*(0.62+amp*Math.sin(waves*a+phase)), rout=R*1.7;
-        h+=`<line x1="${(500+Math.cos(a)*rin).toFixed(1)}" y1="${(500-Math.sin(a)*rin).toFixed(1)}" x2="${(500+Math.cos(a)*rout).toFixed(1)}" y2="${(500-Math.sin(a)*rout).toFixed(1)}"/>`;
-      }
-      svg.innerHTML=h; box.appendChild(svg); sec.prepend(box);
-    });
-  }
-  build(); let t; addEventListener('resize',()=>{clearTimeout(t);t=setTimeout(build,250);});
-})();
+/* (watermarks removed) */
 
 document.querySelectorAll('.copy').forEach(b=>b.addEventListener('click',()=>{
   const el=document.getElementById(b.dataset.copy), txt=el.textContent.trim();
