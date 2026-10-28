@@ -120,6 +120,14 @@ nav.main a:hover{color:var(--ink);border-color:var(--sand)}
 .f-msg.ok{color:var(--sand-deep)}
 .f-msg.err{color:#b0533a}
 
+.method.four{grid-template-columns:repeat(4,minmax(0,1fr));gap:2rem 2.4rem}
+.method.four h3{font-family:var(--display);font-weight:300;font-size:1.3rem}
+@media (max-width:900px){.method.four{grid-template-columns:1fr 1fr}}
+@media (max-width:480px){.method.four{grid-template-columns:1fr}}
+.svc .inc{list-style:none;margin:0;padding:0;display:grid;gap:.35rem;font-size:.88rem;color:var(--ink-2)}
+.svc .inc li{padding-left:1rem;position:relative}
+.svc .inc li::before{content:"";position:absolute;left:0;top:.6em;width:.35rem;height:1px;background:var(--sand)}
+
 /* ---------- Menu (three lines, top right) ---------- */
 #menuBtn{position:fixed;top:calc(env(safe-area-inset-top,0px) + 1.1rem);right:calc(env(safe-area-inset-right,0px) + 1.1rem);z-index:30;width:3rem;height:3rem;border:0;border-radius:50%;background:color-mix(in srgb,var(--paper) 72%,transparent);backdrop-filter:blur(8px);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:0}
 #menuBtn span{display:block;width:1.15rem;height:1.5px;background:var(--ink);transition:transform .35s ease,opacity .25s ease}
@@ -240,7 +248,7 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
 <div id="menu" aria-hidden="true">
   <div class="inner">
     <nav aria-label="Sections">
-      <a href="#services">Services</a><a href="#approach">How we work</a><a href="#work">Projects</a><a href="#about">About</a><a href="#contact">Contact</a>
+      <a href="#services">Services</a><a href="#approach">Methodology</a><a href="#work">Projects</a><a href="#about">About</a><a href="#contact">Contact</a>
     </nav>
     <div class="side">
       <a class="brand" href="#top"><svg class="ring" viewBox="0 0 100 100" aria-hidden="true"></svg><b>Reflect<small>Group</small></b></a>
@@ -256,8 +264,8 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
   <div class="modal-card">
     <button class="modal-x" type="button" aria-label="Close" data-close-form>&times;</button>
     <div class="eyebrow">Fee proposal</div>
-    <h2 id="rfpTitle">Tell us about the project.</h2>
-    <p class="modal-lede">A written fee proposal is usually returned within two business days. Drawings can be sent by email or a file-sharing link once we reply.</p>
+    <h2 id="rfpTitle">Project details.</h2>
+    <p class="modal-lede">A written fee proposal is ordinarily returned within two business days. Documentation may be forwarded by email or file-sharing link on receipt of the reply.</p>
     <form id="rfpForm" novalidate>
       <div class="f2">
         <label>Name<input type="text" id="rf-name" name="name" required autocomplete="name"></label>
@@ -307,48 +315,67 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
   <section class="wrap hero">
     <div>
       <div class="eyebrow">Reflect Group</div>
-      <p class="lede">A Sydney quantity surveying and estimating practice working with builders, developers and architects. We measure from the issued drawings and deliver bills and estimates arranged the way they will be priced.</p>
+      <p class="lede">Reflect Group is a Sydney-based quantity surveying and estimating practice providing pre-tender cost services to builders, developers and architects. The practice prepares cost plans, bills of quantities, estimates and tender comparisons from the issued design documentation, and delivers them in the form in which they will be priced.</p>
     </div>
     <div class="side">
       <dl class="kv">
-        <dt>Experience</dt><dd>Over 20 years measuring and pricing construction work</dd>
-        <dt>Focus</dt><dd>Pre-tender: cost plans, bills of quantities, estimates and quote comparison</dd>
-        <dt>Delivered as</dt><dd>A trade-packaged bill in the format you price in</dd>
+        <dt>Experience</dt><dd>More than twenty years in construction measurement and estimating</dd>
+        <dt>Scope</dt><dd>Pre-tender services: cost planning, bills of quantities, estimating and quote comparison</dd>
+        <dt>Engagement</dt><dd>Fixed fee per project, confirmed in writing before work commences</dd>
       </dl>
       <button class="btn" type="button" data-open-form>Request a fee proposal <span aria-hidden="true">&rarr;</span></button>
+    </div>
+  </section>
+
+  <section class="band" id="value">
+    <div class="wrap">
+      <div class="intro">
+        <div><div class="eyebrow">The measured bill</div><h2>Why tender from measured quantities.</h2></div>
+        <p>A tender priced from a measured bill of quantities rests on a known scope. Every trade prices the same items, every quantity can be traced to a drawing, and the figure submitted on tender day can be defended when the project proceeds.</p>
+      </div>
+      <div class="method four">
+        <article><h3>Like-for-like pricing</h3><p>When subcontractors price identical measured quantities, their quotations can be compared on rate and scope alone. Differences in interpretation of the drawings are removed before they become differences in price.</p></article>
+        <article><h3>Tender accuracy</h3><p>Allowances and rule-of-thumb rates carry risk in both directions. A measured bill replaces them with quantities taken from the documents, narrowing the margin between the tender figure and the cost of the work.</p></article>
+        <article><h3>Scope certainty</h3><p>The bill records what has been measured, what has been assumed and what has been carried as a provisional or coverall item. The builder enters the tender knowing where the documentation is complete and where it is not.</p></article>
+        <article><h3>A basis for the contract</h3><p>Once the tender is successful, the same quantities serve as the reference for subcontract letting, progress claims and the assessment of variations throughout the project.</p></article>
+      </div>
     </div>
   </section>
 
   <section class="band" id="services">
     <div class="wrap">
       <div class="intro">
-        <div><div class="eyebrow">Services</div><h2>From first sketch to tender day.</h2></div>
-        <p>Each service is quoted as a fixed fee before the drawings are opened, so the cost of the work is known at the start. Pick the stage your project is at.</p>
+        <div><div class="eyebrow">Services</div><h2>Cost services from feasibility to tender.</h2></div>
+        <p>Each service is quoted as a fixed fee against the documentation issued at the time of the proposal. The services may be commissioned individually or in combination as a project progresses from concept design to tender.</p>
       </div>
       <div class="services">
         <article class="svc">
-          <div class="stage">Feasibility and design</div>
+          <div class="stage">Feasibility and design development</div>
           <h3>Cost Planning</h3>
-          <p>Elemental cost plans at concept, development application and construction certificate stage, with benchmarks drawn from tendered projects. Each plan is updated as the design develops so the budget is tested before it is committed, not after.</p>
-          <div class="basis">Owners, developers and architects</div>
+          <p>Elemental cost plans prepared at concept, development application and construction certificate stage, benchmarked against tendered projects of comparable type and scale. Each plan is revised as the design develops, so that the budget is tested against the documentation before it is committed and the cost consequences of design decisions are visible to the client and the design team.</p>
+          <ul class="inc"><li>Elemental cost plans at each design stage</li><li>Benchmark rates per square metre by building type</li><li>Cost advice on alternative construction systems and finishes</li><li>Cost reports for development application and lender purposes</li></ul>
+          <div class="basis">For owners, developers and architects</div>
         </article>
         <article class="svc">
           <div class="stage">Tender</div>
           <h3>Builder's Bill of Quantities</h3>
-          <p>Architectural, structural, civil and landscape trades measured in full from the issued revision set and packaged by trade, ready to send to subcontractors. Assumptions are written into the bill where the documents are silent, and provisional items carry what cannot yet be measured.</p>
-          <div class="basis">Builders</div>
+          <p>A full measurement of the architectural, structural, civil and landscape trades from the issued revision set, packaged by trade and ready for issue to subcontractors. Where the documentation is silent, the assumption is stated in the bill; where an element cannot yet be measured, it is carried as a provisional item. Services trades are included as coverall items unless detailed measurement is commissioned.</p>
+          <ul class="inc"><li>Trade-by-trade quantities with full item descriptions</li><li>Register of drawings and revisions measured</li><li>Stated assumptions, provisional items and coverall sums</li><li>Arranged to the builder's own trade breakdown on request</li></ul>
+          <div class="basis">For builders</div>
         </article>
         <article class="svc">
           <div class="stage">Tender</div>
           <h3>Estimating</h3>
-          <p>Rates applied to the measured quantities to produce a tender estimate the builder can stand behind: trade totals, preliminaries and a clear line between measured, provisional and coverall sums. Priced from a maintained library of tendered rates.</p>
-          <div class="basis">Builders and developers</div>
+          <p>Rates applied to the measured quantities to produce a tender estimate the builder can submit with confidence. The estimate presents trade totals, preliminaries and margin separately, with a clear distinction between measured, provisional and coverall sums. Rates are drawn from a maintained library of recently tendered projects and adjusted for location, scale and program.</p>
+          <ul class="inc"><li>Priced bill with trade and elemental summaries</li><li>Preliminaries build-up to the tender program</li><li>Schedule of assumptions, inclusions and exclusions</li><li>Pre-tender estimate for budget confirmation before bids close</li></ul>
+          <div class="basis">For builders and developers</div>
         </article>
         <article class="svc">
           <div class="stage">Procurement</div>
           <h3>Quote Comparison</h3>
-          <p>Subcontractor and supplier quotes levelled against the bill so scope gaps, exclusions and double-ups are visible before a trade is let. The result is a side-by-side comparison with the recommended figure and the reasons for it.</p>
-          <div class="basis">Builders</div>
+          <p>Subcontractor and supplier quotations levelled against the bill of quantities so that scope gaps, exclusions and duplications are identified before a trade is let. The comparison sets each quotation against the measured scope, adjusts for items omitted or priced elsewhere, and reports the recommended figure together with the reasons for it.</p>
+          <ul class="inc"><li>Side-by-side levelling of quotations by trade</li><li>Identification of scope gaps, exclusions and double-ups</li><li>Reconciliation of quotations to the estimate</li><li>Recommendation with supporting commentary</li></ul>
+          <div class="basis">For builders</div>
         </article>
       </div>
     </div>
@@ -357,15 +384,15 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
   <section class="band" id="sectors">
     <div class="wrap">
       <div class="intro">
-        <div><div class="eyebrow">Sectors</div><h2>The work we measure.</h2></div>
-        <p>Most of our work is for builders tendering residential and commercial projects in Sydney and along the east coast. The same measurement rules apply whether the job is a duplex or a distribution centre.</p>
+        <div><div class="eyebrow">Sectors</div><h2>Project types.</h2></div>
+        <p>The practice measures residential, commercial, industrial and civil work for builders tendering projects throughout Australia. The same measurement conventions apply at every scale, from a single dwelling to a multi-stage distribution centre.</p>
       </div>
       <ul class="sectors">
-        <li><strong>Residential apartments</strong><span>Mid-rise and high-rise, basement to roof terrace</span></li>
-        <li><strong>Single Dwelling Residential</strong><span>New homes, duplexes, knock-down rebuilds and alterations</span></li>
-        <li><strong>Commercial</strong><span>Offices, fit-outs and adaptive re-use of existing buildings</span></li>
-        <li><strong>Industrial and logistics</strong><span>Warehouses, distribution centres and associated office</span></li>
-        <li><strong>Civil and external works</strong><span>Bulk earthworks, retaining, stormwater, roads and landscape</span></li>
+        <li><strong>Residential apartments</strong><span>Mid-rise and high-rise developments, from basement car parking to rooftop terraces</span></li>
+        <li><strong>Single Dwelling Residential</strong><span>New homes, duplexes, knock-down rebuilds and alterations and additions</span></li>
+        <li><strong>Commercial</strong><span>Office buildings, fit-outs and the adaptive re-use of existing structures</span></li>
+        <li><strong>Industrial and logistics</strong><span>Warehouses, distribution centres and associated office accommodation</span></li>
+        <li><strong>Civil and external works</strong><span>Bulk earthworks, retaining structures, stormwater, pavements and landscape</span></li>
       </ul>
     </div>
   </section>
@@ -373,26 +400,40 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
   <section class="band" id="approach">
     <div class="wrap">
       <div class="intro">
-        <div><div class="eyebrow">How we work</div><h2>Five steps, in order.</h2></div>
-        <p>The documentation is fixed first, then measured, then qualified, so that every quantity in the bill can be traced back to a drawing number and revision.</p>
+        <div><div class="eyebrow">Methodology</div><h2>A documented basis for every quantity.</h2></div>
+        <p>The documentation is fixed, then measured, then qualified. The sequence ensures that every quantity in the bill can be traced to a drawing number and revision, and that the client knows at all times which set of documents the bill represents.</p>
       </div>
       <div class="method five">
-        <article><div class="n">1</div><h3>Send the drawings</h3><p>Email the architectural, structural and services drawings with any reports and the tender date. A fee proposal usually follows within two business days.</p></article>
-        <article><div class="n">2</div><h3>Basis of proposal</h3><p>Every drawing, schedule, specification and report in the set is listed with its revision in an appendix to the proposal. Later revisions or a change in scope are priced separately.</p></article>
-        <article><div class="n">3</div><h3>Measurement</h3><p>Trades are measured from the plans, sections and schedules. Reinforcement is taken as detailed or at stated ratios; structural steel in bulk tonnage with a nominal allowance for connections.</p></article>
-        <article><div class="n">4</div><h3>Qualification</h3><p>Where the documents are silent, the assumption is written into the bill. Temporary works, hazardous materials and undetailed joinery are carried as provisional or coverall items so nothing is hidden inside a rate.</p></article>
-        <article><div class="n">5</div><h3>Delivery and tender support</h3><p>The bill is issued by trade in the format you price in, with the drawing register and qualifications attached. Questions during tender are answered against the bill.</p></article>
+        <article><div class="n">1</div><h3>Documentation received</h3><p>The client forwards the architectural, structural, civil and services drawings, together with schedules, specifications and reports, and advises the tender date. A written fee proposal is issued, ordinarily within two business days.</p></article>
+        <article><div class="n">2</div><h3>Basis of proposal</h3><p>Every document in the set is listed with its revision in an appendix to the fee proposal. The fee is fixed against that set. Documents issued subsequently, or a material change in scope, are the subject of a separate instruction.</p></article>
+        <article><div class="n">3</div><h3>Measurement</h3><p>Each trade is measured from the plans, sections, elevations and schedules in accordance with established measurement conventions. Reinforcement is taken as detailed or at stated ratios; structural steel in bulk tonnage with a stated allowance for connections.</p></article>
+        <article><div class="n">4</div><h3>Qualification</h3><p>Where the documents are silent, the assumption adopted is recorded in the bill rather than raised as a query during preparation. Temporary works, hazardous materials and undetailed joinery are carried as provisional or coverall items so that no allowance is concealed within a rate.</p></article>
+        <article><div class="n">5</div><h3>Issue and tender support</h3><p>The bill is issued by trade in the client's preferred format, accompanied by the drawing register and schedule of qualifications. Queries arising during the tender period are answered by reference to the bill.</p></article>
       </div>
       <div class="principles">
-        <div><div class="eyebrow">What you receive</div></div>
+        <div><div class="eyebrow">Deliverables</div></div>
         <ul>
-          <li>A bill packaged by trade, ready to issue to subcontractors.</li>
-          <li>A register of every drawing and revision the bill was measured from.</li>
-          <li>Assumptions, provisional items and coverall sums stated in the bill rather than raised as questions during preparation.</li>
-          <li>Services trades (hydraulics other than stormwater, electrical, mechanical, fire, lift, communications, security) as coverall items unless commissioned in detail. Stormwater drainage and tanks are measured from the hydraulic drawings.</li>
-          <li>Obvious discrepancies between drawings and reports flagged for the design team. Reflect Group does not provide a design service.</li>
-          <li>A delivery date confirmed in the proposal, set by the size of the project rather than a standard lead time.</li>
+          <li>A bill of quantities packaged by trade, ready for issue to subcontractors and suppliers.</li>
+          <li>A register of every drawing, schedule, specification and report measured, with its revision.</li>
+          <li>A schedule of assumptions, provisional items and coverall sums, stated within the bill.</li>
+          <li>Services trades (hydraulic services other than stormwater, electrical, mechanical, fire, lift, communications and security) as coverall items unless detailed measurement is commissioned. Stormwater drainage and tanks are measured from the hydraulic drawings.</li>
+          <li>Notification of evident discrepancies between drawings and reports. Reflect Group does not provide design services and does not resolve design conflicts.</li>
+          <li>A delivery date confirmed in the fee proposal and determined by the scale of the project.</li>
         </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="why">
+    <div class="wrap">
+      <div class="intro">
+        <div><div class="eyebrow">Why Reflect Group</div><h2>Director-led, fixed-fee, and accountable for every figure.</h2></div>
+      </div>
+      <div class="method four">
+        <article><h3>Director involvement</h3><p>Every engagement is led by the Managing Director from the first review of the documents to the issue of the bill. The person who quotes the work is the person responsible for its accuracy.</p></article>
+        <article><h3>Fixed fees</h3><p>The fee for each bill, estimate or cost plan is quoted in writing before the drawings are opened. Clients are not exposed to hourly charges for the core service.</p></article>
+        <article><h3>Delivery to program</h3><p>Delivery dates are set to suit the tender period and held. Because each item is measured rather than allowed for, the bill is available sooner and is closer to the final tender figure than an estimate prepared by approximation.</p></article>
+        <article><h3>Independence</h3><p>Reflect Group acts for the client alone. The practice has no interest in any builder, subcontractor or supplier, and its quantities and recommendations are prepared without regard to who will ultimately perform the work.</p></article>
       </div>
     </div>
   </section>
@@ -400,7 +441,7 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
   <section class="band" id="work">
     <div class="wrap">
       <div class="intro">
-        <div><div class="eyebrow">Projects</div><h2>Recent work.</h2></div>
+        <div><div class="eyebrow">Projects</div><h2>Selected work.</h2></div>
         <p>A selection of projects measured and priced by Reflect Group for builders at tender.</p>
       </div>
       <div class="grid">
@@ -416,10 +457,11 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
 
   <section class="band" id="about">
     <div class="wrap about">
-      <blockquote>A bill of quantities is only useful if the builder can trust it on tender day. That trust is built one qualification at a time.</blockquote>
+      <blockquote>A bill of quantities is of value only if the builder can rely on it on tender day. That reliance is earned one qualification at a time.</blockquote>
       <div class="who">
-        <p><strong>Peter Djolic</strong>, Managing Director, has spent more than twenty years measuring and pricing construction work, and leads every engagement from the first drawing to the delivered bill.</p>
-        <p>Reflect Group Pty Ltd is a Sydney quantity surveying and estimating practice. The work is deliberately narrow: cost plans, bills of quantities, estimates and quote comparisons for projects going to tender. Everything is measured from the issued documents and delivered in the form the builder prices in, with the assumptions written down.</p>
+        <p><strong>Peter Djolic</strong>, Managing Director, has more than twenty years' experience in the measurement and pricing of construction work across the residential, commercial and industrial sectors, and leads every engagement personally.</p>
+        <p>Reflect Group Pty Ltd was established to provide builders with the pre-tender cost services that larger consultancies are seldom structured to deliver: a full builder's bill, measured from the issued documents, arranged in the builder's own trade breakdown and qualified in writing. The practice confines itself to this work by design. It does not act as superintendent, certifier or project manager, and it does not offer design services.</p>
+        <p>The practice maintains a library of rates from tendered projects, updated with each engagement, from which estimates and cost plans are priced. Every bill issued remains the intellectual property of Reflect Group Pty Ltd.</p>
       </div>
     </div>
   </section>
@@ -427,15 +469,17 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
   <section class="band" id="faq">
     <div class="wrap">
       <div class="intro">
-        <div><div class="eyebrow">Questions</div><h2>Before you send the drawings.</h2></div>
+        <div><div class="eyebrow">Frequently asked questions</div><h2>Before the documents are sent.</h2></div>
       </div>
       <div class="faq">
-        <details><summary>What do you need to start?</summary><p>The architectural, structural and civil drawings, any schedules and specifications, geotechnical and other reports, and the date the tender closes. The more complete the set, the fewer provisional items in the bill.</p></details>
-        <details><summary>How long does the service take?</summary><p>It depends on the project. A single dwelling can be measured and delivered in a few days; a multi-storey apartment building with a full set of consultant drawings can take several weeks. The delivery date is set in the fee proposal for each project and held to. Because every item is measured rather than allowed for, the bill arrives both sooner and closer to the final tender figure than a rule-of-thumb estimate would.</p></details>
-        <details><summary>What is the difference between a bill of quantities and an estimate?</summary><p>A bill lists the measured quantities of every item by trade, unpriced, so you or your subcontractors can price it. An estimate applies rates to those quantities to arrive at a tender figure. Many builders commission the bill alone; others commission both.</p></details>
-        <details><summary>Can you work in our template?</summary><p>Yes. Send your trade breakdown or pricing template and the bill is arranged to match it, so quantities drop straight into the way you already price.</p></details>
-        <details><summary>What happens when the drawings change?</summary><p>The proposal records the revision of every document the fee is based on. Later revisions are measured as a separate instruction, so you always know which set the bill reflects.</p></details>
-        <details><summary>How are fees set?</summary><p>Bills, estimates and cost plans are quoted as a fixed fee for each project, based on the documentation and scope at the time of the proposal, so the cost of the work is known before the drawings are opened. Reviews, revisions and advice outside that scope are quoted separately or charged hourly.</p></details>
+        <details><summary>What documentation is required to commence?</summary><p>The architectural, structural and civil drawings; any schedules and specifications; geotechnical, survey and other consultant reports; and the date on which the tender closes. The more complete the set, the fewer provisional items the bill will contain. A fee proposal can be prepared from a partial set, with the missing documents noted.</p></details>
+        <details><summary>How long does the service take?</summary><p>The period depends on the scale and completeness of the project. A single dwelling may be measured and issued within a few days; a multi-storey apartment building with a complete consultant set may require several weeks. The delivery date is stated in the fee proposal for each project and is held. Because each item is measured rather than allowed for, the bill is available sooner, and sits closer to the final tender figure, than an estimate prepared by approximation.</p></details>
+        <details><summary>What is the difference between a bill of quantities and an estimate?</summary><p>A bill of quantities lists the measured quantity of every item by trade, without prices, so that the builder and its subcontractors may price it. An estimate applies rates to those quantities to arrive at a tender figure. Many builders commission the bill alone and price it themselves; others commission both.</p></details>
+        <details><summary>Can the bill be arranged to our own trade breakdown?</summary><p>Yes. The client's trade breakdown or pricing template is adopted as the structure of the bill, so that quantities transfer directly into the client's existing pricing method.</p></details>
+        <details><summary>How are revised drawings dealt with?</summary><p>The fee proposal records the revision of every document on which the fee is based. Drawings issued after that date are measured under a separate instruction, so that the client knows at all times which set the bill represents.</p></details>
+        <details><summary>Are services trades measured?</summary><p>Hydraulic services other than stormwater, electrical, mechanical, fire, lift, communications and security are included as coverall items for pricing by the relevant subcontractor, unless detailed measurement of those trades is commissioned. Stormwater drainage and tanks are measured from the hydraulic drawings.</p></details>
+        <details><summary>How are fees determined?</summary><p>Bills of quantities, estimates and cost plans are quoted as a fixed fee for each project, based on the documentation and scope at the date of the proposal. Reviews, revisions and advice outside that scope are quoted separately or charged at an hourly rate stated in the proposal.</p></details>
+        <details><summary>Where does Reflect Group operate?</summary><p>The practice is Sydney based and its services are provided Australia wide. Measurement is undertaken from the issued documentation and does not depend on the location of the project.</p></details>
       </div>
     </div>
   </section>
@@ -443,13 +487,13 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
   <section class="band" id="contact">
     <div class="wrap">
       <div class="intro">
-        <div><div class="eyebrow">Contact</div><h2>Send the drawing set. A fee proposal follows.</h2></div>
-        <p>Email the drawings together with any reports, and note the tender date. A written fee proposal is usually returned within two business days.</p>
+        <div><div class="eyebrow">Contact</div><h2>Request a fee proposal.</h2></div>
+        <p>Forward the design documentation together with the tender date, or complete the request form. A written fee proposal is ordinarily returned within two business days.</p>
       </div>
       <div class="contact">
         <div class="c"><div class="l">Email</div><div class="v"><span id="email">pdjolic@reflectgroup.com.au</span></div><button class="copy" type="button" data-copy="email">Copy address</button></div>
-        <div class="c"><div class="l">Phone</div><div class="v"><span id="phone">+61 426 950 040</span></div><div class="s">Peter Djolic, Managing Director</div></div>
-        <div class="c"><div class="l">Office</div><div class="v">18 Mirbelia Street<br>Denham Court NSW 2565</div><div class="s">Reflect Group Pty Ltd &middot; ABN 33 647 782 947</div></div>
+        <div class="c"><div class="l">Telephone</div><div class="v"><span id="phone">+61 426 950 040</span></div><div class="s">Peter Djolic, Managing Director</div></div>
+        <div class="c"><div class="l">Practice</div><div class="v">Sydney based<br>Services Australia wide</div><div class="s">Reflect Group Pty Ltd &middot; ABN 33 647 782 947</div></div>
       </div>
       <p style="margin-top:2.5rem"><button class="btn" type="button" data-open-form>Request a fee proposal <span aria-hidden="true">&rarr;</span></button></p>
       <p class="fine">&copy; 2026 Reflect Group Pty Ltd &middot; reflectgroup.com.au</p>
@@ -735,7 +779,7 @@ addEventListener('keydown',e=>{ if(!splash.hidden && (e.key==='Enter'||e.key==='
       try{
         const r=await fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({access_key:ACCESS_KEY,subject,from_name:'Reflect Group website',replyto:d.email,...d})});
         const j=await r.json();
-        if(j.success){ msg.className='f-msg ok'; msg.textContent='Request sent. A fee proposal usually follows within two business days.'; form.reset(); }
+        if(j.success){ msg.className='f-msg ok'; msg.textContent='Request received. A fee proposal will ordinarily follow within two business days.'; form.reset(); }
         else throw new Error(j.message||'failed');
       }catch(err){ msg.className='f-msg err'; msg.textContent='The request could not be sent. Please email '+TO+' directly.'; }
       submit.disabled=false;
