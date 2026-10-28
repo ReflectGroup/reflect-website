@@ -47,7 +47,7 @@ p{margin:0}
 #splash .hold a{text-decoration:none;color:var(--ink)}
 body.holding #enter{display:none}
 body.holding #splash .hold{display:flex}
-body.holding main,body.holding #menuBtn,body.holding #menu{display:none}
+body.holding main,body.holding #menuBtn,body.holding #menu,body.holding #tagFixed{display:none}
 #hint{position:absolute;z-index:3;left:var(--gutter-l);top:calc(env(safe-area-inset-top,0px) + 1.4rem);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
 #splash .corner{position:absolute;z-index:3;right:var(--gutter-r);top:calc(env(safe-area-inset-top,0px) + 1.4rem);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);text-align:right}
 
@@ -152,6 +152,9 @@ nav.main a:hover{color:var(--ink);border-color:var(--sand)}
 @media (max-width:820px){.svc-row{grid-template-columns:1fr;gap:1rem}.svc-row.principal{padding-left:1rem;margin-left:-1rem;padding-right:1rem;margin-right:-1rem}}
 @media (max-width:560px){.svc-cols{grid-template-columns:1fr}}
 
+#tagFixed{position:fixed;left:var(--gutter-l);top:calc(env(safe-area-inset-top,0px) + 1.35rem);z-index:20;font-family:var(--display);font-style:italic;font-size:clamp(1.05rem,1.6vw,1.4rem);line-height:1.2;color:#f5f1ea;text-shadow:0 1px 14px rgba(0,0,0,.45);max-width:calc(100vw - 7rem);pointer-events:none;transition:color .5s,text-shadow .5s}
+#tagFixed.ink{color:var(--ink);text-shadow:none}
+
 /* ---------- Menu (three lines, top right) ---------- */
 #menuBtn{position:fixed;top:calc(env(safe-area-inset-top,0px) + 1.1rem);right:calc(env(safe-area-inset-right,0px) + 1.1rem);z-index:30;width:3rem;height:3rem;border:0;border-radius:50%;background:color-mix(in srgb,var(--paper) 72%,transparent);backdrop-filter:blur(8px);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:0}
 #menuBtn span{display:block;width:1.15rem;height:1.5px;background:var(--ink);transition:transform .35s ease,opacity .25s ease}
@@ -178,7 +181,7 @@ nav.main a:hover{color:var(--ink);border-color:var(--sand)}
 .reel .slide img{width:100%;height:100%;object-fit:cover;display:block;transform:scale(1.06);transition:transform 9s linear}
 .reel .slide.on{opacity:1}
 .reel .slide.on img{transform:scale(1)}
-.reel .shade{position:absolute;inset:0;background:linear-gradient(to top,rgba(20,19,18,.72) 0%,rgba(20,19,18,.25) 45%,rgba(20,19,18,0) 75%)}
+.reel .shade{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(20,19,18,.5) 0%,rgba(20,19,18,0) 24%),linear-gradient(to top,rgba(20,19,18,.72) 0%,rgba(20,19,18,.25) 45%,rgba(20,19,18,0) 75%)}
 .reel .cap{position:absolute;left:0;right:0;bottom:0;padding:0 var(--gutter-r) clamp(2rem,5vh,3.5rem) var(--gutter-l);color:#f5f1ea}
 .reel .cap .inner{max-width:1120px;margin:0 auto;display:flex;align-items:flex-end;justify-content:space-between;gap:2rem;flex-wrap:wrap}
 .reel h1{font-family:var(--display);font-size:clamp(1.9rem,4vw,3.4rem);line-height:1.08;letter-spacing:-.01em;max-width:20ch;color:#f5f1ea;display:flex;flex-direction:column;gap:.5rem;transition:opacity .6s}
@@ -268,6 +271,7 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
   </div>
 </div>
 
+<div id="tagFixed" aria-hidden="true">Measured with care. Priced with confidence.</div>
 <button id="menuBtn" type="button" aria-label="Menu" aria-expanded="false" aria-controls="menu"><span></span><span></span><span></span></button>
 <div id="menu" aria-hidden="true">
   <div class="inner">
@@ -330,7 +334,6 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
   <section class="reel" id="projects" aria-label="Recent projects">
     <div class="slide on"><img src="images/project-01.jpg" alt="" loading="eager"></div><div class="slide"><img src="images/project-02.jpg" alt="" loading="eager"></div><div class="slide"><img src="images/project-03.jpg" alt="" loading="lazy"></div><div class="slide"><img src="images/project-04.jpg" alt="" loading="lazy"></div><div class="slide"><img src="images/project-05.jpg" alt="" loading="lazy"></div><div class="slide"><img src="images/project-06.jpg" alt="" loading="lazy"></div><div class="slide"><img src="images/project-07.jpg" alt="" loading="lazy"></div><div class="slide"><img src="images/project-08.jpg" alt="" loading="lazy"></div><div class="slide"><img src="images/project-09.jpg" alt="" loading="lazy"></div><div class="slide"><img src="images/project-10.jpg" alt="" loading="lazy"></div><div class="slide"><img src="images/project-11.jpg" alt="" loading="lazy" style="object-position:50% 85%"></div><div class="slide"><img src="images/project-12.jpg" alt="" loading="lazy"></div><div class="slide"><img src="images/project-13.jpg" alt="" loading="lazy"></div><div class="slide"><img src="images/project-14.jpg" alt="" loading="lazy"></div>
     <div class="shade"></div>
-    <div class="reel-tag">Measured with care. Priced with confidence.</div>
     <div class="cap"><div class="inner">
       <h1 id="reelTitle"><span class="name"></span><span class="sub"></span></h1>
       <div class="dots" id="reelDots" hidden></div>
@@ -843,6 +846,14 @@ addEventListener('keydown',e=>{ if(!splash.hidden && (e.key==='Enter'||e.key==='
       msg.className='f-msg ok'; msg.textContent='Your email program should open with the request filled in. If it does not, email '+TO+'.';
     }
   });
+})();
+
+
+/* Fixed tagline: light over the reel, ink over the page */
+(function(){
+  const t=document.getElementById('tagFixed'), reel=document.querySelector('.reel'); if(!t||!reel) return;
+  const upd=()=>{ t.classList.toggle('ink', scrollY > reel.offsetHeight - 40); };
+  addEventListener('scroll',upd,{passive:true}); addEventListener('resize',upd); upd();
 })();
 
 document.querySelectorAll('.copy').forEach(b=>b.addEventListener('click',()=>{
