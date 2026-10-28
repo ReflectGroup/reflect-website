@@ -26,6 +26,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);f
 body.locked{overflow:hidden}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--paper)}
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 a{color:inherit}
 h1,h2,h3{font-weight:300;margin:0;text-wrap:balance}
 p{margin:0}
@@ -98,6 +99,26 @@ nav.main a:hover{color:var(--ink);border-color:var(--sand)}
 .faq details[open] summary::after{transform:rotate(45deg)}
 .faq p{color:var(--ink-2);padding-bottom:1.2rem;max-width:62ch}
 .fine{margin-top:3.5rem;font-size:.72rem;letter-spacing:.08em;color:var(--mute)}
+
+/* ---------- Fee proposal form ---------- */
+.modal{position:fixed;inset:0;z-index:40;background:color-mix(in srgb,var(--ink) 55%,transparent);display:flex;align-items:flex-start;justify-content:center;overflow-y:auto;padding:calc(env(safe-area-inset-top,0px) + 4vh) var(--gutter-r) calc(env(safe-area-inset-bottom,0px) + 4vh) var(--gutter-l);opacity:0;visibility:hidden;transition:opacity .35s ease,visibility 0s linear .35s}
+.modal.open{opacity:1;visibility:visible;transition:opacity .35s ease}
+.modal-card{position:relative;background:var(--paper);color:var(--ink);width:100%;max-width:720px;padding:2.4rem clamp(1.2rem,4vw,2.6rem) 2.6rem;display:flex;flex-direction:column;gap:1rem;transform:translateY(16px);transition:transform .4s ease}
+.modal.open .modal-card{transform:none}
+.modal-card h2{font-family:var(--display);font-size:clamp(1.7rem,3vw,2.3rem);line-height:1.1}
+.modal-lede{color:var(--ink-2);max-width:56ch}
+.modal-x{position:absolute;top:.8rem;right:.8rem;width:2.4rem;height:2.4rem;border:0;background:transparent;font-size:1.6rem;line-height:1;color:var(--ink-2);cursor:pointer}
+#rfpForm{display:flex;flex-direction:column;gap:1rem;margin-top:.6rem}
+#rfpForm .f2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+@media (max-width:560px){#rfpForm .f2{grid-template-columns:1fr}}
+#rfpForm label{display:flex;flex-direction:column;gap:.35rem;font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--mute);font-weight:400;min-width:0}
+#rfpForm input,#rfpForm select,#rfpForm textarea{font:inherit;font-size:1rem;letter-spacing:0;text-transform:none;color:var(--ink);background:var(--paper-2);border:1px solid var(--line);border-radius:0;padding:.7rem .8rem;width:100%;min-width:0}
+#rfpForm input:focus,#rfpForm select:focus,#rfpForm textarea:focus{outline:1.5px solid var(--sand-deep);outline-offset:0;border-color:var(--sand)}
+#rfpForm input:user-invalid{border-color:#b0533a}
+.f-actions{display:flex;align-items:center;gap:1.2rem;flex-wrap:wrap;margin-top:.4rem}
+.f-msg{font-size:.9rem;color:var(--ink-2)}
+.f-msg.ok{color:var(--sand-deep)}
+.f-msg.err{color:#b0533a}
 
 /* ---------- Menu (three lines, top right) ---------- */
 #menuBtn{position:fixed;top:calc(env(safe-area-inset-top,0px) + 1.1rem);right:calc(env(safe-area-inset-right,0px) + 1.1rem);z-index:30;width:3rem;height:3rem;border:0;border-radius:50%;background:color-mix(in srgb,var(--paper) 72%,transparent);backdrop-filter:blur(8px);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:0}
@@ -219,7 +240,7 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
 <div id="menu" aria-hidden="true">
   <div class="inner">
     <nav aria-label="Sections">
-      <a href="#services">Services</a><a href="#approach">How we work</a><a href="#work">Projects</a><a href="#about">About</a><a href="#fees">Fees</a><a href="#contact">Contact</a>
+      <a href="#services">Services</a><a href="#approach">How we work</a><a href="#work">Projects</a><a href="#about">About</a><a href="#contact">Contact</a>
     </nav>
     <div class="side">
       <a class="brand" href="#top"><svg class="ring" viewBox="0 0 100 100" aria-hidden="true"></svg><b>Reflect<small>Group</small></b></a>
@@ -227,6 +248,48 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
       <div>+61 426 950 040</div>
       <div>Reflect Group Pty Ltd &middot; ABN 33 647 782 947</div>
     </div>
+  </div>
+</div>
+
+
+<div id="rfp" class="modal" aria-hidden="true" role="dialog" aria-labelledby="rfpTitle">
+  <div class="modal-card">
+    <button class="modal-x" type="button" aria-label="Close" data-close-form>&times;</button>
+    <div class="eyebrow">Fee proposal</div>
+    <h2 id="rfpTitle">Tell us about the project.</h2>
+    <p class="modal-lede">A written fee proposal is usually returned within two business days. Drawings can be sent by email or a file-sharing link once we reply.</p>
+    <form id="rfpForm" novalidate>
+      <div class="f2">
+        <label>Name<input type="text" id="rf-name" name="name" required autocomplete="name"></label>
+        <label>Company<input type="text" id="rf-company" name="company" autocomplete="organization"></label>
+      </div>
+      <div class="f2">
+        <label>Email<input type="email" id="rf-email" name="email" required autocomplete="email"></label>
+        <label>Phone<input type="tel" id="rf-phone" name="phone" autocomplete="tel"></label>
+      </div>
+      <label>Project address<input type="text" id="rf-address" name="project_address"></label>
+      <div class="f2">
+        <label>Project type
+          <select id="rf-type" name="project_type">
+            <option>Residential apartments</option><option>Single dwelling residential</option><option>Commercial</option><option>Industrial and logistics</option><option>Civil and external works</option><option>Other</option>
+          </select>
+        </label>
+        <label>Service required
+          <select id="rf-service" name="service">
+            <option>Builder's bill of quantities</option><option>Estimate</option><option>Bill of quantities and estimate</option><option>Cost plan</option><option>Quote comparison</option><option>Not sure yet</option>
+          </select>
+        </label>
+      </div>
+      <div class="f2">
+        <label>Tender or required-by date<input type="date" id="rf-date" name="required_by"></label>
+        <label>Link to drawings (optional)<input type="url" id="rf-link" name="drawings_link" placeholder="Dropbox, Drive, OneDrive…"></label>
+      </div>
+      <label>Anything else<textarea id="rf-notes" name="notes" rows="4"></textarea></label>
+      <div class="f-actions">
+        <button class="btn" type="submit" id="rfpSubmit">Submit request <span aria-hidden="true">&rarr;</span></button>
+        <div class="f-msg" id="rfpMsg" aria-live="polite"></div>
+      </div>
+    </form>
   </div>
 </div>
 
@@ -252,7 +315,7 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
         <dt>Focus</dt><dd>Pre-tender: cost plans, bills of quantities, estimates and quote comparison</dd>
         <dt>Delivered as</dt><dd>A trade-packaged bill in the format you price in</dd>
       </dl>
-      <a class="btn" href="#contact">Request a fee proposal <span aria-hidden="true">&rarr;</span></a>
+      <button class="btn" type="button" data-open-form>Request a fee proposal <span aria-hidden="true">&rarr;</span></button>
     </div>
   </section>
 
@@ -299,7 +362,7 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
       </div>
       <ul class="sectors">
         <li><strong>Residential apartments</strong><span>Mid-rise and high-rise, basement to roof terrace</span></li>
-        <li><strong>Townhouses and dwellings</strong><span>New builds, duplexes, knock-down rebuilds and alterations</span></li>
+        <li><strong>Single Dwelling Residential</strong><span>New homes, duplexes, knock-down rebuilds and alterations</span></li>
         <li><strong>Commercial</strong><span>Offices, fit-outs and adaptive re-use of existing buildings</span></li>
         <li><strong>Industrial and logistics</strong><span>Warehouses, distribution centres and associated office</span></li>
         <li><strong>Civil and external works</strong><span>Bulk earthworks, retaining, stormwater, roads and landscape</span></li>
@@ -328,7 +391,7 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
           <li>Assumptions, provisional items and coverall sums stated in the bill rather than raised as questions during preparation.</li>
           <li>Services trades (hydraulics other than stormwater, electrical, mechanical, fire, lift, communications, security) as coverall items unless commissioned in detail. Stormwater drainage and tanks are measured from the hydraulic drawings.</li>
           <li>Obvious discrepancies between drawings and reports flagged for the design team. Reflect Group does not provide a design service.</li>
-          <li>A typical program of 21 business days from commission, confirmed in the proposal.</li>
+          <li>A delivery date confirmed in the proposal, set by the size of the project rather than a standard lead time.</li>
         </ul>
       </div>
     </div>
@@ -361,30 +424,6 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
     </div>
   </section>
 
-  <section class="band" id="fees">
-    <div class="wrap">
-      <div class="intro">
-        <div><div class="eyebrow">Fees</div><h2>Known before the drawings are opened.</h2></div>
-        <p>Bills of quantities, estimates and cost plans are quoted as fixed fees per project. Reviews, revisions after the basis of proposal and ad hoc advice are charged against the schedule of rates below.</p>
-      </div>
-      <div class="fees">
-        <table class="rates">
-          <thead><tr><th>Grade</th><th>Hourly, excl. GST</th></tr></thead>
-          <tbody>
-            <tr><td>Director</td><td>$200</td></tr>
-            <tr><td>Senior Quantity Surveyor</td><td>$150</td></tr>
-            <tr><td>Quantity Surveyor</td><td>$100</td></tr>
-            <tr><td>Assistant Quantity Surveyor</td><td>$75</td></tr>
-          </tbody>
-        </table>
-        <div class="note">
-          <p>A written fee proposal is issued for every project. It sets out the scope of measurement, the trades included, the qualifications that apply and the documentation the fee is based on, and is valid subject to prompt acceptance.</p>
-          <p>Fees are exclusive of GST. The proposal is confirmed by returning the signed acceptance page by email. The bill remains the intellectual property of Reflect Group Pty Ltd.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <section class="band" id="faq">
     <div class="wrap">
       <div class="intro">
@@ -392,11 +431,11 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
       </div>
       <div class="faq">
         <details><summary>What do you need to start?</summary><p>The architectural, structural and civil drawings, any schedules and specifications, geotechnical and other reports, and the date the tender closes. The more complete the set, the fewer provisional items in the bill.</p></details>
-        <details><summary>How long does a bill take?</summary><p>Typically 21 business days from commission for a full builder's bill. Shorter programs can be agreed in the proposal when the tender period requires it.</p></details>
+        <details><summary>How long does the service take?</summary><p>It depends on the project. A single dwelling can be measured and delivered in a few days; a multi-storey apartment building with a full set of consultant drawings can take several weeks. The delivery date is set in the fee proposal for each project and held to. Because every item is measured rather than allowed for, the bill arrives both sooner and closer to the final tender figure than a rule-of-thumb estimate would.</p></details>
         <details><summary>What is the difference between a bill of quantities and an estimate?</summary><p>A bill lists the measured quantities of every item by trade, unpriced, so you or your subcontractors can price it. An estimate applies rates to those quantities to arrive at a tender figure. Many builders commission the bill alone; others commission both.</p></details>
         <details><summary>Can you work in our template?</summary><p>Yes. Send your trade breakdown or pricing template and the bill is arranged to match it, so quantities drop straight into the way you already price.</p></details>
         <details><summary>What happens when the drawings change?</summary><p>The proposal records the revision of every document the fee is based on. Later revisions are measured as a separate instruction, so you always know which set the bill reflects.</p></details>
-        <details><summary>How are fees set?</summary><p>Bills, estimates and cost plans are fixed fees based on the documentation and scope at the time of the proposal. Reviews, revisions and advice outside that scope are charged at the hourly rates above.</p></details>
+        <details><summary>How are fees set?</summary><p>Bills, estimates and cost plans are quoted as a fixed fee for each project, based on the documentation and scope at the time of the proposal, so the cost of the work is known before the drawings are opened. Reviews, revisions and advice outside that scope are quoted separately or charged hourly.</p></details>
       </div>
     </div>
   </section>
@@ -412,6 +451,7 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
         <div class="c"><div class="l">Phone</div><div class="v"><span id="phone">+61 426 950 040</span></div><div class="s">Peter Djolic, Managing Director</div></div>
         <div class="c"><div class="l">Office</div><div class="v">18 Mirbelia Street<br>Denham Court NSW 2565</div><div class="s">Reflect Group Pty Ltd &middot; ABN 33 647 782 947</div></div>
       </div>
+      <p style="margin-top:2.5rem"><button class="btn" type="button" data-open-form>Request a fee proposal <span aria-hidden="true">&rarr;</span></button></p>
       <p class="fine">&copy; 2026 Reflect Group Pty Ltd &middot; reflectgroup.com.au</p>
     </div>
   </section>
@@ -668,6 +708,42 @@ addEventListener('keydown',e=>{ if(!splash.hidden && (e.key==='Enter'||e.key==='
   btn.addEventListener('click',()=>set(!menu.classList.contains('open')));
   menu.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>set(false)));
   addEventListener('keydown',e=>{ if(e.key==='Escape'&&menu.classList.contains('open')) set(false); });
+})();
+
+
+/* Fee proposal form */
+(function(){
+  /* To deliver submissions straight to your inbox, paste a Web3Forms access key here (free, from web3forms.com, sent to your email).
+     Until a key is set, Submit opens the visitor's email program with the request pre-filled, addressed to pdjolic@reflectgroup.com.au. */
+  const ACCESS_KEY='';
+  const TO='pdjolic@reflectgroup.com.au';
+  const modal=document.getElementById('rfp'), form=document.getElementById('rfpForm'), msg=document.getElementById('rfpMsg'), submit=document.getElementById('rfpSubmit');
+  const set=o=>{modal.classList.toggle('open',o);modal.setAttribute('aria-hidden',!o);document.body.classList.toggle('locked',o);if(o)setTimeout(()=>document.getElementById('rf-name').focus(),350);};
+  document.querySelectorAll('[data-open-form]').forEach(b=>b.addEventListener('click',()=>set(true)));
+  document.querySelectorAll('[data-close-form]').forEach(b=>b.addEventListener('click',()=>set(false)));
+  modal.addEventListener('click',e=>{ if(e.target===modal) set(false); });
+  addEventListener('keydown',e=>{ if(e.key==='Escape'&&modal.classList.contains('open')) set(false); });
+  const fields=[['name','Name'],['company','Company'],['email','Email'],['phone','Phone'],['project_address','Project address'],['project_type','Project type'],['service','Service required'],['required_by','Required by'],['drawings_link','Drawings link'],['notes','Notes']];
+  form.addEventListener('submit',async e=>{
+    e.preventDefault(); msg.className='f-msg'; msg.textContent='';
+    if(!form.reportValidity()) return;
+    const d=Object.fromEntries(new FormData(form).entries());
+    const subject='Fee proposal request: '+(d.project_address||d.company||d.name);
+    const body=fields.map(([k,l])=>l+': '+(d[k]||'-')).join('\n');
+    if(ACCESS_KEY){
+      submit.disabled=true; msg.textContent='Sending…';
+      try{
+        const r=await fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({access_key:ACCESS_KEY,subject,from_name:'Reflect Group website',replyto:d.email,...d})});
+        const j=await r.json();
+        if(j.success){ msg.className='f-msg ok'; msg.textContent='Request sent. A fee proposal usually follows within two business days.'; form.reset(); }
+        else throw new Error(j.message||'failed');
+      }catch(err){ msg.className='f-msg err'; msg.textContent='The request could not be sent. Please email '+TO+' directly.'; }
+      submit.disabled=false;
+    } else {
+      location.href='mailto:'+TO+'?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
+      msg.className='f-msg ok'; msg.textContent='Your email program should open with the request filled in. If it does not, email '+TO+'.';
+    }
+  });
 })();
 
 document.querySelectorAll('.copy').forEach(b=>b.addEventListener('click',()=>{
