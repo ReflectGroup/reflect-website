@@ -41,6 +41,8 @@ body.holding #enter{display:none}
 body.holding #splash .hold{display:flex}
 body.holding main,body.holding #menuBtn,body.holding #menu,body.holding #tagFixed{display:none}
 #hint{position:absolute;z-index:3;left:var(--gutter-l);top:calc(env(safe-area-inset-top,0px) + 1.4rem);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+#splash .mid{position:absolute;z-index:3;left:50%;transform:translateX(-50%);top:calc(env(safe-area-inset-top,0px) + 1.4rem);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);white-space:nowrap}
+@media (max-width:560px){#splash .mid{display:none}}
 #splash .corner{position:absolute;z-index:3;right:var(--gutter-r);top:calc(env(safe-area-inset-top,0px) + 1.4rem);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);text-align:right}
 
 /* ---------- Site ---------- */
@@ -259,6 +261,7 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
 <div id="splash" aria-label="Reflect Group">
   <canvas id="fluid"></canvas>
   <div id="hint">Estimating</div>
+  <div class="mid">Cost management</div>
   <div class="corner">Quantity surveying</div>
   <div class="mark">
     <div class="word">Reflect<small>Group</small></div>
