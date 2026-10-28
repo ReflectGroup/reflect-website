@@ -85,7 +85,7 @@ nav.main a:hover{color:var(--ink);border-color:var(--sand)}
 .grid figcaption span{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
 @media (max-width:820px){.grid{grid-template-columns:1fr 1fr}}
 @media (max-width:480px){.grid{grid-template-columns:1fr}}
-.faq{border-top:1px solid var(--line);max-width:72ch}
+.faq{border-top:1px solid var(--line);max-width:72ch;min-width:0}
 .faq details{border-bottom:1px solid var(--line)}
 .faq summary{cursor:pointer;list-style:none;padding:1.1rem 2.2rem 1.1rem 0;font-weight:500;position:relative}
 .faq summary::-webkit-details-marker{display:none}
@@ -158,6 +158,12 @@ main>section>.wrap{position:relative;z-index:1}
 .wmbox{position:absolute;top:0;bottom:0;z-index:0;overflow:hidden;pointer-events:none}
 .wm{position:absolute;opacity:.17;overflow:visible}
 .wm line{stroke:var(--bronze);stroke-width:9;stroke-linecap:butt}
+
+.faq-wrap{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:2rem 4rem;align-items:center}
+.faq-mark{display:flex;justify-content:center;align-items:center}
+.faq-mark svg{width:min(100%,420px);height:auto}
+.faq-mark svg line{stroke-width:1.4}
+@media (max-width:820px){.faq-wrap{grid-template-columns:1fr}.faq-mark svg{width:min(70%,320px)}}
 
 /* ---------- Menu (three lines, top right) ---------- */
 #menuBtn{position:fixed;top:calc(env(safe-area-inset-top,0px) + 1.1rem);right:calc(env(safe-area-inset-right,0px) + 1.1rem);z-index:30;width:3rem;height:3rem;border:0;border-radius:50%;background:color-mix(in srgb,var(--paper) 72%,transparent);backdrop-filter:blur(8px);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:0}
@@ -536,6 +542,7 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
       <div class="intro">
         <div><div class="eyebrow">Frequently asked questions</div><h2>Before the documents are sent.</h2></div>
       </div>
+      <div class="faq-wrap">
       <div class="faq">
         <details><summary>What documentation is required to commence?</summary><p>The architectural, structural and civil drawings; any schedules and specifications; geotechnical, survey and other consultant reports; and the date on which the tender closes. The more complete the set, the fewer provisional items the bill will contain. A fee proposal can be prepared from a partial set, with the missing documents noted.</p></details>
         <details><summary>How long does the service take?</summary><p>The period depends on the scale and completeness of the project. A single dwelling may be measured and issued within a few days; a multi-storey apartment building with a complete consultant set may require several weeks. The delivery date is stated in the fee proposal for each project and is held. Because each item is measured rather than allowed for, the bill is issued faster, and sits closer to the final figure, than a competing estimate prepared by approximation.</p></details>
@@ -545,6 +552,8 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
         <details><summary>Are services trades measured?</summary><p>Hydraulic services other than stormwater, electrical, mechanical, fire, lift, communications and security are included as coverall items for pricing by the relevant subcontractor, unless detailed measurement of those trades is commissioned. Stormwater drainage and tanks are measured from the hydraulic drawings.</p></details>
         <details><summary>How are fees determined?</summary><p>Bills of quantities, estimates and cost plans are quoted as a fixed fee for each project, based on the documentation and scope at the date of the proposal. Reviews, revisions and advice outside that scope are quoted separately or charged at an hourly rate stated in the proposal.</p></details>
         <details><summary>Does the location of the project matter?</summary><p>No. Measurement is undertaken from the issued documentation and does not depend on where the project is located.</p></details>
+      </div>
+      <div class="faq-mark" aria-hidden="true"><svg class="ring" viewBox="0 0 100 100"></svg></div>
       </div>
     </div>
   </section>
