@@ -129,7 +129,9 @@ nav.main a:hover{color:var(--ink);border-color:var(--sand)}
 .svc .inc li::before{content:"";position:absolute;left:0;top:.6em;width:.35rem;height:1px;background:var(--sand)}
 
 .statement{background:var(--paper-2)}
-.tag-big{font-family:var(--display);font-size:clamp(2.2rem,5.6vw,4.6rem);line-height:1.05;letter-spacing:-.01em;max-width:16ch;text-wrap:balance}
+.tag-big{font-family:var(--display);font-size:clamp(1.9rem,4.6vw,4.2rem);line-height:1.1;letter-spacing:-.01em;text-wrap:nowrap;max-width:none}
+.tag-big span{white-space:nowrap}
+@media (max-width:480px){.tag-big{font-size:clamp(1.6rem,8.6vw,2rem)}}
 .tag-big + .tag-cols{margin-top:clamp(2rem,5vw,3.5rem)}
 .tag-cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2rem 3rem;border-top:1px solid var(--line);padding-top:2rem}
 .tag-cols p{color:var(--ink-2);font-size:.95rem;margin-top:.6rem;max-width:40ch}
@@ -341,7 +343,7 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
 
   <section class="band statement" id="tagline">
     <div class="wrap">
-      <p class="tag-big">Measured with care.<br>Priced with confidence.</p>
+      <p class="tag-big"><span>Measured with care.</span><br><span>Priced with confidence.</span></p>
       <div class="tag-cols">
         <div><div class="eyebrow">Measured with care</div><p>Every item in the bill is measured from the issued documents, never allowed for. Assumptions are written down, provisional items are declared, and each quantity can be traced to a drawing and revision.</p></div>
         <div><div class="eyebrow">Priced with confidence</div><p>Rates are drawn from recently tendered projects and applied to measured quantities, so the figure submitted on tender day can be defended when the project proceeds.</p></div>
@@ -511,7 +513,7 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
   <section class="band" id="contact">
     <div class="wrap">
       <div class="intro">
-        <div><div class="eyebrow">Contact</div><h2>Measured with care.<br>Priced with confidence.</h2></div>
+        <div><div class="eyebrow">Contact</div><h2><span style="white-space:nowrap">Measured with care.</span><br><span style="white-space:nowrap">Priced with confidence.</span></h2></div>
         <p>Forward the design documentation together with the tender date, or complete the request form. A written fee proposal is ordinarily returned within two business days.</p>
       </div>
       <div class="contact">
