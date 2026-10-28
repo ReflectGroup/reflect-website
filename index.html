@@ -84,8 +84,9 @@ nav.main a:hover{color:var(--ink);border-color:var(--sand)}
 .reel .shade{position:absolute;inset:0;background:linear-gradient(to top,rgba(20,19,18,.72) 0%,rgba(20,19,18,.25) 45%,rgba(20,19,18,0) 75%)}
 .reel .cap{position:absolute;left:0;right:0;bottom:0;padding:0 var(--gutter-r) clamp(2rem,5vh,3.5rem) var(--gutter-l);color:#f5f1ea}
 .reel .cap .inner{max-width:1120px;margin:0 auto;display:flex;align-items:flex-end;justify-content:space-between;gap:2rem;flex-wrap:wrap}
-.reel h1{font-family:var(--display);font-size:clamp(2.1rem,4.8vw,4rem);line-height:1.05;letter-spacing:-.01em;max-width:18ch;color:#f5f1ea}
-.reel h1 em{font-style:italic;color:#d9c9ab}
+.reel h1{font-family:var(--display);font-size:clamp(1.9rem,4vw,3.4rem);line-height:1.08;letter-spacing:-.01em;max-width:20ch;color:#f5f1ea;display:flex;flex-direction:column;gap:.5rem;transition:opacity .6s}
+.reel h1.fade{opacity:0}
+.reel h1 .sub{font-family:var(--body);font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:#cdc5b9;font-weight:400}
 .reel .meta{display:flex;flex-direction:column;align-items:flex-end;gap:.6rem;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:#cdc5b9;font-variant-numeric:tabular-nums}
 .reel .dots{display:flex;gap:.45rem}
 .reel .dots button{width:1.6rem;height:2px;border:0;padding:0;background:rgba(245,241,234,.35);cursor:pointer;transition:background .3s}
@@ -185,11 +186,11 @@ footer.site .brand b{font-size:.9rem}
 
 <main id="top">
   <section class="reel" id="projects" aria-label="Recent projects">
-    <div class="slide on"><img src="images/project-01.jpg" alt="" loading="eager"></div><div class="slide"><img src="images/project-02.jpg" alt="" loading="eager"></div><div class="slide"><img src="images/project-03.jpg" alt="" loading="lazy"></div><div class="slide"><img src="images/project-04.jpg" alt="" loading="lazy"></div><div class="slide"><img src="images/project-05.jpg" alt="" loading="lazy"></div><div class="slide"><img src="images/project-06.jpg" alt="" loading="lazy"></div><div class="slide"><img src="images/project-07.jpg" alt="" loading="lazy"></div><div class="slide"><img src="images/project-08.jpg" alt="" loading="lazy"></div><div class="slide"><img src="images/project-09.jpg" alt="" loading="lazy"></div><div class="slide"><img src="images/project-10.jpg" alt="" loading="lazy"></div><div class="slide"><img src="images/project-11.jpg" alt="" loading="lazy"></div><div class="slide"><img src="images/project-12.jpg" alt="" loading="lazy"></div><div class="slide"><img src="images/project-13.jpg" alt="" loading="lazy"></div><div class="slide"><img src="images/project-14.jpg" alt="" loading="lazy"></div>
+    <div class="slide on"><img src="images/project-01.jpg" alt="" loading="eager"></div><div class="slide"><img src="images/project-02.jpg" alt="" loading="eager"></div><div class="slide"><img src="images/project-03.jpg" alt="" loading="lazy"></div><div class="slide"><img src="images/project-04.jpg" alt="" loading="lazy"></div><div class="slide"><img src="images/project-05.jpg" alt="" loading="lazy"></div><div class="slide"><img src="images/project-06.jpg" alt="" loading="lazy"></div><div class="slide"><img src="images/project-07.jpg" alt="" loading="lazy"></div><div class="slide"><img src="images/project-08.jpg" alt="" loading="lazy"></div><div class="slide"><img src="images/project-09.jpg" alt="" loading="lazy"></div><div class="slide"><img src="images/project-10.jpg" alt="" loading="lazy"></div><div class="slide"><img src="images/project-11.jpg" alt="" loading="lazy" style="object-position:50% 85%"></div><div class="slide"><img src="images/project-12.jpg" alt="" loading="lazy"></div><div class="slide"><img src="images/project-13.jpg" alt="" loading="lazy"></div><div class="slide"><img src="images/project-14.jpg" alt="" loading="lazy"></div>
     <div class="shade"></div>
     <div class="cap"><div class="inner">
-      <h1>Builders' bills of quantities, <em>measured</em> the way you price.</h1>
-      <div class="meta"><div><span id="reelN">01</span> / 14</div><div class="dots" id="reelDots"></div></div>
+      <h1 id="reelTitle"><span class="name"></span><span class="sub"></span></h1>
+      <div class="meta"><div class="dots" id="reelDots"></div></div>
     </div></div>
     <div class="cue" aria-hidden="true"></div>
   </section>
@@ -538,11 +539,29 @@ addEventListener('keydown',e=>{ if(!splash.hidden && (e.key==='Enter'||e.key==='
 /* Project reel */
 (function(){
   const slides=[...document.querySelectorAll('.reel .slide')]; if(!slides.length) return;
-  const dots=document.getElementById('reelDots'), n=document.getElementById('reelN'); let i=0,t;
+  /* One entry per image, in order (images/project-01.jpg ... project-14.jpg): [project name, one-line detail] */
+  const PROJECTS=[
+    ['Project one','Residential apartments'],
+    ['Project two','Townhouses'],
+    ['Project three','Residential apartments'],
+    ['Project four','Residential apartments'],
+    ['Project five','Industrial'],
+    ['Project six','Commercial'],
+    ['Project seven','Townhouses'],
+    ['Project eight','Residential apartments'],
+    ['Project nine','Residential apartments'],
+    ['Project ten','Commercial fit-out'],
+    ['Project eleven','Townhouses'],
+    ['Project twelve','Townhouses'],
+    ['Project thirteen','Industrial'],
+    ['Project fourteen','Residential']
+  ];
+  const dots=document.getElementById('reelDots'), title=document.getElementById('reelTitle'); let i=0,t;
+  const setTitle=k=>{const [nm,sub]=PROJECTS[k]||['','']; title.querySelector('.name').textContent=nm; title.querySelector('.sub').textContent=sub;};
   slides.forEach((_,k)=>{const b=document.createElement('button');b.type='button';b.setAttribute('aria-label','Project '+(k+1));b.addEventListener('click',()=>{go(k);restart();});dots.appendChild(b);});
-  function go(k){slides[i].classList.remove('on');dots.children[i].classList.remove('on');i=(k+slides.length)%slides.length;slides[i].classList.add('on');dots.children[i].classList.add('on');n.textContent=String(i+1).padStart(2,'0');}
+  function go(k){slides[i].classList.remove('on');dots.children[i].classList.remove('on');i=(k+slides.length)%slides.length;slides[i].classList.add('on');dots.children[i].classList.add('on');title.classList.add('fade');setTimeout(()=>{setTitle(i);title.classList.remove('fade');},reduce?0:600);}
   function restart(){clearInterval(t); if(!reduce) t=setInterval(()=>go(i+1),5200);}
-  dots.children[0].classList.add('on'); restart();
+  dots.children[0].classList.add('on'); setTitle(0); restart();
   document.addEventListener('visibilitychange',()=>{ if(document.hidden) clearInterval(t); else restart(); });
 })();
 
