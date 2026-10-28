@@ -73,6 +73,32 @@ nav.main a:hover{color:var(--ink);border-color:var(--sand)}
 .btn:hover{background:var(--sand-deep)}
 @media (max-width:820px){.hero{grid-template-columns:1fr;gap:2rem}}
 
+.svc .stage{font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:var(--mute);font-weight:400}
+.sectors{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0;border-top:1px solid var(--line)}
+.sectors li{display:flex;flex-direction:column;gap:.35rem;padding:1.4rem 1.2rem 1.4rem 0;border-bottom:1px solid var(--line);min-width:0}
+.sectors strong{font-weight:500;font-size:1rem}
+.sectors span{font-size:.88rem;color:var(--ink-2)}
+.method.five{grid-template-columns:repeat(5,minmax(0,1fr));gap:2rem 2rem}
+@media (max-width:1000px){.method.five{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:640px){.method.five{grid-template-columns:1fr 1fr}}
+@media (max-width:440px){.method.five{grid-template-columns:1fr}}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.6rem 1.4rem}
+.grid figure{margin:0;display:flex;flex-direction:column;gap:.7rem;min-width:0}
+.grid img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;max-width:100%;background:var(--paper-2)}
+.grid figcaption{display:flex;flex-direction:column;gap:.15rem}
+.grid figcaption b{font-weight:500;font-size:.98rem}
+.grid figcaption span{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+@media (max-width:820px){.grid{grid-template-columns:1fr 1fr}}
+@media (max-width:480px){.grid{grid-template-columns:1fr}}
+.faq{border-top:1px solid var(--line);max-width:72ch}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{cursor:pointer;list-style:none;padding:1.1rem 2.2rem 1.1rem 0;font-weight:500;position:relative}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";position:absolute;right:.2rem;top:.95rem;font-family:var(--display);font-size:1.4rem;font-weight:300;color:var(--sand-deep);transition:transform .3s}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq p{color:var(--ink-2);padding-bottom:1.2rem;max-width:62ch}
+.fine{margin-top:3.5rem;font-size:.72rem;letter-spacing:.08em;color:var(--mute)}
+
 /* ---------- Menu (three lines, top right) ---------- */
 #menuBtn{position:fixed;top:calc(env(safe-area-inset-top,0px) + 1.1rem);right:calc(env(safe-area-inset-right,0px) + 1.1rem);z-index:30;width:3rem;height:3rem;border:0;border-radius:50%;background:color-mix(in srgb,var(--paper) 72%,transparent);backdrop-filter:blur(8px);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:0}
 #menuBtn span{display:block;width:1.15rem;height:1.5px;background:var(--ink);transition:transform .35s ease,opacity .25s ease}
@@ -86,7 +112,7 @@ nav.main a:hover{color:var(--ink);border-color:var(--sand)}
 #menu nav{display:flex;flex-direction:column;gap:.2rem}
 #menu nav a{font-family:var(--display);font-size:clamp(2.2rem,6vw,4.4rem);line-height:1.15;text-decoration:none;color:var(--ink);transform:translateY(.6em);opacity:0;transition:transform .5s ease,opacity .5s ease}
 #menu.open nav a{transform:none;opacity:1}
-#menu.open nav a:nth-child(2){transition-delay:.05s}#menu.open nav a:nth-child(3){transition-delay:.1s}#menu.open nav a:nth-child(4){transition-delay:.15s}#menu.open nav a:nth-child(5){transition-delay:.2s}
+#menu.open nav a:nth-child(2){transition-delay:.05s}#menu.open nav a:nth-child(3){transition-delay:.1s}#menu.open nav a:nth-child(4){transition-delay:.15s}#menu.open nav a:nth-child(5){transition-delay:.2s}#menu.open nav a:nth-child(6){transition-delay:.25s}
 #menu nav a:hover{color:var(--sand-deep)}
 #menu .side{display:flex;flex-direction:column;gap:.5rem;font-size:.9rem;color:var(--ink-2);border-top:1px solid var(--line);padding-top:1.2rem}
 #menu .side .brand{margin-bottom:.8rem}
@@ -193,7 +219,7 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
 <div id="menu" aria-hidden="true">
   <div class="inner">
     <nav aria-label="Sections">
-      <a href="#projects">Projects</a><a href="#services">Services</a><a href="#approach">Approach</a><a href="#fees">Fees</a><a href="#contact">Contact</a>
+      <a href="#services">Services</a><a href="#approach">How we work</a><a href="#work">Projects</a><a href="#about">About</a><a href="#fees">Fees</a><a href="#contact">Contact</a>
     </nav>
     <div class="side">
       <a class="brand" href="#top"><svg class="ring" viewBox="0 0 100 100" aria-hidden="true"></svg><b>Reflect<small>Group</small></b></a>
@@ -218,13 +244,13 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
   <section class="wrap hero">
     <div>
       <div class="eyebrow">Reflect Group</div>
-      <p class="lede">Builder's bills of quantities, estimates and cost plans for residential, commercial and industrial projects across Sydney. Every bill is measured from the issued drawing set and delivered in the format you price in, arranged by trade to suit tender pricing.</p>
+      <p class="lede">A Sydney quantity surveying and estimating practice working with builders, developers and architects. We measure from the issued drawings and deliver bills and estimates arranged the way they will be priced.</p>
     </div>
     <div class="side">
       <dl class="kv">
-        <dt>Measured from</dt><dd>The issued drawing set, revision by revision</dd>
+        <dt>Experience</dt><dd>Over 20 years measuring and pricing construction work</dd>
+        <dt>Focus</dt><dd>Pre-tender: cost plans, bills of quantities, estimates and quote comparison</dd>
         <dt>Delivered as</dt><dd>A trade-packaged bill in the format you price in</dd>
-        <dt>Typical program</dt><dd>21 business days from commission</dd>
       </dl>
       <a class="btn" href="#contact">Request a fee proposal <span aria-hidden="true">&rarr;</span></a>
     </div>
@@ -233,55 +259,104 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
   <section class="band" id="services">
     <div class="wrap">
       <div class="intro">
-        <div><div class="eyebrow">Services</div><h2>Four things, done properly.</h2></div>
-        <p>Each service is quoted on a fixed basis so the builder knows the fee before the drawings are opened. Services trades are carried as coverall items unless detailed measurement is commissioned.</p>
+        <div><div class="eyebrow">Services</div><h2>From first sketch to tender day.</h2></div>
+        <p>Each service is quoted as a fixed fee before the drawings are opened, so the cost of the work is known at the start. Pick the stage your project is at.</p>
       </div>
       <div class="services">
         <article class="svc">
+          <div class="stage">Feasibility and design</div>
+          <h3>Cost Planning</h3>
+          <p>Elemental cost plans at concept, development application and construction certificate stage, with benchmarks drawn from tendered projects. Each plan is updated as the design develops so the budget is tested before it is committed, not after.</p>
+          <div class="basis">Owners, developers and architects</div>
+        </article>
+        <article class="svc">
+          <div class="stage">Tender</div>
           <h3>Builder's Bill of Quantities</h3>
-          <p>Architectural, structural, civil and landscape trades measured in full from the issued revision set, with assumptions stated in the bill rather than raised as questions. Provisional items where the documentation is silent.</p>
-          <div class="basis">Fixed fee &middot; single share</div>
+          <p>Architectural, structural, civil and landscape trades measured in full from the issued revision set and packaged by trade, ready to send to subcontractors. Assumptions are written into the bill where the documents are silent, and provisional items carry what cannot yet be measured.</p>
+          <div class="basis">Builders</div>
         </article>
         <article class="svc">
+          <div class="stage">Tender</div>
           <h3>Estimating</h3>
-          <p>Rates applied to the measured quantities to produce a tender estimate the builder can stand behind, with trade totals, preliminaries and a clear line between measured, provisional and coverall sums.</p>
-          <div class="basis">Lump sum</div>
+          <p>Rates applied to the measured quantities to produce a tender estimate the builder can stand behind: trade totals, preliminaries and a clear line between measured, provisional and coverall sums. Priced from a maintained library of tendered rates.</p>
+          <div class="basis">Builders and developers</div>
         </article>
         <article class="svc">
-          <h3>Cost Plans</h3>
-          <p>Elemental cost plans at concept, DA and construction-certificate stages for owners, developers and architects who need a reliable figure before the design is fixed.</p>
-          <div class="basis">Lump sum per stage</div>
-        </article>
-        <article class="svc">
+          <div class="stage">Procurement</div>
           <h3>Quote Comparison</h3>
-          <p>Subcontractor and supplier quotes levelled against the bill so scope gaps, exclusions and double-ups are visible before a trade is let.</p>
-          <div class="basis">Hourly or fixed</div>
+          <p>Subcontractor and supplier quotes levelled against the bill so scope gaps, exclusions and double-ups are visible before a trade is let. The result is a side-by-side comparison with the recommended figure and the reasons for it.</p>
+          <div class="basis">Builders</div>
         </article>
       </div>
+    </div>
+  </section>
+
+  <section class="band" id="sectors">
+    <div class="wrap">
+      <div class="intro">
+        <div><div class="eyebrow">Sectors</div><h2>The work we measure.</h2></div>
+        <p>Most of our work is for builders tendering residential and commercial projects in Sydney and along the east coast. The same measurement rules apply whether the job is a duplex or a distribution centre.</p>
+      </div>
+      <ul class="sectors">
+        <li><strong>Residential apartments</strong><span>Mid-rise and high-rise, basement to roof terrace</span></li>
+        <li><strong>Townhouses and dwellings</strong><span>New builds, duplexes, knock-down rebuilds and alterations</span></li>
+        <li><strong>Commercial</strong><span>Offices, fit-outs and adaptive re-use of existing buildings</span></li>
+        <li><strong>Industrial and logistics</strong><span>Warehouses, distribution centres and associated office</span></li>
+        <li><strong>Civil and external works</strong><span>Bulk earthworks, retaining, stormwater, roads and landscape</span></li>
+      </ul>
     </div>
   </section>
 
   <section class="band" id="approach">
     <div class="wrap">
       <div class="intro">
-        <div><div class="eyebrow">Approach</div><h2>How a Reflect bill is prepared.</h2></div>
-        <p>The order matters. The documentation is fixed first, then measured, then qualified, so that every quantity in the bill can be traced back to a drawing number and revision.</p>
+        <div><div class="eyebrow">How we work</div><h2>Five steps, in order.</h2></div>
+        <p>The documentation is fixed first, then measured, then qualified, so that every quantity in the bill can be traced back to a drawing number and revision.</p>
       </div>
-      <div class="method">
-        <article><div class="n">i</div><h3>Basis of proposal</h3><p>Every drawing, schedule, specification and report in the set is listed with its revision in an appendix to the proposal. Later revisions or a material change in scope are priced separately.</p></article>
-        <article><div class="n">ii</div><h3>Measurement</h3><p>Trades are measured from the plans, sections and schedules. Reinforcement is taken as detailed or at stated ratios; structural steel in bulk tonnage with a nominal allowance for connections.</p></article>
-        <article><div class="n">iii</div><h3>Qualification</h3><p>Where the documents are silent, the assumption is written into the bill. Temporary works, hazardous materials and undetailed joinery are carried as provisional or coverall items so nothing is hidden inside a rate.</p></article>
+      <div class="method five">
+        <article><div class="n">1</div><h3>Send the drawings</h3><p>Email the architectural, structural and services drawings with any reports and the tender date. A fee proposal usually follows within two business days.</p></article>
+        <article><div class="n">2</div><h3>Basis of proposal</h3><p>Every drawing, schedule, specification and report in the set is listed with its revision in an appendix to the proposal. Later revisions or a change in scope are priced separately.</p></article>
+        <article><div class="n">3</div><h3>Measurement</h3><p>Trades are measured from the plans, sections and schedules. Reinforcement is taken as detailed or at stated ratios; structural steel in bulk tonnage with a nominal allowance for connections.</p></article>
+        <article><div class="n">4</div><h3>Qualification</h3><p>Where the documents are silent, the assumption is written into the bill. Temporary works, hazardous materials and undetailed joinery are carried as provisional or coverall items so nothing is hidden inside a rate.</p></article>
+        <article><div class="n">5</div><h3>Delivery and tender support</h3><p>The bill is issued by trade in the format you price in, with the drawing register and qualifications attached. Questions during tender are answered against the bill.</p></article>
       </div>
       <div class="principles">
-        <div><div class="eyebrow">Standing conventions</div></div>
+        <div><div class="eyebrow">What you receive</div></div>
         <ul>
-          <li>No question-and-answer format during preparation. Assumptions are stated in the bill and can be adjusted at tender.</li>
-          <li>Services trades (hydraulics other than stormwater, electrical, mechanical, fire, lift, communications, security) are coverall items unless commissioned in detail.</li>
-          <li>Stormwater drainage and tanks are measured from the hydraulic drawings.</li>
-          <li>Door hardware, joinery and proprietary fitments without schedules are described as coverall items referenced to the detail drawings.</li>
-          <li>Reflect Group does not provide a design service. Obvious discrepancies between drawings and reports are flagged, not resolved.</li>
-          <li>The bill remains the intellectual property of Reflect Group Pty Ltd.</li>
+          <li>A bill packaged by trade, ready to issue to subcontractors.</li>
+          <li>A register of every drawing and revision the bill was measured from.</li>
+          <li>Assumptions, provisional items and coverall sums stated in the bill rather than raised as questions during preparation.</li>
+          <li>Services trades (hydraulics other than stormwater, electrical, mechanical, fire, lift, communications, security) as coverall items unless commissioned in detail. Stormwater drainage and tanks are measured from the hydraulic drawings.</li>
+          <li>Obvious discrepancies between drawings and reports flagged for the design team. Reflect Group does not provide a design service.</li>
+          <li>A typical program of 21 business days from commission, confirmed in the proposal.</li>
         </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="work">
+    <div class="wrap">
+      <div class="intro">
+        <div><div class="eyebrow">Projects</div><h2>Recent work.</h2></div>
+        <p>A selection of projects measured and priced by Reflect Group for builders at tender.</p>
+      </div>
+      <div class="grid">
+        <figure><img src="images/project-01.jpg" alt="" loading="lazy"><figcaption><b>2-4 Urunga Parade, Miranda</b><span>Residential apartments</span></figcaption></figure>
+        <figure><img src="images/project-02.jpg" alt="" loading="lazy"><figcaption><b>Babylon</b><span>Residential apartments</span></figcaption></figure>
+        <figure><img src="images/project-04.jpg" alt="" loading="lazy"><figcaption><b>48 King Street, King Beach</b><span>Residential apartments</span></figcaption></figure>
+        <figure><img src="images/project-05.jpg" alt="" loading="lazy"><figcaption><b>ESR Westlink</b><span>Industrial and logistics</span></figcaption></figure>
+        <figure><img src="images/project-06.jpg" alt="" loading="lazy"><figcaption><b>29-41 Hutchinson Street, Surry Hills</b><span>Commercial, adaptive re-use</span></figcaption></figure>
+        <figure><img src="images/project-07.jpg" alt="" loading="lazy"><figcaption><b>Babylon</b><span>Residential apartments</span></figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="about">
+    <div class="wrap about">
+      <blockquote>A bill of quantities is only useful if the builder can trust it on tender day. That trust is built one qualification at a time.</blockquote>
+      <div class="who">
+        <p><strong>Peter Djolic</strong>, Managing Director, has spent more than twenty years measuring and pricing construction work, and leads every engagement from the first drawing to the delivered bill.</p>
+        <p>Reflect Group Pty Ltd is a Sydney quantity surveying and estimating practice. The work is deliberately narrow: cost plans, bills of quantities, estimates and quote comparisons for projects going to tender. Everything is measured from the issued documents and delivered in the form the builder prices in, with the assumptions written down.</p>
       </div>
     </div>
   </section>
@@ -290,7 +365,7 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
     <div class="wrap">
       <div class="intro">
         <div><div class="eyebrow">Fees</div><h2>Known before the drawings are opened.</h2></div>
-        <p>Bills of quantities and estimates are quoted as fixed fees per project. Reviews, variations and ad hoc advice are charged against the schedule of rates below.</p>
+        <p>Bills of quantities, estimates and cost plans are quoted as fixed fees per project. Reviews, revisions after the basis of proposal and ad hoc advice are charged against the schedule of rates below.</p>
       </div>
       <div class="fees">
         <table class="rates">
@@ -304,18 +379,24 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
         </table>
         <div class="note">
           <p>A written fee proposal is issued for every project. It sets out the scope of measurement, the trades included, the qualifications that apply and the documentation the fee is based on, and is valid subject to prompt acceptance.</p>
-          <p>Fees are exclusive of GST. The proposal is confirmed by returning the signed acceptance page by email.</p>
+          <p>Fees are exclusive of GST. The proposal is confirmed by returning the signed acceptance page by email. The bill remains the intellectual property of Reflect Group Pty Ltd.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="band" id="about">
-    <div class="wrap about">
-      <blockquote>A bill of quantities is only useful if the builder can trust it on tender day. That trust is built one qualification at a time.</blockquote>
-      <div class="who">
-        <p><strong>Peter Djolic</strong>, Managing Director, leads every engagement from first drawing to delivered bill.</p>
-        <p>Reflect Group Pty Ltd is a Sydney quantity surveying and estimating practice working with builders, developers and architects on new dwellings, alterations and commercial projects. The practice measures with the tools that suit each client's workflow and prices from a maintained library of tendered rates.</p>
+  <section class="band" id="faq">
+    <div class="wrap">
+      <div class="intro">
+        <div><div class="eyebrow">Questions</div><h2>Before you send the drawings.</h2></div>
+      </div>
+      <div class="faq">
+        <details><summary>What do you need to start?</summary><p>The architectural, structural and civil drawings, any schedules and specifications, geotechnical and other reports, and the date the tender closes. The more complete the set, the fewer provisional items in the bill.</p></details>
+        <details><summary>How long does a bill take?</summary><p>Typically 21 business days from commission for a full builder's bill. Shorter programs can be agreed in the proposal when the tender period requires it.</p></details>
+        <details><summary>What is the difference between a bill of quantities and an estimate?</summary><p>A bill lists the measured quantities of every item by trade, unpriced, so you or your subcontractors can price it. An estimate applies rates to those quantities to arrive at a tender figure. Many builders commission the bill alone; others commission both.</p></details>
+        <details><summary>Can you work in our template?</summary><p>Yes. Send your trade breakdown or pricing template and the bill is arranged to match it, so quantities drop straight into the way you already price.</p></details>
+        <details><summary>What happens when the drawings change?</summary><p>The proposal records the revision of every document the fee is based on. Later revisions are measured as a separate instruction, so you always know which set the bill reflects.</p></details>
+        <details><summary>How are fees set?</summary><p>Bills, estimates and cost plans are fixed fees based on the documentation and scope at the time of the proposal. Reviews, revisions and advice outside that scope are charged at the hourly rates above.</p></details>
       </div>
     </div>
   </section>
@@ -324,13 +405,14 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
     <div class="wrap">
       <div class="intro">
         <div><div class="eyebrow">Contact</div><h2>Send the drawing set. A fee proposal follows.</h2></div>
-        <p>Email the architectural, structural and services drawings together with any reports, and note the tender date. A written fee proposal is usually returned within two business days.</p>
+        <p>Email the drawings together with any reports, and note the tender date. A written fee proposal is usually returned within two business days.</p>
       </div>
       <div class="contact">
         <div class="c"><div class="l">Email</div><div class="v"><span id="email">pdjolic@reflectgroup.com.au</span></div><button class="copy" type="button" data-copy="email">Copy address</button></div>
         <div class="c"><div class="l">Phone</div><div class="v"><span id="phone">+61 426 950 040</span></div><div class="s">Peter Djolic, Managing Director</div></div>
         <div class="c"><div class="l">Office</div><div class="v">18 Mirbelia Street<br>Denham Court NSW 2565</div><div class="s">Reflect Group Pty Ltd &middot; ABN 33 647 782 947</div></div>
       </div>
+      <p class="fine">&copy; 2026 Reflect Group Pty Ltd &middot; reflectgroup.com.au</p>
     </div>
   </section>
 </main>
