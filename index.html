@@ -150,6 +150,12 @@ main>section:nth-child(even){background:var(--paper-2)}
 #tagFixed.ink{color:var(--ink);text-shadow:none}
 
 .hero-band{padding-block:0;border-top:0}
+/* Ring-fragment watermarks on the lighter sections */
+main>section{position:relative;overflow:hidden}
+main>section>.wrap{position:relative;z-index:1}
+.wm{position:absolute;z-index:0;pointer-events:none;opacity:.2}
+.wm line{stroke:var(--bronze);stroke-width:6;stroke-linecap:butt}
+
 /* ---------- Menu (three lines, top right) ---------- */
 #menuBtn{position:fixed;top:calc(env(safe-area-inset-top,0px) + 1.1rem);right:calc(env(safe-area-inset-right,0px) + 1.1rem);z-index:30;width:3rem;height:3rem;border:0;border-radius:50%;background:color-mix(in srgb,var(--paper) 72%,transparent);backdrop-filter:blur(8px);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:0}
 #menuBtn span{display:block;width:1.15rem;height:1.5px;background:var(--ink);transition:transform .35s ease,opacity .25s ease}
@@ -851,6 +857,34 @@ addEventListener('keydown',e=>{ if(!splash.hidden && (e.key==='Enter'||e.key==='
   const t=document.getElementById('tagFixed'), reel=document.querySelector('.reel'); if(!t||!reel) return;
   const upd=()=>{ t.classList.toggle('ink', scrollY > reel.offsetHeight - 40); };
   addEventListener('scroll',upd,{passive:true}); addEventListener('resize',upd); upd();
+})();
+
+
+/* Ring-fragment watermarks: a random arc of the mark, placed at a random edge of each lighter section, new each load */
+(function(){
+  const secs=[...document.querySelectorAll('main>section')].filter((el,i)=>i>0 && i%2===0); /* odd-numbered sections after the reel = lighter tone */
+  const R=380, BARS=80;
+  secs.forEach(sec=>{
+    const span=70+Math.random()*90;            /* arc length, degrees */
+    const side=['left','right','top','bottom'][Math.floor(Math.random()*4)];
+    const facing={left:0,right:180,top:270,bottom:90}[side];   /* the arc faces into the page */
+    const start=facing-span/2+(Math.random()*40-20);
+    const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+    svg.setAttribute('class','wm'); svg.setAttribute('viewBox','0 0 1000 1000'); svg.setAttribute('aria-hidden','true');
+    const size=900+Math.random()*500; svg.style.width=size+'px'; svg.style.height=size+'px';
+    const off=-(size*(0.45+Math.random()*0.2));
+    if(side==='left'){svg.style.left=off+'px';svg.style.top=(Math.random()*60-30)+'%';}
+    if(side==='right'){svg.style.right=off+'px';svg.style.top=(Math.random()*60-30)+'%';}
+    if(side==='top'){svg.style.top=off+'px';svg.style.left=(Math.random()*70)+'%';}
+    if(side==='bottom'){svg.style.bottom=off+'px';svg.style.left=(Math.random()*70)+'%';}
+    let h='';
+    for(let i=0;i<BARS;i++){
+      const deg=i*360/BARS; let d=((deg-start)%360+360)%360; if(d>span) continue;
+      const r=deg*Math.PI/180, x1=500+Math.cos(r)*R*0.69, y1=500-Math.sin(r)*R*0.69, x2=500+Math.cos(r)*R, y2=500-Math.sin(r)*R;
+      h+=`<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}"/>`;
+    }
+    svg.innerHTML=h; sec.prepend(svg);
+  });
 })();
 
 document.querySelectorAll('.copy').forEach(b=>b.addEventListener('click',()=>{
