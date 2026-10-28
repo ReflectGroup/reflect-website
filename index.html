@@ -124,9 +124,9 @@ nav.main a:hover{color:var(--ink);border-color:var(--sand)}
 .method.four h3{font-family:var(--display);font-weight:300;font-size:1.3rem}
 @media (max-width:900px){.method.four{grid-template-columns:1fr 1fr}}
 @media (max-width:480px){.method.four{grid-template-columns:1fr}}
-.svc .inc{list-style:none;margin:0;padding:0;display:grid;gap:.35rem;font-size:.88rem;color:var(--ink-2)}
-.svc .inc li{padding-left:1rem;position:relative}
-.svc .inc li::before{content:"";position:absolute;left:0;top:.6em;width:.35rem;height:1px;background:var(--sand)}
+.inc{list-style:none;margin:0;padding:0;display:grid;gap:.35rem;font-size:.88rem;color:var(--ink-2)}
+.inc li{padding-left:1rem;position:relative}
+.inc li::before{content:"";position:absolute;left:0;top:.6em;width:.35rem;height:1px;background:var(--sand)}
 
 .statement{background:var(--paper-2)}
 .tag-big{font-family:var(--display);font-size:clamp(1.9rem,4.6vw,4.2rem);line-height:1.1;letter-spacing:-.01em;text-wrap:nowrap;max-width:none}
@@ -139,6 +139,18 @@ nav.main a:hover{color:var(--ink);border-color:var(--sand)}
 @media (max-width:820px){.tag-cols{grid-template-columns:1fr}}
 .reel .reel-tag{position:absolute;left:var(--gutter-l);top:calc(env(safe-area-inset-top,0px) + 1.6rem);font-family:var(--display);font-style:italic;font-size:1rem;color:#f5f1ea;opacity:.9;max-width:60vw}
 .menu-tag{font-family:var(--display);font-style:italic;font-size:1.05rem;color:var(--ink);margin-bottom:.4rem}
+
+.svc-list{display:flex;flex-direction:column;border-top:1px solid var(--line)}
+.svc-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2.2fr);gap:1.5rem 4rem;padding:2.6rem 0;border-bottom:1px solid var(--line)}
+.svc-row.principal{background:linear-gradient(to right,var(--paper-2),transparent 60%);padding-left:1.5rem;margin-left:-1.5rem;padding-right:1.5rem;margin-right:-1.5rem}
+.svc-head{display:flex;flex-direction:column;gap:.7rem;min-width:0}
+.svc-head h3{font-family:var(--display);font-size:clamp(1.6rem,2.6vw,2.1rem);line-height:1.1}
+.svc-body{display:flex;flex-direction:column;gap:1.6rem;min-width:0}
+.svc-body>p{color:var(--ink-2);max-width:64ch}
+.svc-cols{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem 2.5rem}
+.svc-cols .eyebrow{margin-bottom:.6rem}
+@media (max-width:820px){.svc-row{grid-template-columns:1fr;gap:1rem}.svc-row.principal{padding-left:1rem;margin-left:-1rem;padding-right:1rem;margin-right:-1rem}}
+@media (max-width:560px){.svc-cols{grid-template-columns:1fr}}
 
 /* ---------- Menu (three lines, top right) ---------- */
 #menuBtn{position:fixed;top:calc(env(safe-area-inset-top,0px) + 1.1rem);right:calc(env(safe-area-inset-right,0px) + 1.1rem);z-index:30;width:3rem;height:3rem;border:0;border-radius:50%;background:color-mix(in srgb,var(--paper) 72%,transparent);backdrop-filter:blur(8px);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:0}
@@ -153,7 +165,7 @@ nav.main a:hover{color:var(--ink);border-color:var(--sand)}
 #menu nav{display:flex;flex-direction:column;gap:.2rem}
 #menu nav a{font-family:var(--display);font-size:clamp(2.2rem,6vw,4.4rem);line-height:1.15;text-decoration:none;color:var(--ink);transform:translateY(.6em);opacity:0;transition:transform .5s ease,opacity .5s ease}
 #menu.open nav a{transform:none;opacity:1}
-#menu.open nav a:nth-child(2){transition-delay:.05s}#menu.open nav a:nth-child(3){transition-delay:.1s}#menu.open nav a:nth-child(4){transition-delay:.15s}#menu.open nav a:nth-child(5){transition-delay:.2s}#menu.open nav a:nth-child(6){transition-delay:.25s}
+#menu.open nav a:nth-child(2){transition-delay:.05s}#menu.open nav a:nth-child(3){transition-delay:.1s}#menu.open nav a:nth-child(4){transition-delay:.15s}#menu.open nav a:nth-child(5){transition-delay:.2s}#menu.open nav a:nth-child(6){transition-delay:.25s}#menu.open nav a:nth-child(7){transition-delay:.3s}
 #menu nav a:hover{color:var(--sand-deep)}
 #menu .side{display:flex;flex-direction:column;gap:.5rem;font-size:.9rem;color:var(--ink-2);border-top:1px solid var(--line);padding-top:1.2rem}
 #menu .side .brand{margin-bottom:.8rem}
@@ -329,12 +341,12 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
   <section class="wrap hero">
     <div>
       <div class="eyebrow">Reflect Group</div>
-      <p class="lede">Reflect Group is a quantity surveying and estimating practice providing pre-tender cost services to builders, developers and architects. The practice prepares cost plans, bills of quantities, estimates and subcontractor's quote comparisons from the issued design documentation, and delivers them in the form in which they will be priced.</p>
+      <p class="lede">Reflect Group is a quantity surveying and estimating practice providing pre-tender cost services to builders, developers and architects. The practice provides cost planning, builder's bills of quantities, estimating and subcontractor quote comparison as separate services, each prepared from the issued design documentation and delivered in the form in which it will be used.</p>
     </div>
     <div class="side">
       <dl class="kv">
         <dt>Experience</dt><dd>More than twenty years in construction measurement and estimating</dd>
-        <dt>Scope</dt><dd>Pre-tender services: cost planning, bills of quantities, estimating and quote comparison</dd>
+        <dt>Services</dt><dd>Cost planning, builder's bills of quantities, estimating and subcontractor quote comparison</dd>
         <dt>Engagement</dt><dd>Fixed fee per project, confirmed in writing before work commences</dd>
       </dl>
       <button class="btn" type="button" data-open-form>Request a fee proposal <span aria-hidden="true">&rarr;</span></button>
@@ -345,8 +357,8 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
     <div class="wrap">
       <p class="tag-big"><span>Measured with care.</span><br><span>Priced with confidence.</span></p>
       <div class="tag-cols">
-        <div><div class="eyebrow">Measured with care</div><p>Every item in the bill is measured from the issued documents, never assumed. Where the documentation leaves no alternative, the assumption adopted is clearly noted in the bill, provisional items are declared, and each quantity can be traced to a drawing and revision.</p></div>
-        <div><div class="eyebrow">Priced with confidence</div><p>Rates are drawn from recently tendered projects and applied to measured quantities, so the figure submitted on tender day can be defended when the project proceeds.</p></div>
+        <div><div class="eyebrow">Measured with care &middot; Bills of quantities</div><p>Every item in the bill is measured from the issued documents, never assumed. Where the documentation leaves no alternative, the assumption adopted is clearly noted in the bill, provisional items are declared, and each quantity can be traced to a drawing and revision.</p></div>
+        <div><div class="eyebrow">Priced with confidence &middot; Estimating</div><p>Where an estimate is commissioned, rates drawn from recently tendered projects are applied to the measured quantities, so the figure submitted on tender day can be defended when the project proceeds.</p></div>
         <div><div class="eyebrow">The result</div><p><strong>Faster than the competition. More accurate than the competition.</strong> The bill is issued ahead of the tender program and sits nearer the outcome than an estimate prepared by approximation.</p></div>
       </div>
     </div>
@@ -355,13 +367,13 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
   <section class="band" id="value">
     <div class="wrap">
       <div class="intro">
-        <div><div class="eyebrow">The measured bill</div><h2>Why tender from measured quantities.</h2></div>
-        <p>A tender priced from a measured bill of quantities rests on a known scope. Every trade prices the same items, every quantity can be traced to a drawing, and the figure submitted on tender day can be defended when the project proceeds.</p>
+        <div><div class="eyebrow">The builder's bill of quantities</div><h2>Why tender from a measured bill.</h2></div>
+        <p>A builder's bill of quantities is the measured scope of the project, trade by trade, prepared from the issued documents. It is the basis on which a builder tenders from known quantities rather than from allowances.</p>
       </div>
       <div class="method four">
-        <article><h3>Like-for-like pricing</h3><p>When subcontractors price identical measured quantities, their quotations can be compared on rate and scope alone. Differences in interpretation of the drawings are removed before they become differences in price.</p></article>
-        <article><h3>Tender accuracy</h3><p>Allowances and rule-of-thumb rates carry risk in both directions. A measured bill replaces them with quantities taken from the documents, narrowing the margin between the tender figure and the cost of the work.</p></article>
         <article><h3>Scope certainty</h3><p>The bill records what has been measured, what has been assumed and what has been carried as a provisional or coverall item. The builder enters the tender knowing where the documentation is complete and where it is not.</p></article>
+        <article><h3>Traceable quantities</h3><p>Every quantity in the bill can be traced to a drawing number and revision. When a figure is questioned, by the estimator, a subcontractor or the client, the source is on record.</p></article>
+        <article><h3>Trade packages ready to issue</h3><p>The bill is arranged by trade in the builder's own breakdown, so each package can be sent to subcontractors as issued, without re-sorting or re-measurement.</p></article>
         <article><h3>A basis for the contract</h3><p>Once the tender is successful, the same quantities serve as the reference for subcontract letting, progress claims and the assessment of variations throughout the project.</p></article>
       </div>
     </div>
@@ -370,37 +382,65 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
   <section class="band" id="services">
     <div class="wrap">
       <div class="intro">
-        <div><div class="eyebrow">Services</div><h2>Cost services from feasibility to tender.</h2></div>
-        <p>Each service is quoted as a fixed fee against the documentation issued at the time of the proposal. The services may be commissioned individually or in combination as a project progresses from concept design to tender.</p>
+        <div><div class="eyebrow">Services</div><h2>Four services, each with its own deliverables.</h2></div>
+        <p>Each service is quoted as a fixed fee against the documentation issued at the time of the proposal. They may be commissioned individually or in combination as a project progresses from concept design to tender.</p>
       </div>
-      <div class="services">
-        <article class="svc">
-          <div class="stage">Feasibility and design development</div>
-          <h3>Cost Planning</h3>
-          <p>Elemental cost plans prepared at concept, development application and construction certificate stage, benchmarked against tendered projects of comparable type and scale. Each plan is revised as the design develops, so that the budget is tested against the documentation before it is committed and the cost consequences of design decisions are visible to the client and the design team.</p>
-          <ul class="inc"><li>Elemental cost plans at each design stage</li><li>Benchmark rates per square metre by building type</li><li>Cost advice on alternative construction systems and finishes</li><li>Cost reports for development application and lender purposes</li></ul>
-          <div class="basis">For owners, developers and architects</div>
+      <div class="svc-list">
+        <article class="svc-row" id="costplanning">
+          <div class="svc-head">
+            <div class="stage">Feasibility and design development</div>
+            <h3>Cost Planning</h3>
+            <div class="basis">For owners, developers and architects</div>
+          </div>
+          <div class="svc-body">
+            <p>Elemental cost plans prepared at concept, development application and construction certificate stage, benchmarked against tendered projects of comparable type and scale. Each plan is revised as the design develops, so that the budget is tested against the documentation before it is committed and the cost consequences of design decisions are visible to the client and the design team.</p>
+            <div class="svc-cols">
+              <div><div class="eyebrow">Why commission it</div><ul class="inc"><li>The budget is tested before the design is fixed, not after</li><li>Design options are compared on cost at the stage when they can still change</li><li>A figure for development application, lender and board purposes</li></ul></div>
+              <div><div class="eyebrow">Deliverables</div><ul class="inc"><li>Elemental cost plan at each design stage</li><li>Benchmark rates per square metre by building type</li><li>Cost advice on alternative construction systems and finishes</li><li>Cost report for development application and lender purposes</li></ul></div>
+            </div>
+          </div>
         </article>
-        <article class="svc">
-          <div class="stage">Tender</div>
-          <h3>Builder's Bill of Quantities</h3>
-          <p>A full measurement of the architectural, structural, civil and landscape trades from the issued revision set, packaged by trade and ready for issue to subcontractors. Where the documentation is silent, the assumption is stated in the bill; where an element cannot yet be measured, it is carried as a provisional item. Services trades are included as coverall items unless detailed measurement is commissioned.</p>
-          <ul class="inc"><li>Trade-by-trade quantities with full item descriptions</li><li>Register of drawings and revisions measured</li><li>Stated assumptions, provisional items and coverall sums</li><li>Arranged to the builder's own trade breakdown on request</li></ul>
-          <div class="basis">For builders</div>
+        <article class="svc-row" id="boq">
+          <div class="svc-head">
+            <div class="stage">Tender</div>
+            <h3>Builder's Bill of Quantities</h3>
+            <div class="basis">For builders</div>
+          </div>
+          <div class="svc-body">
+            <p>A full measurement of the architectural, structural, civil and landscape trades from the issued revision set, packaged by trade and ready for issue to subcontractors. Where the documentation is silent, the assumption adopted is stated in the bill; where an element cannot yet be measured, it is carried as a provisional item. Services trades are included as coverall items unless detailed measurement is commissioned.</p>
+            <div class="svc-cols">
+              <div><div class="eyebrow">Why commission it</div><ul class="inc"><li>The tender is priced from a measured scope rather than from allowances</li><li>Subcontractors receive a trade package that is complete and consistent</li><li>Assumptions and provisional items are visible before the bid is lodged</li><li>The bill becomes the reference for letting, claims and variations after award</li></ul></div>
+              <div><div class="eyebrow">Deliverables</div><ul class="inc"><li>Bill of quantities by trade, unpriced, in the builder's own trade breakdown</li><li>Register of every drawing, schedule, specification and report measured, with revision</li><li>Schedule of assumptions, provisional items and coverall sums</li><li>Notification of evident discrepancies between drawings and reports</li></ul></div>
+            </div>
+          </div>
         </article>
-        <article class="svc">
-          <div class="stage">Tender</div>
-          <h3>Estimating</h3>
-          <p>Rates applied to the measured quantities to produce a tender estimate the builder can submit with confidence. The estimate presents trade totals, preliminaries and margin separately, with a clear distinction between measured, provisional and coverall sums. Rates are drawn from a maintained library of recently tendered projects and adjusted for location, scale and program.</p>
-          <ul class="inc"><li>Priced bill with trade and elemental summaries</li><li>Preliminaries build-up to the tender program</li><li>Schedule of assumptions, inclusions and exclusions</li><li>Pre-tender estimate for budget confirmation before bids close</li></ul>
-          <div class="basis">For builders and developers</div>
+        <article class="svc-row" id="estimating">
+          <div class="svc-head">
+            <div class="stage">Tender</div>
+            <h3>Estimating</h3>
+            <div class="basis">For builders and developers</div>
+          </div>
+          <div class="svc-body">
+            <p>Rates applied to the measured quantities to produce a tender estimate the builder can submit with confidence. The estimate presents trade totals, preliminaries and margin separately, with a clear distinction between measured, provisional and coverall sums. Rates are drawn from a maintained library of recently tendered projects and adjusted for location, scale and program.</p>
+            <div class="svc-cols">
+              <div><div class="eyebrow">Why commission it</div><ul class="inc"><li>Like-for-like pricing: every trade is priced against the same measured quantities</li><li>A benchmark figure before subcontractor quotations close</li><li>Preliminaries built up to the tender program rather than applied as a percentage</li><li>A figure that can be defended line by line if the tender is questioned</li></ul></div>
+              <div><div class="eyebrow">Deliverables</div><ul class="inc"><li>Priced bill with trade and elemental summaries</li><li>Preliminaries build-up to the tender program</li><li>Schedule of rates, assumptions, inclusions and exclusions</li><li>Pre-tender estimate for budget confirmation before bids close</li></ul></div>
+            </div>
+          </div>
         </article>
-        <article class="svc">
-          <div class="stage">Procurement</div>
-          <h3>Quote Comparison</h3>
-          <p>Subcontractor and supplier quotations levelled against the bill of quantities so that scope gaps, exclusions and duplications are identified before a trade is let. The comparison sets each quotation against the measured scope, adjusts for items omitted or priced elsewhere, and reports the recommended figure together with the reasons for it.</p>
-          <ul class="inc"><li>Side-by-side levelling of quotations by trade</li><li>Identification of scope gaps, exclusions and double-ups</li><li>Reconciliation of quotations to the estimate</li><li>Recommendation with supporting commentary</li></ul>
-          <div class="basis">For builders</div>
+        <article class="svc-row" id="quotes">
+          <div class="svc-head">
+            <div class="stage">Procurement</div>
+            <h3>Subcontractor Quote Comparison</h3>
+            <div class="basis">For builders</div>
+          </div>
+          <div class="svc-body">
+            <p>Subcontractor and supplier quotations levelled against the bill of quantities so that scope gaps, exclusions and duplications are identified before a trade is let. The comparison sets each quotation against the measured scope, adjusts for items omitted or priced elsewhere, and reports the recommended figure together with the reasons for it.</p>
+            <div class="svc-cols">
+              <div><div class="eyebrow">Why commission it</div><ul class="inc"><li>Quotations are compared on scope and rate, not on headline total</li><li>Exclusions and double-ups are found before the subcontract is signed</li><li>The let figure is reconciled to the estimate</li></ul></div>
+              <div><div class="eyebrow">Deliverables</div><ul class="inc"><li>Side-by-side levelling of quotations by trade</li><li>Schedule of scope gaps, exclusions and duplications per quotation</li><li>Reconciliation of quotations to the estimate</li><li>Recommendation with supporting commentary</li></ul></div>
+            </div>
+          </div>
         </article>
       </div>
     </div>
@@ -425,8 +465,8 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
   <section class="band" id="approach">
     <div class="wrap">
       <div class="intro">
-        <div><div class="eyebrow">Methodology</div><h2>A documented basis for every quantity.</h2></div>
-        <p>The documentation is fixed, then measured, then qualified. The sequence ensures that every quantity in the bill can be traced to a drawing number and revision, and that the client knows at all times which set of documents the bill represents.</p>
+        <div><div class="eyebrow">Methodology &middot; Bill of quantities</div><h2>A documented basis for every quantity.</h2></div>
+        <p>How a builder's bill is prepared. The documentation is fixed, then measured, then qualified. The sequence ensures that every quantity in the bill can be traced to a drawing number and revision, and that the client knows at all times which set of documents the bill represents.</p>
       </div>
       <div class="method five">
         <article><div class="n">1</div><h3>Documentation received</h3><p>The client forwards the architectural, structural, civil and services drawings, together with schedules, specifications and reports, and advises the tender date. A written fee proposal is issued, ordinarily within two business days.</p></article>
@@ -434,17 +474,6 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
         <article><div class="n">3</div><h3>Measurement</h3><p>Each trade is measured from the plans, sections, elevations and schedules in accordance with established measurement conventions. Reinforcement is taken as detailed or at stated ratios; structural steel in bulk tonnage with a stated allowance for connections.</p></article>
         <article><div class="n">4</div><h3>Qualification</h3><p>Where the documents are silent, the assumption adopted is recorded in the bill rather than raised as a query during preparation. Temporary works, hazardous materials and undetailed joinery are carried as provisional or coverall items so that no allowance is concealed within a rate.</p></article>
         <article><div class="n">5</div><h3>Issue and tender support</h3><p>The bill is issued by trade in the client's preferred format, accompanied by the drawing register and schedule of qualifications. Queries arising during the tender period are answered by reference to the bill.</p></article>
-      </div>
-      <div class="principles">
-        <div><div class="eyebrow">Deliverables</div></div>
-        <ul>
-          <li>A bill of quantities packaged by trade, ready for issue to subcontractors and suppliers.</li>
-          <li>A register of every drawing, schedule, specification and report measured, with its revision.</li>
-          <li>A schedule of assumptions, provisional items and coverall sums, stated within the bill.</li>
-          <li>Services trades (hydraulic services other than stormwater, electrical, mechanical, fire, lift, communications and security) as coverall items unless detailed measurement is commissioned. Stormwater drainage and tanks are measured from the hydraulic drawings.</li>
-          <li>Notification of evident discrepancies between drawings and reports. Reflect Group does not provide design services and does not resolve design conflicts.</li>
-          <li>A delivery date confirmed in the fee proposal and determined by the scale of the project.</li>
-        </ul>
       </div>
     </div>
   </section>
