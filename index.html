@@ -686,7 +686,7 @@ function startFluid(){
   function resize(){
     const dpr=Math.min(devicePixelRatio||1,2);
     W=canvas.width=Math.floor(canvas.clientWidth*dpr); H=canvas.height=Math.floor(canvas.clientHeight*dpr);
-    const asp=W/H, sim=128, dmax=1024;
+    const asp=W/H, sim=128, dmax=(Math.max(W,H)>1600?2048:1600);
     simW=Math.round(asp>=1?sim*asp:sim); simH=Math.round(asp>=1?sim:sim/asp);
     const ds=Math.min(dmax,Math.max(W,H)); dyeW=Math.round(asp>=1?ds:ds*asp); dyeH=Math.round(asp>=1?ds/asp:ds);
     vel=dfbo(simW,simH); dye=dfbo(dyeW,dyeH); div=fbo(simW,simH); curlT=fbo(simW,simH); pres=dfbo(simW,simH);
@@ -717,7 +717,7 @@ function startFluid(){
     use(P.grad,vel.tx,vel.ty); gl.uniform1i(P.grad.u.uP,pres.r.bind(0)); gl.uniform1i(P.grad.u.uVel,vel.r.bind(1)); blit(vel.w2); vel.swap();
     use(P.advect,vel.tx,vel.ty); gl.uniform1i(P.advect.u.uVel,vel.r.bind(0)); gl.uniform1i(P.advect.u.uSrc,vel.r.bind(0)); gl.uniform1f(P.advect.u.dt,dt); gl.uniform1f(P.advect.u.diss,0.985); blit(vel.w2); vel.swap();
     use(P.advect,dye.tx,dye.ty); gl.uniform1i(P.advect.u.uVel,vel.r.bind(0)); gl.uniform1i(P.advect.u.uSrc,dye.r.bind(1)); gl.uniform1f(P.advect.u.dt,dt); gl.uniform1f(P.advect.u.diss,0.992); blit(dye.w2); dye.swap();
-    use(P.emit,dye.tx,dye.ty); gl.uniform1i(P.emit.u.uDye,dye.r.bind(0)); gl.uniform1i(P.emit.u.uLogo,(gl.activeTexture(gl.TEXTURE1),gl.bindTexture(gl.TEXTURE_2D,logoTex),1)); gl.uniform1f(P.emit.u.rate,needBurst?1:0.045); blit(dye.w2); dye.swap();
+    use(P.emit,dye.tx,dye.ty); gl.uniform1i(P.emit.u.uDye,dye.r.bind(0)); gl.uniform1i(P.emit.u.uLogo,(gl.activeTexture(gl.TEXTURE1),gl.bindTexture(gl.TEXTURE_2D,logoTex),1)); gl.uniform1f(P.emit.u.rate,needBurst?1:0.09); blit(dye.w2); dye.swap();
     needBurst=false;
   }
   function frame(now){
