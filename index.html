@@ -5,7 +5,7 @@
 <style>
 /* Layout: a white, airy A4 sheet translated to the screen - thin rules, lots of space, charcoal-to-sand gradient as the only colour. */
 :root{
-  --paper:#ffffff; --paper-2:#faf8f4; --ink:#2b2926; --ink-2:#5f5750; --mute:#9a8c7b;
+  --paper:#faf8f4; --paper-2:#f1ece3; --ink:#2b2926; --ink-2:#5f5750; --mute:#9a8c7b;
   --sand:#b39f84; --sand-deep:#9d8f7c; --bronze:#8a7557; --mist:#e3d9ca; --line:#c9b9a0; --charcoal:#2b2926;
   --ring-a:#6b5740; --ring-b:#dccfbb; --ring-c:#b89d78; --ring-d:#8f7a5c;
   --display:"Newsreader",Georgia,"Times New Roman",serif;
@@ -120,7 +120,7 @@ nav.main a:hover{color:var(--ink);border-color:var(--sand)}
 .inc li{padding-left:1rem;position:relative}
 .inc li::before{content:"";position:absolute;left:0;top:.6em;width:.35rem;height:1px;background:var(--bronze)}
 
-.statement{background:var(--paper-2)}
+main>section:nth-child(even){background:var(--paper-2)}
 .tag-big{font-family:var(--display);font-size:clamp(1.9rem,4.6vw,4.2rem);line-height:1.1;letter-spacing:-.01em;text-wrap:nowrap;max-width:none}
 .tag-big span{white-space:nowrap}
 @media (max-width:480px){.tag-big{font-size:clamp(1.6rem,8.6vw,2rem)}}
