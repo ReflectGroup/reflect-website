@@ -652,7 +652,7 @@ function startMark(){
     const bw=(2*Math.PI*R/BARS)*0.46; ctx.lineCap='butt';
     /* wave mark: the outer and inner profiles are three-lobe waves that counter-rotate once the mark has assembled */
     const ptw=reduce?0:Math.max(0,(t-(ASSEMBLE+STAGGER))/1000);
-    const spin=0;                                           /* profiles fixed: the wave shape is static, only the glow moves */
+    const spin=ptw*0.6;                                     /* outer and inner profiles counter-rotate, as on the study page */
     const outPhase=1.2+spin, inPhase=1.2-spin;
     const prof=(base,op,ip)=>{ const wo=0.5+0.5*Math.sin(3*base+op), wi=0.5+0.5*Math.sin(3*base+ip); return [0.69*(1-0.12*wi), 1+0.18*wo]; };
     /* ghost ring, lower right, mirrors the mark in the opposite direction, fades in as the mark assembles */
