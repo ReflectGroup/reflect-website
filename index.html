@@ -645,22 +645,24 @@ function startMark(){
     const assembled=t>ASSEMBLE+STAGGER;
     const pt=reduce?0:(t-(ASSEMBLE+STAGGER))/1000;
     const breathe=assembled?1+0.012*Math.sin(pt*1.1):1;
-    const band=pt*1.1;                        /* radians per second the highlight travels */
+    const band=pt*1.4;                        /* radians per second the highlight travels */
     for(const b of bars){
       const k=ease((t-b.delay)/ASSEMBLE);      /* 0 → 1 flight progress */
       const kb=back((t-b.delay)/ASSEMBLE);     /* with a small settle-back */
       const hx=cx+Math.cos(b.a)*R*0.845*breathe, hy=cy-Math.sin(b.a)*R*0.845*breathe;   /* home centre of the bar */
       const x=b.sx+(hx-b.sx)*kb, y=b.sy+(hy-b.sy)*kb;
+      /* domino: as the sweep reaches each bar it tips over on its own, then rights itself before the next one goes */
+      let tilt=0, lenBoost=1;
       /* bar direction: spins while flying, aligns radially as it lands */
-      const dir=-b.a+b.rot0*(1-k);
-      let half=R*0.155*(b.len+(1-b.len)*k);
-      if(assembled){ const w=Math.cos(b.a-band); half*=1+0.22*Math.pow(Math.max(0,w),3); }   /* bars lengthen as the sweep passes */
+      const dir=-b.a+b.rot0*(1-k)+tilt;
+      let half=R*0.155*(b.len+(1-b.len)*k)*lenBoost;
+      if(assembled){ const d=((band-b.a)%(Math.PI*2)+Math.PI*2)%(Math.PI*2); const win=0.55; if(d<win){ const u=d/win; const e=Math.sin(u*Math.PI); tilt=e*0.75; half*=1+0.18*e; } }
       /* cursor nudge once assembled */
       let px=0,py=0;
       if(assembled){ const dx=x-ptr.x, dy=y-ptr.y, d=Math.hypot(dx,dy), reach=R*0.9; if(d<reach){ const f=(1-d/reach); px=dx/d*f*R*0.12; py=dy/d*f*R*0.12; } }
       /* shade: base gradient by angle, plus the travelling light band */
       const deg=b.a*180/Math.PI; let col=ringColor(stops,deg);
-      if(assembled){ const ph=Math.cos(b.a-band); const lift=Math.pow(Math.max(0,ph),2.5)*0.7; const trail=Math.pow(Math.max(0,Math.cos(b.a-band+0.9)),3)*0.25; col=col.map(v=>v+(1-v)*lift-v*trail); }
+      if(assembled){ const d=((band-b.a)%(Math.PI*2)+Math.PI*2)%(Math.PI*2); const lift=d<0.55?Math.sin(d/0.55*Math.PI)*0.55:0; const trail=d>=0.55&&d<1.6?(1-(d-0.55)/1.05)*0.18:0; col=col.map(v=>v+(1-v)*lift-v*trail); }
       ctx.strokeStyle=toCss(col); ctx.globalAlpha=Math.min(1,0.15+k);
       const ux=Math.cos(dir), uy=Math.sin(dir);
       ctx.beginPath(); ctx.moveTo(x+px-ux*half,y+py-uy*half); ctx.lineTo(x+px+ux*half,y+py+uy*half); ctx.stroke();
