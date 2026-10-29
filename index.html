@@ -603,158 +603,67 @@ function buildSvgRings(){
   });
 }
 
-/* Draw the logo mark onto a 2D canvas (used as the dye source for the fluid, and as the static fallback) */
-function drawLogo(ctx,w,h,ghost){
-  const stops=ringStops();
-  ctx.clearRect(0,0,w,h);
-  const R=Math.min(w*0.26,h*0.22), cx=w/2, cy=h/2-R*0.5;
-  const draw=(x,y,rad,alpha,rot)=>{
-    const bw=(2*Math.PI*rad/BARS)*0.46;
-    ctx.lineCap='butt'; ctx.lineWidth=bw; ctx.globalAlpha=alpha;
-    for(let i=0;i<BARS;i++){
-      const deg=i*360/BARS+rot, r=deg*Math.PI/180;
-      ctx.strokeStyle=toCss(ringColor(stops,deg));
-      ctx.beginPath(); ctx.moveTo(x+Math.cos(r)*rad*0.69,y-Math.sin(r)*rad*0.69); ctx.lineTo(x+Math.cos(r)*rad,y-Math.sin(r)*rad); ctx.stroke();
-    }
-    ctx.globalAlpha=1;
-  };
-  if(ghost) draw(cx+R*1.05,cy+R*0.95,R*0.78,0.13,8);
-  draw(cx,cy,R,1,0);
-}
-
-/* ---------------- Fluid simulation (WebGL2) ---------------- */
+/* ---------------- Splash mark: assemble, then pulse ---------------- */
 const canvas=document.getElementById('fluid');
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-let raf=0, gl=null, running=false;
+let running=false, raf=0;
 
-function staticLogo(){
-  const dpr=Math.min(devicePixelRatio||1,2);
-  canvas.width=canvas.clientWidth*dpr; canvas.height=canvas.clientHeight*dpr;
+function startMark(){
   const ctx=canvas.getContext('2d'); if(!ctx) return;
-  ctx.setTransform(dpr,0,0,dpr,0,0); drawLogo(ctx,canvas.clientWidth,canvas.clientHeight,true);
-}
-
-function startFluid(){
-  gl=canvas.getContext('webgl2',{alpha:false,antialias:false,premultipliedAlpha:false});
-  if(!gl || !gl.getExtension('EXT_color_buffer_float')){ staticLogo(); return; }
-  const VS=`#version 300 es
-  in vec2 aPos; out vec2 vUv,vL,vR,vT,vB; uniform vec2 texelSize;
-  void main(){vUv=aPos*0.5+0.5;vL=vUv-vec2(texelSize.x,0.);vR=vUv+vec2(texelSize.x,0.);vT=vUv+vec2(0.,texelSize.y);vB=vUv-vec2(0.,texelSize.y);gl_Position=vec4(aPos,0.,1.);}`;
-  const FH=`#version 300 es
-  precision highp float; precision highp sampler2D; in vec2 vUv,vL,vR,vT,vB; out vec4 o;`;
-  const FS={
-    copy:FH+`uniform sampler2D uTex; void main(){o=texture(uTex,vUv);}`,
-    splat:FH+`uniform sampler2D uTarget; uniform float aspect,radius; uniform vec2 point; uniform vec3 color;
-      void main(){vec2 p=vUv-point;p.x*=aspect;vec3 s=exp(-dot(p,p)/radius)*color;o=vec4(texture(uTarget,vUv).xyz+s,1.);}`,
-    advect:FH+`uniform sampler2D uVel,uSrc; uniform vec2 texelSize; uniform float dt,diss;
-      void main(){vec2 c=vUv-dt*texture(uVel,vUv).xy*texelSize;o=texture(uSrc,c)*diss;}`,
-    div:FH+`uniform sampler2D uVel; void main(){float L=texture(uVel,vL).x,R=texture(uVel,vR).x,T=texture(uVel,vT).y,B=texture(uVel,vB).y;vec2 C=texture(uVel,vUv).xy;
-      if(vL.x<0.)L=-C.x;if(vR.x>1.)R=-C.x;if(vT.y>1.)T=-C.y;if(vB.y<0.)B=-C.y;o=vec4(0.5*(R-L+T-B),0.,0.,1.);}`,
-    curl:FH+`uniform sampler2D uVel; void main(){float L=texture(uVel,vL).y,R=texture(uVel,vR).y,T=texture(uVel,vT).x,B=texture(uVel,vB).x;o=vec4(0.5*(R-L-T+B),0.,0.,1.);}`,
-    vort:FH+`uniform sampler2D uVel,uCurl; uniform float curl,dt;
-      void main(){float L=texture(uCurl,vL).x,R=texture(uCurl,vR).x,T=texture(uCurl,vT).x,B=texture(uCurl,vB).x,C=texture(uCurl,vUv).x;
-      vec2 f=0.5*vec2(abs(T)-abs(B),abs(R)-abs(L));f/=length(f)+1e-4;f*=curl*C;f.y*=-1.;vec2 v=texture(uVel,vUv).xy+f*dt;o=vec4(clamp(v,-1000.,1000.),0.,1.);}`,
-    press:FH+`uniform sampler2D uP,uDiv; void main(){float L=texture(uP,vL).x,R=texture(uP,vR).x,T=texture(uP,vT).x,B=texture(uP,vB).x;o=vec4((L+R+B+T-texture(uDiv,vUv).x)*0.25,0.,0.,1.);}`,
-    grad:FH+`uniform sampler2D uP,uVel; void main(){float L=texture(uP,vL).x,R=texture(uP,vR).x,T=texture(uP,vT).x,B=texture(uP,vB).x;vec2 v=texture(uVel,vUv).xy-vec2(R-L,T-B);o=vec4(v,0.,1.);}`,
-    emit:FH+`uniform sampler2D uDye,uLogo; uniform float rate; void main(){vec4 d=texture(uDye,vUv);vec4 l=texture(uLogo,vUv);o=mix(d,l,clamp(rate*l.a,0.,1.));}`,
-    show:FH+`uniform sampler2D uDye; uniform vec3 paper; void main(){vec4 d=texture(uDye,vUv);float a=clamp(d.a,0.,1.);o=vec4(paper*(1.-a)+d.rgb,1.);}`
-  };
-  function prog(fs){
-    const mk=(t,s)=>{const sh=gl.createShader(t);gl.shaderSource(sh,s);gl.compileShader(sh);if(!gl.getShaderParameter(sh,gl.COMPILE_STATUS))throw new Error(gl.getShaderInfoLog(sh));return sh;};
-    const p=gl.createProgram();gl.attachShader(p,mk(gl.VERTEX_SHADER,VS));gl.attachShader(p,mk(gl.FRAGMENT_SHADER,fs));gl.linkProgram(p);
-    const u={};const n=gl.getProgramParameter(p,gl.ACTIVE_UNIFORMS);for(let i=0;i<n;i++){const nm=gl.getActiveUniform(p,i).name;u[nm]=gl.getUniformLocation(p,nm);}
-    return {p,u};
+  let W,H,dpr,R,cx,cy,stops,bars=[],t0=performance.now(),ptr={x:-1e4,y:-1e4};
+  const ASSEMBLE=2600, STAGGER=900;         /* ms: flight time, and spread of start times */
+  const ease=t=>t<0?0:t>1?1:1-Math.pow(1-t,3);
+  const back=t=>{t=Math.max(0,Math.min(1,t));const c=1.4;return 1+(c+1)*Math.pow(t-1,3)+c*Math.pow(t-1,2);};
+  function layout(){
+    dpr=Math.min(devicePixelRatio||1,2); W=canvas.clientWidth; H=canvas.clientHeight;
+    canvas.width=Math.round(W*dpr); canvas.height=Math.round(H*dpr); ctx.setTransform(dpr,0,0,dpr,0,0);
+    R=Math.min(W*0.26,H*0.22); cx=W/2; cy=H/2-R*0.5; stops=ringStops();
   }
-  const P={}; for(const k in FS) P[k]=prog(FS[k]);
-  const vao=gl.createVertexArray(); gl.bindVertexArray(vao);
-  const vb=gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER,vb); gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
-  gl.enableVertexAttribArray(0); gl.vertexAttribPointer(0,2,gl.FLOAT,false,0,0);
-
-  function fbo(w,h){
-    const t=gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D,t);
-    gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);
-    gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);
-    gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA16F,w,h,0,gl.RGBA,gl.HALF_FLOAT,null);
-    const f=gl.createFramebuffer(); gl.bindFramebuffer(gl.FRAMEBUFFER,f); gl.framebufferTexture2D(gl.FRAMEBUFFER,gl.COLOR_ATTACHMENT0,gl.TEXTURE_2D,t,0);
-    gl.viewport(0,0,w,h); gl.clearColor(0,0,0,0); gl.clear(gl.COLOR_BUFFER_BIT);
-    return {t,f,w,h,tx:1/w,ty:1/h,bind(u){gl.activeTexture(gl.TEXTURE0+u);gl.bindTexture(gl.TEXTURE_2D,t);return u;}};
-  }
-  function dfbo(w,h){ let a=fbo(w,h),b=fbo(w,h); return {w,h,tx:1/w,ty:1/h,get r(){return a},get w2(){return b},swap(){const t=a;a=b;b=t;}}; }
-
-  let W,H,simW,simH,dyeW,dyeH,vel,dye,div,curlT,pres,logoTex;
-  const logoCanvas=document.createElement('canvas');
-  function uploadLogo(){
-    logoCanvas.width=dyeW; logoCanvas.height=dyeH;
-    const c=logoCanvas.getContext('2d'); drawLogo(c,dyeW,dyeH,true);
-    if(!logoTex) logoTex=gl.createTexture();
-    gl.bindTexture(gl.TEXTURE_2D,logoTex);
-    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,true); gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL,true);
-    gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,logoCanvas);
-    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,false); gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL,false);
-    gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);
-    gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);
-  }
-  let needBurst=true;
-  function resize(){
-    const dpr=Math.min(devicePixelRatio||1,2);
-    W=canvas.width=Math.floor(canvas.clientWidth*dpr); H=canvas.height=Math.floor(canvas.clientHeight*dpr);
-    const asp=W/H, sim=128, dmax=(Math.max(W,H)>1600?2048:1600);
-    simW=Math.round(asp>=1?sim*asp:sim); simH=Math.round(asp>=1?sim:sim/asp);
-    const ds=Math.min(dmax,Math.max(W,H)); dyeW=Math.round(asp>=1?ds:ds*asp); dyeH=Math.round(asp>=1?ds/asp:ds);
-    vel=dfbo(simW,simH); dye=dfbo(dyeW,dyeH); div=fbo(simW,simH); curlT=fbo(simW,simH); pres=dfbo(simW,simH);
-    uploadLogo(); needBurst=true;
-  }
-  function blit(target){
-    if(target){gl.bindFramebuffer(gl.FRAMEBUFFER,target.f);gl.viewport(0,0,target.w,target.h);}
-    else{gl.bindFramebuffer(gl.FRAMEBUFFER,null);gl.viewport(0,0,W,H);}
-    gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
-  }
-  function use(pr,tsx,tsy){gl.useProgram(pr.p);if(pr.u.texelSize)gl.uniform2f(pr.u.texelSize,tsx,tsy);}
-
-  let paper=hex(css('--paper'));
-  const pointers=[]; let lastT=performance.now(), ambientT=0;
-  function splat(x,y,dx,dy){
-    use(P.splat,vel.tx,vel.ty);
-    gl.uniform1i(P.splat.u.uTarget,vel.r.bind(0)); gl.uniform1f(P.splat.u.aspect,W/H); gl.uniform2f(P.splat.u.point,x,y);
-    gl.uniform3f(P.splat.u.color,dx,dy,0); gl.uniform1f(P.splat.u.radius,0.0012);
-    blit(vel.w2); vel.swap();
-  }
-  function step(dt){
-    gl.disable(gl.BLEND);
-    use(P.curl,vel.tx,vel.ty); gl.uniform1i(P.curl.u.uVel,vel.r.bind(0)); blit(curlT);
-    use(P.vort,vel.tx,vel.ty); gl.uniform1i(P.vort.u.uVel,vel.r.bind(0)); gl.uniform1i(P.vort.u.uCurl,curlT.bind(1)); gl.uniform1f(P.vort.u.curl,18); gl.uniform1f(P.vort.u.dt,dt); blit(vel.w2); vel.swap();
-    use(P.div,vel.tx,vel.ty); gl.uniform1i(P.div.u.uVel,vel.r.bind(0)); blit(div);
-    use(P.press,vel.tx,vel.ty); gl.uniform1i(P.press.u.uDiv,div.bind(0));
-    for(let i=0;i<20;i++){gl.uniform1i(P.press.u.uP,pres.r.bind(1)); blit(pres.w2); pres.swap();}
-    use(P.grad,vel.tx,vel.ty); gl.uniform1i(P.grad.u.uP,pres.r.bind(0)); gl.uniform1i(P.grad.u.uVel,vel.r.bind(1)); blit(vel.w2); vel.swap();
-    use(P.advect,vel.tx,vel.ty); gl.uniform1i(P.advect.u.uVel,vel.r.bind(0)); gl.uniform1i(P.advect.u.uSrc,vel.r.bind(0)); gl.uniform1f(P.advect.u.dt,dt); gl.uniform1f(P.advect.u.diss,0.985); blit(vel.w2); vel.swap();
-    use(P.advect,dye.tx,dye.ty); gl.uniform1i(P.advect.u.uVel,vel.r.bind(0)); gl.uniform1i(P.advect.u.uSrc,dye.r.bind(1)); gl.uniform1f(P.advect.u.dt,dt); gl.uniform1f(P.advect.u.diss,0.992); blit(dye.w2); dye.swap();
-    use(P.emit,dye.tx,dye.ty); gl.uniform1i(P.emit.u.uDye,dye.r.bind(0)); gl.uniform1i(P.emit.u.uLogo,(gl.activeTexture(gl.TEXTURE1),gl.bindTexture(gl.TEXTURE_2D,logoTex),1)); gl.uniform1f(P.emit.u.rate,needBurst?1:0.09); blit(dye.w2); dye.swap();
-    needBurst=false;
+  function seed(){
+    bars=[]; const D=Math.hypot(W,H);
+    for(let i=0;i<BARS;i++){
+      const a=i*Math.PI*2/BARS;                 /* home angle */
+      const fa=Math.random()*Math.PI*2;         /* arrives from a random direction, well off screen */
+      bars.push({a, sx:cx+Math.cos(fa)*D*0.75, sy:cy+Math.sin(fa)*D*0.75, rot0:(Math.random()*2-1)*Math.PI*1.5, delay:Math.random()*STAGGER, len:0.6+Math.random()*0.8});
+    }
   }
   function frame(now){
     if(!running) return;
-    const dt=Math.min((now-lastT)/1000,0.0166*2); lastT=now;
-    ambientT+=dt;
-    if(ambientT>1.6){ ambientT=0; const a=Math.random()*Math.PI*2, r=0.18+Math.random()*0.12; const cx=0.5+Math.cos(a)*r*(H/W), cy=0.56+Math.sin(a)*r;
-      const s=0.5+Math.random(); splat(cx,cy,-Math.sin(a)*120*s,Math.cos(a)*120*s); }
-    for(const p of pointers){ if(p.moved){ splat(p.x,p.y,p.dx*900,p.dy*900); p.moved=false; } }
-    step(dt);
-    use(P.show,dye.tx,dye.ty); gl.uniform1i(P.show.u.uDye,dye.r.bind(0)); gl.uniform3f(P.show.u.paper,paper[0],paper[1],paper[2]); blit(null);
+    const t=now-t0;
+    ctx.clearRect(0,0,W,H);
+    const bw=(2*Math.PI*R/BARS)*0.46; ctx.lineCap='butt'; ctx.lineWidth=bw;
+    /* pulse: a band of light travels around the ring; the whole mark breathes */
+    const assembled=t>ASSEMBLE+STAGGER;
+    const pt=reduce?0:(t-(ASSEMBLE+STAGGER))/1000;
+    const breathe=assembled?1+0.012*Math.sin(pt*1.1):1;
+    const band=pt*0.9;                        /* radians per second the highlight travels */
+    for(const b of bars){
+      const k=ease((t-b.delay)/ASSEMBLE);      /* 0 → 1 flight progress */
+      const kb=back((t-b.delay)/ASSEMBLE);     /* with a small settle-back */
+      const hx=cx+Math.cos(b.a)*R*0.845*breathe, hy=cy-Math.sin(b.a)*R*0.845*breathe;   /* home centre of the bar */
+      const x=b.sx+(hx-b.sx)*kb, y=b.sy+(hy-b.sy)*kb;
+      /* bar direction: spins while flying, aligns radially as it lands */
+      const dir=-b.a+b.rot0*(1-k);
+      let half=R*0.155*(b.len+(1-b.len)*k);
+      /* cursor nudge once assembled */
+      let px=0,py=0;
+      if(assembled){ const dx=x-ptr.x, dy=y-ptr.y, d=Math.hypot(dx,dy), reach=R*0.9; if(d<reach){ const f=(1-d/reach); px=dx/d*f*R*0.12; py=dy/d*f*R*0.12; } }
+      /* shade: base gradient by angle, plus the travelling light band */
+      const deg=b.a*180/Math.PI; let col=ringColor(stops,deg);
+      if(assembled){ const ph=Math.cos(b.a-band); const lift=Math.max(0,ph)*0.45*(0.6+0.4*Math.sin(pt*0.7)); col=col.map(v=>v+(1-v)*lift); }
+      ctx.strokeStyle=toCss(col); ctx.globalAlpha=Math.min(1,0.15+k);
+      const ux=Math.cos(dir), uy=Math.sin(dir);
+      ctx.beginPath(); ctx.moveTo(x+px-ux*half,y+py-uy*half); ctx.lineTo(x+px+ux*half,y+py+uy*half); ctx.stroke();
+    }
+    ctx.globalAlpha=1;
     raf=requestAnimationFrame(frame);
   }
-  function ptr(id){ let p=pointers.find(q=>q.id===id); if(!p){p={id,x:0,y:0,dx:0,dy:0,moved:false,down:false};pointers.push(p);} return p; }
-  const toUv=e=>{const r=canvas.getBoundingClientRect();return [(e.clientX-r.left)/r.width,1-(e.clientY-r.top)/r.height];};
-  canvas.addEventListener('pointermove',e=>{const p=ptr(e.pointerId),[x,y]=toUv(e);
-    if(p.x||p.y){p.dx=(x-p.x)*(W/H);p.dy=y-p.y;p.moved=Math.hypot(p.dx,p.dy)>0;} p.x=x;p.y=y;},{passive:true});
-  canvas.addEventListener('pointerdown',e=>{const p=ptr(e.pointerId),[x,y]=toUv(e);p.x=x;p.y=y;p.down=true;});
-  canvas.addEventListener('pointerleave',e=>{const i=pointers.findIndex(q=>q.id===e.pointerId);if(i>=0)pointers.splice(i,1);});
-  canvas.addEventListener('pointerup',e=>{const i=pointers.findIndex(q=>q.id===e.pointerId);if(i>=0&&e.pointerType==='touch')pointers.splice(i,1);});
-
-  resize(); running=true; lastT=performance.now(); raf=requestAnimationFrame(frame);
-  addEventListener('resize',()=>{ if(running) resize(); });
-  window.__fluidTheme=()=>{ paper=hex(css('--paper')); if(running){uploadLogo();needBurst=true;} };
-  window.__fluidStop=()=>{ running=false; cancelAnimationFrame(raf); };
+  layout(); seed(); running=true; t0=performance.now()-(reduce?ASSEMBLE+STAGGER:0); raf=requestAnimationFrame(frame);
+  addEventListener('resize',()=>{ if(!running) return; const done=performance.now()-t0; layout(); seed(); t0=performance.now()-Math.max(done,0); });
+  canvas.addEventListener('pointermove',e=>{const r=canvas.getBoundingClientRect();ptr.x=e.clientX-r.left;ptr.y=e.clientY-r.top;},{passive:true});
+  canvas.addEventListener('pointerleave',()=>{ptr.x=-1e4;ptr.y=-1e4;});
+  window.__markTheme=()=>{ stops=ringStops(); };
+  window.__markStop=()=>{ running=false; cancelAnimationFrame(raf); };
 }
 
 /* ---------------- Boot ---------------- */
@@ -764,11 +673,10 @@ const HOLDING=true;
 if(HOLDING && location.hash!=='#preview') document.body.classList.add('holding');
 document.body.classList.add('locked');
 buildSvgRings();
-if(reduce) staticLogo(); else { try{ startFluid(); }catch(e){ staticLogo(); } }
-addEventListener('resize',()=>{ if(reduce||!running) staticLogo(); });
+startMark();
 
 const themeQ=matchMedia('(prefers-color-scheme: dark)');
-const onTheme=()=>{ buildSvgRings(); if(window.__fluidTheme) window.__fluidTheme(); else staticLogo(); };
+const onTheme=()=>{ buildSvgRings(); if(window.__markTheme) window.__markTheme(); };
 themeQ.addEventListener('change',onTheme);
 new MutationObserver(onTheme).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
 
@@ -776,7 +684,7 @@ const splash=document.getElementById('splash');
 function enter(){
   if(splash.classList.contains('leaving')) return;
   splash.classList.add('leaving'); document.body.classList.remove('locked');
-  setTimeout(()=>{ splash.hidden=true; if(window.__fluidStop) window.__fluidStop(); }, reduce?0:950);
+  setTimeout(()=>{ splash.hidden=true; if(window.__markStop) window.__markStop(); }, reduce?0:950);
 }
 document.getElementById('enter').addEventListener('click',enter);
 addEventListener('keydown',e=>{ if(!splash.hidden && (e.key==='Enter'||e.key===' ')) { e.preventDefault(); enter(); } });
