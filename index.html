@@ -640,7 +640,14 @@ function startMark(){
     if(!running) return;
     const t=now-t0;
     ctx.clearRect(0,0,W,H);
-    const bw=(2*Math.PI*R/BARS)*0.46; ctx.lineCap='butt'; ctx.lineWidth=bw;
+    const bw=(2*Math.PI*R/BARS)*0.46; ctx.lineCap='butt';
+    /* ghost ring, lower right, fades in as the mark assembles */
+    { const gR=R*0.78, gx=cx+R*1.05, gy=cy+R*0.95, ga=Math.min(1,Math.max(0,(t-ASSEMBLE*0.6)/ASSEMBLE))*0.13;
+      if(ga>0){ ctx.globalAlpha=ga; ctx.lineWidth=(2*Math.PI*gR/BARS)*0.46;
+        for(let i=0;i<BARS;i++){ const deg=i*360/BARS+8, r=deg*Math.PI/180; ctx.strokeStyle=toCss(ringColor(stops,deg));
+          ctx.beginPath(); ctx.moveTo(gx+Math.cos(r)*gR*0.69,gy-Math.sin(r)*gR*0.69); ctx.lineTo(gx+Math.cos(r)*gR,gy-Math.sin(r)*gR); ctx.stroke(); }
+        ctx.globalAlpha=1; } }
+    ctx.lineWidth=bw;
     /* pulse: a band of light travels around the ring; the whole mark breathes */
     const assembled=t>ASSEMBLE+STAGGER;
     const pt=reduce?0:(t-(ASSEMBLE+STAGGER))/1000;
