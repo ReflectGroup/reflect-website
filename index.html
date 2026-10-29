@@ -658,7 +658,7 @@ function startMark(){
     /* ghost ring, lower right, mirrors the mark in the opposite direction, fades in as the mark assembles */
     { const gR=R*0.78, gx=cx+R*1.05, gy=cy+R*0.95, ga=Math.min(1,Math.max(0,(t-ASSEMBLE*0.6)/ASSEMBLE))*0.13;
       if(ga>0){ ctx.globalAlpha=ga; ctx.lineWidth=(2*Math.PI*gR/BARS)*0.46;
-        for(let i=0;i<BARS;i++){ const base=i*Math.PI*2/BARS, deg=i*360/BARS+8, r=deg*Math.PI/180; const [ri,ro]=prof(base,-outPhase,-inPhase); ctx.strokeStyle=toCss(ringColor(stops,deg));
+        for(let i=0;i<BARS;i++){ const base=i*Math.PI*2/BARS, deg=i*360/BARS+8, r=deg*Math.PI/180; const [ri,ro]=prof(base,-outPhase,-inPhase); let gc=ringColor(stops,deg); if(assembled){ let sd=base+ptw*0.8; sd=Math.atan2(Math.sin(sd),Math.cos(sd)); const g=Math.exp(-(sd*sd)/(2*0.45*0.45)); gc=gc.map(v=>v+(1-v)*0.5*g); } ctx.strokeStyle=toCss(gc);
           ctx.beginPath(); ctx.moveTo(gx+Math.cos(r)*gR*ri,gy-Math.sin(r)*gR*ri); ctx.lineTo(gx+Math.cos(r)*gR*ro,gy-Math.sin(r)*gR*ro); ctx.stroke(); }
         ctx.globalAlpha=1; } }
     ctx.lineWidth=bw;
@@ -666,31 +666,15 @@ function startMark(){
     const assembled=t>ASSEMBLE+STAGGER;
     if(assembled&&!revealed){ revealed=true; document.querySelector('#splash .mark').classList.add('in'); }
     const pt=reduce?0:(t-(ASSEMBLE+STAGGER))/1000;
-    const breathe=assembled?1+0.012*Math.sin(pt*1.1):1;
-    /* sweep angle: integrates a velocity that ebbs and flows and, every so often, eases through zero to run the other way */
-    if(assembled){
-      const dt=Math.min(0.05,(now-(lastNow||now))/1000);
-      if(now>nextTurn){ target=-target; nextTurn=now+6000+Math.random()*9000; }
-      vel+=(target-vel)*Math.min(1,dt*0.8);                       /* slow, smooth approach: the sweep decelerates to a stop, then builds the other way */
-      band+=vel*(1.05+0.22*Math.sin(pt*0.45))*dt;
-      if(Math.abs(vel)>0.02) sign=Math.sign(vel);
-      amp=Math.min(1,Math.abs(vel)/0.55);                          /* effects fade out as the sweep stops and return as it picks up */
-    }
-    lastNow=now;
+    const breathe=1;
+    const band=ptw*0.8; sign=1; amp=1;                       /* steady sweep, as on the study page */
     for(const b of bars){
       const k=ease((t-b.delay)/ASSEMBLE);      /* 0 → 1 flight progress */
       const kb=back((t-b.delay)/ASSEMBLE);     /* with a small settle-back */
       const [ri,ro]=prof(b.a,outPhase,inPhase); const rm=(ri+ro)/2, rh=(ro-ri)/2;      /* this bar's place on the wave right now */
       const hx=cx+Math.cos(b.a)*R*rm*breathe, hy=cy-Math.sin(b.a)*R*rm*breathe;        /* home centre of the bar */
       const x=b.sx+(hx-b.sx)*kb, y=b.sy+(hy-b.sy)*kb;
-      /* sweep: a soft glow leads, each bar tips over smoothly as it passes, and a fading ripple runs on behind it */
       let tilt=0, lenBoost=1;
-      if(assembled){
-        const d=(((band-b.a)*sign)%(Math.PI*2)+Math.PI*2)%(Math.PI*2);   /* how far behind the sweep this bar is, in the direction of travel */
-        const win=0.9;
-        if(d<win){ const u=d/win, e=Math.pow(Math.sin(u*Math.PI),2); tilt=e*0.62*sign*amp; lenBoost=1+0.14*e*amp; }
-        else { const r=d-win; tilt=0.10*Math.sin(r*5.5)*Math.exp(-r*1.6)*sign*amp; }
-      }
       /* bar direction: spins while flying, aligns radially as it lands */
       const dir=-b.a+b.rot0*(1-k)+tilt;
       let half=R*rh*(b.len+(1-b.len)*k)*lenBoost;
@@ -700,7 +684,7 @@ function startMark(){
       if(assembled){ const dx=x-ptr.x, dy=y-ptr.y, d=Math.hypot(dx,dy), reach=R*0.9; if(d<reach){ const f=(1-d/reach); px=dx/d*f*R*0.12; py=dy/d*f*R*0.12; } }
       /* shade: base gradient by angle, plus the travelling light band */
       const deg=b.a*180/Math.PI; let col=ringColor(stops,deg);
-      if(assembled){ let sd=b.a-band; sd=Math.atan2(Math.sin(sd),Math.cos(sd)); const g=Math.exp(-(sd*sd)/(2*0.42*0.42)); const lift=0.6*g*(0.35+0.65*amp); const trail=sd*sign<0?0.14*amp*Math.exp(-(sd*sd)/(2*1.1*1.1))*(1-g):0; col=col.map(v=>v+(1-v)*lift-v*trail); }
+      if(assembled){ let sd=b.a-band; sd=Math.atan2(Math.sin(sd),Math.cos(sd)); const g=Math.exp(-(sd*sd)/(2*0.45*0.45)); const lift=0.5*g; col=col.map(v=>v+(1-v)*lift); }
       ctx.strokeStyle=toCss(col); ctx.globalAlpha=Math.min(1,0.15+k);
       const ux=Math.cos(dir), uy=Math.sin(dir);
       ctx.beginPath(); ctx.moveTo(x+px-ux*half,y+py-uy*half); ctx.lineTo(x+px+ux*half,y+py+uy*half); ctx.stroke();
