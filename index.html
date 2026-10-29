@@ -45,6 +45,14 @@ body.holding main,body.holding #menuBtn,body.holding #menu,body.holding #tagFixe
 @media (max-width:560px){#splash .mid{display:none}}
 #splash .corner{position:absolute;z-index:3;right:var(--gutter-r);top:calc(env(safe-area-inset-top,0px) + 1.4rem);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);text-align:right}
 
+#soundBtn{position:absolute;z-index:3;right:var(--gutter-r);bottom:calc(env(safe-area-inset-bottom,0px) + 1.4rem);display:flex;align-items:center;gap:.6rem;font:inherit;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--mute);background:transparent;border:0;cursor:pointer;padding:.4rem 0}
+#soundBtn .ic{display:flex;gap:2px;align-items:flex-end;height:12px}
+#soundBtn .ic::before,#soundBtn .ic::after,#soundBtn .ic i{content:"";display:block;width:2px;background:var(--bronze);height:6px;transition:height .3s}
+#soundBtn[aria-pressed="true"] .ic::before{height:12px;animation:eq .9s ease-in-out infinite alternate}
+#soundBtn[aria-pressed="true"] .ic::after{height:9px;animation:eq 1.3s ease-in-out infinite alternate-reverse}
+@keyframes eq{from{height:4px}to{height:12px}}
+#soundBtn:hover{color:var(--ink)}
+
 /* ---------- Site ---------- */
 .wrap{max-width:1120px;margin:0 auto;padding-left:var(--gutter-l);padding-right:var(--gutter-r)}
 .brand{display:flex;align-items:center;gap:.7rem;text-decoration:none}
@@ -264,6 +272,7 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
   <div id="hint">Estimating</div>
   <div class="mid">Cost management</div>
   <div class="corner">Quantity surveying</div>
+  <button id="soundBtn" type="button" aria-pressed="false" aria-label="Sound"><span class="ic" aria-hidden="true"></span><span class="lbl">Sound off</span></button>
   <div class="mark">
     <div class="word">Reflect<small>Group</small></div>
     <div class="tag">Measured with care. Priced with confidence.</div>
@@ -611,7 +620,7 @@ let running=false, raf=0;
 function startMark(){
   const ctx=canvas.getContext('2d'); if(!ctx) return;
   let W,H,dpr,R,cx,cy,stops,bars=[],t0=performance.now(),ptr={x:-1e4,y:-1e4};
-  const ASSEMBLE=2600, STAGGER=900;         /* ms: flight time, and spread of start times */
+  const ASSEMBLE=4200, STAGGER=1800;         /* ms: flight time, and spread of start times */
   const ease=t=>t<0?0:t>1?1:1-Math.pow(1-t,3);
   const back=t=>{t=Math.max(0,Math.min(1,t));const c=1.4;return 1+(c+1)*Math.pow(t-1,3)+c*Math.pow(t-1,2);};
   function layout(){
@@ -636,7 +645,7 @@ function startMark(){
     const assembled=t>ASSEMBLE+STAGGER;
     const pt=reduce?0:(t-(ASSEMBLE+STAGGER))/1000;
     const breathe=assembled?1+0.012*Math.sin(pt*1.1):1;
-    const band=pt*0.9;                        /* radians per second the highlight travels */
+    const band=pt*1.1;                        /* radians per second the highlight travels */
     for(const b of bars){
       const k=ease((t-b.delay)/ASSEMBLE);      /* 0 → 1 flight progress */
       const kb=back((t-b.delay)/ASSEMBLE);     /* with a small settle-back */
@@ -645,12 +654,13 @@ function startMark(){
       /* bar direction: spins while flying, aligns radially as it lands */
       const dir=-b.a+b.rot0*(1-k);
       let half=R*0.155*(b.len+(1-b.len)*k);
+      if(assembled){ const w=Math.cos(b.a-band); half*=1+0.22*Math.pow(Math.max(0,w),3); }   /* bars lengthen as the sweep passes */
       /* cursor nudge once assembled */
       let px=0,py=0;
       if(assembled){ const dx=x-ptr.x, dy=y-ptr.y, d=Math.hypot(dx,dy), reach=R*0.9; if(d<reach){ const f=(1-d/reach); px=dx/d*f*R*0.12; py=dy/d*f*R*0.12; } }
       /* shade: base gradient by angle, plus the travelling light band */
       const deg=b.a*180/Math.PI; let col=ringColor(stops,deg);
-      if(assembled){ const ph=Math.cos(b.a-band); const lift=Math.max(0,ph)*0.45*(0.6+0.4*Math.sin(pt*0.7)); col=col.map(v=>v+(1-v)*lift); }
+      if(assembled){ const ph=Math.cos(b.a-band); const lift=Math.pow(Math.max(0,ph),2.5)*0.7; const trail=Math.pow(Math.max(0,Math.cos(b.a-band+0.9)),3)*0.25; col=col.map(v=>v+(1-v)*lift-v*trail); }
       ctx.strokeStyle=toCss(col); ctx.globalAlpha=Math.min(1,0.15+k);
       const ux=Math.cos(dir), uy=Math.sin(dir);
       ctx.beginPath(); ctx.moveTo(x+px-ux*half,y+py-uy*half); ctx.lineTo(x+px+ux*half,y+py+uy*half); ctx.stroke();
@@ -683,7 +693,7 @@ new MutationObserver(onTheme).observe(document.documentElement,{attributes:true,
 const splash=document.getElementById('splash');
 function enter(){
   if(splash.classList.contains('leaving')) return;
-  splash.classList.add('leaving'); document.body.classList.remove('locked');
+  splash.classList.add('leaving'); document.body.classList.remove('locked'); if(window.__splashChime) window.__splashChime();
   setTimeout(()=>{ splash.hidden=true; if(window.__markStop) window.__markStop(); }, reduce?0:950);
 }
 document.getElementById('enter').addEventListener('click',enter);
@@ -775,6 +785,28 @@ addEventListener('keydown',e=>{ if(!splash.hidden && (e.key==='Enter'||e.key==='
 
 
 /* (watermarks removed) */
+
+
+/* Splash sound: a quiet ambient pad synthesised in the browser (no audio file), off until the visitor turns it on,
+   plus a soft chime on Enter when sound is on. Browsers do not allow sound before the first click or tap. */
+(function(){
+  const btn=document.getElementById('soundBtn'); if(!btn) return;
+  let ac,master,on=false,nodes=[];
+  function start(){
+    ac=ac||new (window.AudioContext||window.webkitAudioContext)(); if(ac.state==='suspended') ac.resume();
+    master=ac.createGain(); master.gain.value=0; master.connect(ac.destination);
+    const lp=ac.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=900; lp.connect(master);
+    [[110,0],[164.8,3],[220,-4],[329.6,2]].forEach(([f,det])=>{
+      const o=ac.createOscillator(), g=ac.createGain(); o.type='sine'; o.frequency.value=f; o.detune.value=det;
+      g.gain.value=0.12; const lfo=ac.createOscillator(), lg=ac.createGain(); lfo.frequency.value=0.05+Math.random()*0.08; lg.gain.value=0.05; lfo.connect(lg); lg.connect(g.gain);
+      o.connect(g); g.connect(lp); o.start(); lfo.start(); nodes.push(o,lfo);
+    });
+    master.gain.linearRampToValueAtTime(0.35,ac.currentTime+2.5);
+  }
+  function stop(){ if(!master) return; master.gain.linearRampToValueAtTime(0,ac.currentTime+0.8); const m=master,n=nodes; nodes=[]; setTimeout(()=>{n.forEach(x=>{try{x.stop()}catch(e){}}); m.disconnect();},900); master=null; }
+  btn.addEventListener('click',()=>{ on=!on; btn.setAttribute('aria-pressed',on); btn.querySelector('.lbl').textContent=on?'Sound on':'Sound off'; if(on) start(); else stop(); });
+  window.__splashChime=()=>{ if(!on||!ac) return; const t=ac.currentTime; [523.25,659.25,783.99].forEach((f,i)=>{ const o=ac.createOscillator(), g=ac.createGain(); o.type='sine'; o.frequency.value=f; g.gain.setValueAtTime(0,t+i*0.12); g.gain.linearRampToValueAtTime(0.12,t+i*0.12+0.03); g.gain.exponentialRampToValueAtTime(0.0001,t+i*0.12+1.6); o.connect(g); g.connect(ac.destination); o.start(t+i*0.12); o.stop(t+i*0.12+1.7); }); stop(); };
+})();
 
 document.querySelectorAll('.copy').forEach(b=>b.addEventListener('click',()=>{
   const el=document.getElementById(b.dataset.copy), txt=el.textContent.trim();
