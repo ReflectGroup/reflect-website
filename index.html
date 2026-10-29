@@ -623,7 +623,7 @@ let running=false, raf=0;
 function startMark(){
   const ctx=canvas.getContext('2d'); if(!ctx) return;
   let W,H,dpr,R,cx,cy,stops,bars=[],t0=performance.now(),ptr={x:-1e4,y:-1e4};
-  let band=0,vel=1,target=1,sign=1,lastNow=0,nextTurn=performance.now()+9000+Math.random()*6000;
+  let band=0,vel=1,target=1,sign=1,amp=1,lastNow=0,nextTurn=performance.now()+9000+Math.random()*6000;
   const ASSEMBLE=4200, STAGGER=1800;         /* ms: flight time, and spread of start times */
   const ease=t=>t<0?0:t>1?1:1-Math.pow(1-t,3);
   const back=t=>{t=Math.max(0,Math.min(1,t));const c=1.4;return 1+(c+1)*Math.pow(t-1,3)+c*Math.pow(t-1,2);};
@@ -660,9 +660,10 @@ function startMark(){
     if(assembled){
       const dt=Math.min(0.05,(now-(lastNow||now))/1000);
       if(now>nextTurn){ target=-target; nextTurn=now+6000+Math.random()*9000; }
-      vel+=(target-vel)*Math.min(1,dt*1.6);                       /* smooth approach to the target direction */
+      vel+=(target-vel)*Math.min(1,dt*0.8);                       /* slow, smooth approach: the sweep decelerates to a stop, then builds the other way */
       band+=vel*(1.05+0.22*Math.sin(pt*0.45))*dt;
-      if(Math.abs(vel)>0.05) sign=Math.sign(vel);
+      if(Math.abs(vel)>0.02) sign=Math.sign(vel);
+      amp=Math.min(1,Math.abs(vel)/0.55);                          /* effects fade out as the sweep stops and return as it picks up */
     }
     lastNow=now;
     for(const b of bars){
@@ -675,8 +676,8 @@ function startMark(){
       if(assembled){
         const d=(((band-b.a)*sign)%(Math.PI*2)+Math.PI*2)%(Math.PI*2);   /* how far behind the sweep this bar is, in the direction of travel */
         const win=0.9;
-        if(d<win){ const u=d/win, e=Math.pow(Math.sin(u*Math.PI),2); tilt=e*0.62*sign; lenBoost=1+0.14*e; }
-        else { const r=d-win; tilt=0.10*Math.sin(r*5.5)*Math.exp(-r*1.6)*sign; }
+        if(d<win){ const u=d/win, e=Math.pow(Math.sin(u*Math.PI),2); tilt=e*0.62*sign*amp; lenBoost=1+0.14*e*amp; }
+        else { const r=d-win; tilt=0.10*Math.sin(r*5.5)*Math.exp(-r*1.6)*sign*amp; }
       }
       /* bar direction: spins while flying, aligns radially as it lands */
       const dir=-b.a+b.rot0*(1-k)+tilt;
@@ -687,7 +688,7 @@ function startMark(){
       if(assembled){ const dx=x-ptr.x, dy=y-ptr.y, d=Math.hypot(dx,dy), reach=R*0.9; if(d<reach){ const f=(1-d/reach); px=dx/d*f*R*0.12; py=dy/d*f*R*0.12; } }
       /* shade: base gradient by angle, plus the travelling light band */
       const deg=b.a*180/Math.PI; let col=ringColor(stops,deg);
-      if(assembled){ let sd=b.a-band; sd=Math.atan2(Math.sin(sd),Math.cos(sd)); const g=Math.exp(-(sd*sd)/(2*0.42*0.42)); const lift=0.6*g; const trail=sd*sign<0?0.14*Math.exp(-(sd*sd)/(2*1.1*1.1))*(1-g):0; col=col.map(v=>v+(1-v)*lift-v*trail); }
+      if(assembled){ let sd=b.a-band; sd=Math.atan2(Math.sin(sd),Math.cos(sd)); const g=Math.exp(-(sd*sd)/(2*0.42*0.42)); const lift=0.6*g*(0.35+0.65*amp); const trail=sd*sign<0?0.14*amp*Math.exp(-(sd*sd)/(2*1.1*1.1))*(1-g):0; col=col.map(v=>v+(1-v)*lift-v*trail); }
       ctx.strokeStyle=toCss(col); ctx.globalAlpha=Math.min(1,0.15+k);
       const ux=Math.cos(dir), uy=Math.sin(dir);
       ctx.beginPath(); ctx.moveTo(x+px-ux*half,y+py-uy*half); ctx.lineTo(x+px+ux*half,y+py+uy*half); ctx.stroke();
