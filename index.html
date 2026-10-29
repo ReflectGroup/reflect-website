@@ -652,7 +652,7 @@ function startMark(){
     const bw=(2*Math.PI*R/BARS)*0.46; ctx.lineCap='butt';
     /* wave mark: the outer and inner profiles are three-lobe waves that counter-rotate once the mark has assembled */
     const ptw=reduce?0:Math.max(0,(t-(ASSEMBLE+STAGGER))/1000);
-    const spin=Math.min(1,ptw/2.5)*ptw*0.6;                /* eases into motion over the first couple of seconds */
+    const spin=ptw*0.6;                                     /* same rate as the study page */
     const outPhase=1.2+spin, inPhase=1.2-spin;
     const prof=(base,op,ip)=>{ const wo=0.5+0.5*Math.sin(3*base+op), wi=0.5+0.5*Math.sin(3*base+ip); return [0.69*(1-0.12*wi), 1+0.18*wo]; };
     /* ghost ring, lower right, mirrors the mark in the opposite direction, fades in as the mark assembles */
@@ -679,9 +679,7 @@ function startMark(){
       const dir=-b.a+b.rot0*(1-k)+tilt;
       let half=R*rh*(b.len+(1-b.len)*k)*lenBoost;
       if(assembled){ const d=((band-b.a)%(Math.PI*2)+Math.PI*2)%(Math.PI*2); const win=0.55; if(d<win){ const u=d/win; const e=Math.sin(u*Math.PI); tilt=e*0.75; half*=1+0.18*e; } }
-      /* cursor nudge once assembled */
       let px=0,py=0;
-      if(assembled){ const dx=x-ptr.x, dy=y-ptr.y, d=Math.hypot(dx,dy), reach=R*0.9; if(d<reach){ const f=(1-d/reach); px=dx/d*f*R*0.12; py=dy/d*f*R*0.12; } }
       /* shade: base gradient by angle, plus the travelling light band */
       const deg=b.a*180/Math.PI; let col=ringColor(stops,deg);
       if(assembled){ let sd=b.a-band; sd=Math.atan2(Math.sin(sd),Math.cos(sd)); const g=Math.exp(-(sd*sd)/(2*0.45*0.45)); const lift=0.5*g; col=col.map(v=>v+(1-v)*lift); }
