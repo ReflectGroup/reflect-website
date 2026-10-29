@@ -613,8 +613,10 @@ function buildSvgRings(){
     let s='';
     for(let i=0;i<BARS;i++){
       const deg=i*360/BARS, r=deg*Math.PI/180, col=toCss(ringColor(stops,deg));
-      const x1=50+Math.cos(r)*33, y1=50-Math.sin(r)*33, x2=50+Math.cos(r)*48, y2=50-Math.sin(r)*48;
-      s+=`<line x1="${x1.toFixed(2)}" y1="${y1.toFixed(2)}" x2="${x2.toFixed(2)}" y2="${y2.toFixed(2)}" stroke="${col}" stroke-width="1.6"/>`;
+      const base=i*Math.PI*2/BARS, wo=0.5+0.5*Math.sin(3*base+1.2), wi=0.5+0.5*Math.sin(3*base+1.2);   /* the wave mark, at rest */
+      const R=40, ro=R*(1+0.18*wo), ri=R*0.69*(1-0.12*wi);
+      const x1=50+Math.cos(r)*ri, y1=50-Math.sin(r)*ri, x2=50+Math.cos(r)*ro, y2=50-Math.sin(r)*ro;
+      s+=`<line x1="${x1.toFixed(2)}" y1="${y1.toFixed(2)}" x2="${x2.toFixed(2)}" y2="${y2.toFixed(2)}" stroke="${col}" stroke-width="1.4"/>`;
     }
     svg.innerHTML=s;
   });
