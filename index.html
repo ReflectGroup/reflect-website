@@ -678,7 +678,6 @@ function startMark(){
       /* bar direction: spins while flying, aligns radially as it lands */
       const dir=-b.a+b.rot0*(1-k)+tilt;
       let half=R*rh*(b.len+(1-b.len)*k)*lenBoost;
-      if(assembled){ const d=((band-b.a)%(Math.PI*2)+Math.PI*2)%(Math.PI*2); const win=0.55; if(d<win){ const u=d/win; const e=Math.sin(u*Math.PI); tilt=e*0.75; half*=1+0.18*e; } }
       let px=0,py=0;
       /* shade: base gradient by angle, plus the travelling light band */
       const deg=b.a*180/Math.PI; let col=ringColor(stops,deg);
