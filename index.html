@@ -248,12 +248,14 @@ body.holding #topMark{display:none}
 
 /* ---------- Menu (three lines, top right) ---------- */
 #menuBtn{position:fixed;top:calc(env(safe-area-inset-top,0px) + 1.1rem);right:calc(env(safe-area-inset-right,0px) + 1.1rem);z-index:30;width:3.8rem;height:3.8rem;border:0;border-radius:50%;background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:0;transition:filter .4s ease}
-#menuBtn span{display:block;width:2.3rem;height:2.5px;border-radius:1px;background:linear-gradient(90deg,var(--bronze) 0%,var(--bronze) 35%,#e6d9c3 50%,var(--bronze) 65%,var(--bronze) 100%);background-size:250% 100%;background-position:100% 0;box-shadow:0 0 0 rgba(220,207,187,0);transition:transform .35s ease,opacity .25s ease,box-shadow .4s ease}
-#menuBtn:hover{filter:drop-shadow(0 0 6px rgba(220,207,187,.85))}
-#menuBtn:hover span{animation:shine 1.1s cubic-bezier(.4,0,.2,1) forwards;box-shadow:0 0 8px rgba(220,207,187,.55)}
+#menuBtn{--mb:#f5f1ea}#menuBtn.ink{--mb:var(--ink)}
+#menuBtn span{display:block;width:2.3rem;height:2.5px;border-radius:1px;background:linear-gradient(90deg,var(--mb) 0%,var(--mb) 35%,#c9a97a 50%,var(--mb) 65%,var(--mb) 100%);background-size:250% 100%;background-position:100% 0;box-shadow:0 0 0 rgba(184,157,120,0);transition:transform .35s ease,opacity .25s ease,box-shadow .4s ease}
+#menuBtn:hover{filter:drop-shadow(0 0 6px rgba(184,157,120,.9))}
+#menuBtn:hover span{animation:shine 1.1s cubic-bezier(.4,0,.2,1) forwards;box-shadow:0 0 8px rgba(184,157,120,.6)}
 #menuBtn:hover span:nth-child(2){animation-delay:.08s}#menuBtn:hover span:nth-child(3){animation-delay:.16s}
 @keyframes shine{from{background-position:100% 0}to{background-position:0% 0}}
 #menuBtn.open span{background:var(--ink);animation:none;box-shadow:none}
+#menuBtn.open{filter:none}
 #menuBtn.open span:nth-child(1){transform:translateY(10.5px) rotate(45deg)}
 #menuBtn.open span:nth-child(2){opacity:0}
 #menuBtn.open span:nth-child(3){transform:translateY(-10.5px) rotate(-45deg)}
@@ -816,9 +818,9 @@ function enter(){
   setTimeout(()=>{ splash.hidden=true; if(window.__markStop) window.__markStop(); }, reduce?0:950);
 }
 document.getElementById('enter').addEventListener('click',enter);
-/* Returning visitors: the splash is shown once, then skipped for 24 hours (per browser); after that it plays again.
+/* Returning visitors: the splash is shown once, then skipped for 2 hours (per browser); after that it plays again.
    Not applied in holding mode, where the splash is the page. Add #splash to the address to force it. */
-const SPLASH_SKIP_MS=24*60*60*1000, SPLASH_KEY='rg-splash-seen';
+const SPLASH_SKIP_MS=2*60*60*1000, SPLASH_KEY='rg-splash-seen';
 (function(){
   if(document.body.classList.contains('holding')) return;
   let seen=0; try{ seen=+localStorage.getItem(SPLASH_KEY)||0; }catch(e){}
@@ -918,7 +920,8 @@ addEventListener('keydown',e=>{ if(!splash.hidden && (e.key==='Enter'||e.key==='
 (function(){
   const t=document.getElementById('tagFixed'), reel=document.querySelector('.reel'); if(!t||!reel) return;
   const tm=document.getElementById('topMark');
-  const upd=()=>{ const past=scrollY > reel.offsetHeight - 40; t.classList.toggle('ink', past); if(tm) tm.classList.toggle('show', past); };
+  const mb=document.getElementById('menuBtn');
+  const upd=()=>{ const past=scrollY > reel.offsetHeight - 40; t.classList.toggle('ink', past); if(tm) tm.classList.toggle('show', past); if(mb) mb.classList.toggle('ink', past||mb.classList.contains('open')); };
   addEventListener('scroll',upd,{passive:true}); addEventListener('resize',upd); upd();
 })();
 
