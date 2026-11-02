@@ -816,6 +816,17 @@ function enter(){
   setTimeout(()=>{ splash.hidden=true; if(window.__markStop) window.__markStop(); }, reduce?0:950);
 }
 document.getElementById('enter').addEventListener('click',enter);
+/* Returning visitors: the splash is shown once, then skipped for 24 hours (per browser); after that it plays again.
+   Not applied in holding mode, where the splash is the page. Add #splash to the address to force it. */
+const SPLASH_SKIP_MS=24*60*60*1000, SPLASH_KEY='rg-splash-seen';
+(function(){
+  if(document.body.classList.contains('holding')) return;
+  let seen=0; try{ seen=+localStorage.getItem(SPLASH_KEY)||0; }catch(e){}
+  const skip=location.hash!=='#splash' && seen && (Date.now()-seen)<SPLASH_SKIP_MS;
+  const stamp=()=>{ try{ localStorage.setItem(SPLASH_KEY,String(Date.now())); }catch(e){} };
+  if(skip){ splash.hidden=true; splash.classList.add('leaving'); document.body.classList.remove('locked'); if(window.__markStop) window.__markStop(); }
+  else { splash.addEventListener('transitionend',stamp,{once:true}); setTimeout(stamp,1200); }
+})();
 addEventListener('keydown',e=>{ if(!splash.hidden && (e.key==='Enter'||e.key===' ')) { e.preventDefault(); enter(); } });
 
 
