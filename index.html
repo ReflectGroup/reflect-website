@@ -631,7 +631,7 @@ function startMark(){
   const ctx=canvas.getContext('2d'); if(!ctx){ document.querySelector('#splash .mark').classList.add('in'); return; }
   let W,H,dpr,R,cx,cy,stops,bars=[],t0=performance.now(),ptr={x:-1e4,y:-1e4};
   let revealed=false; let band=0,vel=1,target=1,sign=1,amp=1,lastNow=0,nextTurn=performance.now()+9000+Math.random()*6000;
-  const ASSEMBLE=3500, STAGGER=1500;         /* ms: flight time, and spread of start times */
+  const ASSEMBLE=2100, STAGGER=900, TOTAL=ASSEMBLE+STAGGER;   /* ms: the ring sweeps round and closes at TOTAL (study variant B1) */
   const ease=t=>t<0?0:t>1?1:1-Math.pow(1-t,3);
   const back=t=>{t=Math.max(0,Math.min(1,t));const c=1.4;return 1+(c+1)*Math.pow(t-1,3)+c*Math.pow(t-1,2);};
   function layout(){
@@ -644,7 +644,7 @@ function startMark(){
     for(let i=0;i<BARS;i++){
       const a=i*Math.PI*2/BARS;                 /* home angle */
       const fa=Math.random()*Math.PI*2;         /* arrives from a random direction, well off screen */
-      bars.push({a, sx:cx+Math.cos(fa)*D*0.75, sy:cy+Math.sin(fa)*D*0.75, rot0:(Math.random()*2-1)*Math.PI*1.5, delay:Math.random()*STAGGER, len:0.6+Math.random()*0.8});
+      bars.push({i, a, sx:cx+Math.cos(fa)*D*0.75, sy:cy+Math.sin(fa)*D*0.75, rot0:(Math.random()*2-1)*Math.PI*1.5, delay:Math.random()*STAGGER, len:0.6+Math.random()*0.8});
     }
   }
   function frame(now){
@@ -652,8 +652,8 @@ function startMark(){
     const t=now-t0;
     ctx.clearRect(0,0,W,H);
     const bw=(2*Math.PI*R/BARS)*0.46; ctx.lineCap='butt';
-    /* wave mark: the outer and inner profiles are three-lobe waves that counter-rotate once the mark has assembled */
-    const ptw=reduce?0:Math.max(0,(t-(ASSEMBLE+STAGGER))/1000);
+    /* wave mark: the outer and inner profiles are three-lobe waves that counter-rotate; the shape is already breathing while it assembles, so there is no hand-over */
+    const ptw=reduce?0:Math.max(0,t)/1000;
     const spin=ptw*0.6;                                     /* outer and inner profiles counter-rotate, as on the study page */
     const outPhase=1.2+spin, inPhase=1.2-spin;
     const prof=(base,op,ip)=>{ const wo=0.5+0.5*Math.sin(3*base+op), wi=0.5+0.5*Math.sin(3*base+ip); return [0.69*(1-0.12*wi), 1+0.18*wo]; };
@@ -665,33 +665,33 @@ function startMark(){
         ctx.globalAlpha=1; } }
     ctx.lineWidth=bw;
     /* pulse: a band of light travels around the ring; the whole mark breathes */
-    const assembled=t>ASSEMBLE+STAGGER;
+    const assembled=t>TOTAL;
     if(assembled&&!revealed){ revealed=true; document.querySelector('#splash .mark').classList.add('in'); }
-    const pt=reduce?0:(t-(ASSEMBLE+STAGGER))/1000;
+    const pt=reduce?0:(t-TOTAL)/1000;
     const breathe=1;
     const band=ptw*0.8; sign=1; amp=1;                       /* steady sweep, as on the study page */
     for(const b of bars){
-      const k=ease((t-b.delay)/ASSEMBLE);      /* 0 → 1 flight progress */
-      const kb=back((t-b.delay)/ASSEMBLE);     /* with a small settle-back */
       const [ri,ro]=prof(b.a,outPhase,inPhase); const rm=(ri+ro)/2, rh=(ro-ri)/2;      /* this bar's place on the wave right now */
       const hx=cx+Math.cos(b.a)*R*rm*breathe, hy=cy-Math.sin(b.a)*R*rm*breathe;        /* home centre of the bar */
-      const x=b.sx+(hx-b.sx)*kb, y=b.sy+(hy-b.sy)*kb;
-      let tilt=0, lenBoost=1;
-      /* bar direction: spins while flying, aligns radially as it lands */
-      const dir=-b.a+b.rot0*(1-k)+tilt;
-      let half=R*rh*(b.len+(1-b.len)*k)*lenBoost;
+      /* sweep round: bars appear one after another clockwise, each growing outward from its inner end */
+      const idx=(BARS-b.i)%BARS, kk=reduce?1:ease((t-idx*(TOTAL*0.9/BARS))/700);
+      if(kk<=0) continue;
+      const dir=-b.a, ux0=Math.cos(dir), uy0=Math.sin(dir);
+      const x=hx-ux0*R*rh*(1-kk), y=hy-uy0*R*rh*(1-kk);
+      let half=R*rh*kk;
       let px=0,py=0;
       /* shade: base gradient by angle, plus the travelling light band */
       const deg=b.a*180/Math.PI; let col=ringColor(stops,deg);
-      if(assembled){ let sd=b.a-band; sd=Math.atan2(Math.sin(sd),Math.cos(sd)); const g=Math.exp(-(sd*sd)/(2*0.45*0.45)); const lift=0.5*g; col=col.map(v=>v+(1-v)*lift); }
-      ctx.strokeStyle=toCss(col); ctx.globalAlpha=Math.min(1,0.15+k);
+      { let sd=b.a-band; sd=Math.atan2(Math.sin(sd),Math.cos(sd)); const g=Math.exp(-(sd*sd)/(2*0.45*0.45)); const lift=0.5*g; col=col.map(v=>v+(1-v)*lift); }
+      ctx.strokeStyle=toCss(col); ctx.globalAlpha=1;
       const ux=Math.cos(dir), uy=Math.sin(dir);
       ctx.beginPath(); ctx.moveTo(x+px-ux*half,y+py-uy*half); ctx.lineTo(x+px+ux*half,y+py+uy*half); ctx.stroke();
     }
     ctx.globalAlpha=1;
     raf=requestAnimationFrame(frame);
   }
-  layout(); seed(); running=true; t0=performance.now()-(reduce?ASSEMBLE+STAGGER:0); raf=requestAnimationFrame(frame);
+  layout(); seed(); running=true; t0=performance.now()-(reduce?TOTAL:0); raf=requestAnimationFrame(frame);
+  window.__markReplay=()=>{ if(!running||reduce) return; revealed=false; document.querySelector('#splash .mark').classList.remove('in'); t0=performance.now(); };
   addEventListener('resize',()=>{ if(!running) return; const done=performance.now()-t0; layout(); seed(); t0=performance.now()-Math.max(done,0); });
   canvas.addEventListener('pointermove',e=>{const r=canvas.getBoundingClientRect();ptr.x=e.clientX-r.left;ptr.y=e.clientY-r.top;},{passive:true});
   canvas.addEventListener('pointerleave',()=>{ptr.x=-1e4;ptr.y=-1e4;});
@@ -810,25 +810,44 @@ addEventListener('keydown',e=>{ if(!splash.hidden && (e.key==='Enter'||e.key==='
 /* (watermarks removed) */
 
 
-/* Splash sound: a quiet ambient pad synthesised in the browser (no audio file), off until the visitor turns it on,
-   plus a soft chime on Enter when sound is on. Browsers do not allow sound before the first click or tap. */
+/* Splash sound: a string swell synthesised in the browser (no audio file) that rises with the ring as it sweeps round and
+   lands on a soft click as it closes, then fades in a short hall. Off until the visitor turns it on; browsers do not allow
+   sound before the first click or tap, so turning it on replays the assembly with the sound. Soft chime on Enter when sound is on. */
 (function(){
   const btn=document.getElementById('soundBtn'); if(!btn) return;
-  let ac,master,on=false,nodes=[];
-  function start(){
-    ac=ac||new (window.AudioContext||window.webkitAudioContext)(); if(ac.state==='suspended') ac.resume();
-    master=ac.createGain(); master.gain.value=0; master.connect(ac.destination);
-    const lp=ac.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=900; lp.connect(master);
-    [[110,0],[164.8,3],[220,-4],[329.6,2]].forEach(([f,det])=>{
-      const o=ac.createOscillator(), g=ac.createGain(); o.type='sine'; o.frequency.value=f; o.detune.value=det;
-      g.gain.value=0.12; const lfo=ac.createOscillator(), lg=ac.createGain(); lfo.frequency.value=0.05+Math.random()*0.08; lg.gain.value=0.05; lfo.connect(lg); lg.connect(g.gain);
-      o.connect(g); g.connect(lp); o.start(); lfo.start(); nodes.push(o,lfo);
-    });
-    master.gain.linearRampToValueAtTime(0.35,ac.currentTime+2.5);
-  }
-  function stop(){ if(!master) return; master.gain.linearRampToValueAtTime(0,ac.currentTime+0.8); const m=master,n=nodes; nodes=[]; setTimeout(()=>{n.forEach(x=>{try{x.stop()}catch(e){}}); m.disconnect();},900); master=null; }
-  btn.addEventListener('click',()=>{ on=!on; btn.setAttribute('aria-pressed',on); btn.querySelector('.lbl').textContent=on?'Sound on':'Sound off'; if(on) start(); else stop(); });
-  window.__splashChime=()=>{ if(!on||!ac) return; const t=ac.currentTime; [523.25,659.25,783.99].forEach((f,i)=>{ const o=ac.createOscillator(), g=ac.createGain(); o.type='sine'; o.frequency.value=f; g.gain.setValueAtTime(0,t+i*0.12); g.gain.linearRampToValueAtTime(0.12,t+i*0.12+0.03); g.gain.exponentialRampToValueAtTime(0.0001,t+i*0.12+1.6); o.connect(g); g.connect(ac.destination); o.start(t+i*0.12); o.stop(t+i*0.12+1.7); }); stop(); };
+  let ac,on=false;
+  function ensureAudio(){ ac=ac||new (window.AudioContext||window.webkitAudioContext)(); if(ac.state==='suspended') ac.resume(); }
+function playAssembly(){
+  if(!on||!ac) return; const now=ac.currentTime, T=3.0;   /* seconds: must match TOTAL in the mark */
+  /* a long hall reverb (synthesised impulse, ~3 s decay) that everything is sent to, so the sound hangs in the air after the ring closes */
+  const verb=ac.createConvolver(); { const L=Math.floor(ac.sampleRate*3.2), ir=ac.createBuffer(2,L,ac.sampleRate); for(let c=0;c<2;c++){ const d=ir.getChannelData(c); for(let k=0;k<L;k++) d[k]=(Math.random()*2-1)*Math.pow(1-k/L,2.2)*Math.exp(-3*k/L); } verb.buffer=ir; }
+  const verbLP=ac.createBiquadFilter(); verbLP.type='lowpass'; verbLP.frequency.value=3200; const verbG=ac.createGain(); verbG.gain.value=0.55; verb.connect(verbLP); verbLP.connect(verbG); verbG.connect(ac.destination);
+  /* strings: a small section of violin-like voices (bright wave, dark filter, slow bow attack, gentle vibrato), in harmony,
+     swelling from nothing to full as the ring closes */
+  const master=ac.createGain(); master.gain.setValueAtTime(0.002,now); master.gain.linearRampToValueAtTime(0.2,now+T);   /* linear, so the loudness tracks the bars one for one from the first frame */ master.gain.exponentialRampToValueAtTime(0.05,now+T+0.15); master.gain.exponentialRampToValueAtTime(0.0001,now+T+2.0);   /* the bow eases off as the ring closes, then the strings fade with the hall */
+  const tone=ac.createBiquadFilter(); tone.type='lowpass'; tone.Q.value=0.7; tone.frequency.setValueAtTime(1200,now); tone.frequency.exponentialRampToValueAtTime(3000,now+T);
+  const body=ac.createBiquadFilter(); body.type='highpass'; body.frequency.value=400; body.Q.value=0.6;   /* trims everything below the chord, so the sound stays light */
+  tone.connect(body); body.connect(master); master.connect(ac.destination); master.connect(verb);
+  const voices=[[440,0.8,2],[440,0.8,-6],[554.37,0.6,-3],[659.25,0.45,4],[659.25,0.45,-5]];   /* A4, C#5, E5: a light A major, two players on A and E */
+  voices.forEach(([f,amp,det],n)=>{
+    const o=ac.createOscillator(); o.type='triangle'; o.frequency.value=f; o.detune.value=det;
+    const vib=ac.createOscillator(), vg=ac.createGain(); vib.frequency.value=5.2+Math.random()*0.8; vg.gain.setValueAtTime(0,now); vg.gain.linearRampToValueAtTime(7,now+0.8); vib.connect(vg); vg.connect(o.detune);
+    const g=ac.createGain(); g.gain.setValueAtTime(0,now); g.gain.linearRampToValueAtTime(amp,now+0.15);   
+    o.connect(g); g.connect(tone); o.start(now); vib.start(now); o.stop(now+T+2.1); vib.stop(now+T+2.1);
+  });
+  /* a high violin layer an octave up (A5, C#6, E6, A6): thin, airy, slower vibrato, kept well under the main section */
+  { const hi=ac.createGain(); hi.gain.value=0.22; hi.connect(body);
+    [[880,0.9,0],[880,0.9,6],[1108.73,0.6,-4],[1318.51,0.5,3],[1760,0.25,-2]].forEach(([f,amp,det])=>{
+      const o=ac.createOscillator(); o.type='triangle'; o.frequency.value=f; o.detune.value=det;
+      const vib=ac.createOscillator(), vg=ac.createGain(); vib.frequency.value=4.6+Math.random()*0.6; vg.gain.setValueAtTime(0,now); vg.gain.linearRampToValueAtTime(9,now+1.0); vib.connect(vg); vg.connect(o.detune);
+      const g=ac.createGain(); g.gain.setValueAtTime(0,now); g.gain.linearRampToValueAtTime(amp,now+0.3);
+      o.connect(g); g.connect(hi); o.start(now); vib.start(now); o.stop(now+T+2.1); vib.stop(now+T+2.1); }); }
+  /* the close: a soft wooden click as the last bar lands */
+  { const t=now+T; const n=ac.createBufferSource(); const len=Math.floor(ac.sampleRate*0.03); const b=ac.createBuffer(1,len,ac.sampleRate); const d=b.getChannelData(0); for(let k=0;k<len;k++) d[k]=(Math.random()*2-1)*Math.pow(1-k/len,3); n.buffer=b;
+    const f=ac.createBiquadFilter(); f.type='bandpass'; f.frequency.value=1800; f.Q.value=2; const g=ac.createGain(); g.gain.value=0.5; n.connect(f); f.connect(g); g.connect(ac.destination); g.connect(verb); n.start(t); }
+}
+  btn.addEventListener('click',()=>{ on=!on; btn.setAttribute('aria-pressed',on); btn.querySelector('.lbl').textContent=on?'Sound on':'Sound off'; if(on){ ensureAudio(); if(window.__markReplay) window.__markReplay(); playAssembly(); } });
+  window.__splashChime=()=>{ if(!on||!ac) return; const t=ac.currentTime; [523.25,659.25,783.99].forEach((f,i)=>{ const o=ac.createOscillator(), g=ac.createGain(); o.type='sine'; o.frequency.value=f; g.gain.setValueAtTime(0,t+i*0.12); g.gain.linearRampToValueAtTime(0.12,t+i*0.12+0.03); g.gain.exponentialRampToValueAtTime(0.0001,t+i*0.12+1.6); o.connect(g); g.connect(ac.destination); o.start(t+i*0.12); o.stop(t+i*0.12+1.7); }); };
 })();
 
 document.querySelectorAll('.copy').forEach(b=>b.addEventListener('click',()=>{
