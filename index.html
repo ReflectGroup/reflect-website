@@ -638,7 +638,7 @@ function startMark(){
   const ctx=canvas.getContext('2d'); if(!ctx){ document.querySelector('#splash .mark').classList.add('in'); return; }
   let W,H,dpr,R,cx,cy,stops,bars=[],t0=performance.now(),ptr={x:-1e4,y:-1e4};
   let revealed=false; let band=0,vel=1,target=1,sign=1,amp=1,lastNow=0,nextTurn=performance.now()+9000+Math.random()*6000;
-  const ASSEMBLE=2100, STAGGER=900, TOTAL=ASSEMBLE+STAGGER;   /* ms: the ring sweeps round and closes at TOTAL (study variant B1) */
+  const ASSEMBLE=1400, STAGGER=600, TOTAL=ASSEMBLE+STAGGER;   /* ms: the ring sweeps round and closes at TOTAL (study variant B1) */
   const ease=t=>t<0?0:t>1?1:1-Math.pow(1-t,3);
   const back=t=>{t=Math.max(0,Math.min(1,t));const c=1.4;return 1+(c+1)*Math.pow(t-1,3)+c*Math.pow(t-1,2);};
   function layout(){
@@ -681,7 +681,7 @@ function startMark(){
       const [ri,ro]=prof(b.a,outPhase,inPhase); const rm=(ri+ro)/2, rh=(ro-ri)/2;      /* this bar's place on the wave right now */
       const hx=cx+Math.cos(b.a)*R*rm*breathe, hy=cy-Math.sin(b.a)*R*rm*breathe;        /* home centre of the bar */
       /* sweep round: bars appear one after another clockwise, each growing outward from its inner end */
-      const idx=(BARS-b.i)%BARS, kk=reduce?1:ease((t-idx*(TOTAL*0.9/BARS))/700);
+      const idx=(BARS-b.i)%BARS, kk=reduce?1:ease((t-idx*(TOTAL*0.9/BARS))/470);
       if(kk<=0) continue;
       const dir=-b.a, ux0=Math.cos(dir), uy0=Math.sin(dir);
       const x=hx-ux0*R*rh*(1-kk), y=hy-uy0*R*rh*(1-kk);
@@ -825,7 +825,7 @@ addEventListener('keydown',e=>{ if(!splash.hidden && (e.key==='Enter'||e.key==='
   let ac,on=false;
   function ensureAudio(){ ac=ac||new (window.AudioContext||window.webkitAudioContext)(); if(ac.state==='suspended') ac.resume(); }
 function playAssembly(){
-  if(!on||!ac) return; const now=ac.currentTime, T=3.0;   /* seconds: must match TOTAL in the mark */
+  if(!on||!ac) return; const now=ac.currentTime, T=2.0;   /* seconds: must match TOTAL in the mark */
   /* a long hall reverb (synthesised impulse, ~3 s decay) that everything is sent to, so the sound hangs in the air after the ring closes */
   const verb=ac.createConvolver(); { const L=Math.floor(ac.sampleRate*3.2), ir=ac.createBuffer(2,L,ac.sampleRate); for(let c=0;c<2;c++){ const d=ir.getChannelData(c); for(let k=0;k<L;k++) d[k]=(Math.random()*2-1)*Math.pow(1-k/L,2.2)*Math.exp(-3*k/L); } verb.buffer=ir; }
   const verbLP=ac.createBiquadFilter(); verbLP.type='lowpass'; verbLP.frequency.value=3200; const verbG=ac.createGain(); verbG.gain.value=0.55; verb.connect(verbLP); verbLP.connect(verbG); verbG.connect(ac.destination);
