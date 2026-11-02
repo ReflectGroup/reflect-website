@@ -235,8 +235,10 @@ main>section:nth-child(even){background:var(--paper-2)}
 #topMark:hover svg{transform:rotate(60deg)}
 #topMark.show{opacity:1;transform:none;pointer-events:auto}
 body.holding #topMark{display:none}
-#tagFixed{position:fixed;left:var(--gutter-l);top:calc(env(safe-area-inset-top,0px) + 1.35rem);z-index:20;font-family:var(--display);font-style:italic;font-size:clamp(1.05rem,1.6vw,1.4rem);line-height:1.25;color:#f5f1ea;text-shadow:0 1px 14px rgba(0,0,0,.45);max-width:calc(100vw - 7rem);white-space:nowrap;pointer-events:none;transition:color .5s,text-shadow .5s}
-#tagFixed.ink{color:var(--ink);text-shadow:none;left:calc(var(--gutter-l) + 3.2rem)}
+#tagFixed{position:fixed;left:var(--gutter-l);top:calc(env(safe-area-inset-top,0px) + 1.35rem);z-index:20;font-family:var(--display);font-style:italic;font-size:clamp(1.05rem,1.6vw,1.4rem);line-height:1.25;color:#f5f1ea;text-shadow:0 1px 14px rgba(0,0,0,.45);max-width:calc(100vw - 7rem);white-space:nowrap;pointer-events:auto;cursor:default;--tc:#f5f1ea;transition:color .5s,text-shadow .5s,left .5s}
+#tagFixed.ink{color:var(--ink);text-shadow:none;left:calc(var(--gutter-l) + 3.2rem);--tc:var(--ink)}
+#tagFixed:hover{color:transparent;text-shadow:none;background:linear-gradient(90deg,var(--tc) 0%,var(--tc) 35%,#c9a97a 50%,var(--tc) 65%,var(--tc) 100%);background-size:250% 100%;background-position:100% 0;-webkit-background-clip:text;background-clip:text;animation:shine 1.2s cubic-bezier(.4,0,.2,1) forwards;filter:drop-shadow(0 0 6px rgba(184,157,120,.7))}
+body.holding #tagFixed{display:none}
 
 .hero-band{padding-block:0;border-top:0}
 
