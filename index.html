@@ -4,11 +4,13 @@
 <link rel="icon" href="favicon.ico" sizes="32x32">
 <link rel="apple-touch-icon" href="favicon-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="image" href="images/project-01.jpg">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;1,6..72,300&display=swap">
 <style>
 /* Layout: a white, airy A4 sheet translated to the screen - thin rules, lots of space, charcoal-to-sand gradient as the only colour. */
 :root{
-  --paper:#faf8f4; --paper-2:#f1ece3; --ink:#2b2926; --ink-2:#5f5750; --mute:#9a8c7b;
+  --paper:#faf8f4; --paper-2:#f1ece3; --ink:#2b2926; --ink-2:#5f5750; --mute:#857868;
   --sand:#b39f84; --sand-deep:#9d8f7c; --bronze:#8a7557; --mist:#e3d9ca; --line:#c9b9a0; --charcoal:#2b2926;
   --ring-a:#6b5740; --ring-b:#dccfbb; --ring-c:#b89d78; --ring-d:#8f7a5c;
   --display:"Newsreader",Georgia,"Times New Roman",serif;
@@ -25,7 +27,11 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 a{color:inherit}
 h1,h2,h3{font-weight:300;margin:0;text-wrap:balance}
 p{margin:0}
-:focus-visible{outline:1.5px solid var(--sand-deep);outline-offset:3px}
+:focus-visible{outline:2px solid var(--bronze);outline-offset:3px;border-radius:2px}
+.faq summary:focus-visible{outline-offset:-2px}
+.reel .dots button{min-height:1.4rem;background-clip:content-box;padding:.6rem 0}
+#soundBtn{min-height:2.75rem}
+.copy{min-height:2.4rem}
 
 /* ---------- Splash ---------- */
 #splash{position:fixed;inset:0;z-index:50;background:var(--paper);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .9s ease,transform .9s ease;padding:env(safe-area-inset-top,0px) var(--gutter-r) env(safe-area-inset-bottom,0px) var(--gutter-l)}
@@ -35,6 +41,7 @@ p{margin:0}
 #splash .word{font-family:var(--body);font-weight:200;font-size:clamp(2rem,4.6vw,3.1rem);letter-spacing:.02em;line-height:1;color:var(--ink)}
 #splash .word small{display:block;font-size:.38em;font-weight:300;color:var(--mute);letter-spacing:.14em;text-transform:uppercase;margin-top:.55rem}
 #splash .tag{font-family:var(--display);font-style:italic;font-weight:300;font-size:clamp(1.35rem,2.4vw,1.9rem);color:var(--bronze);margin-top:.6rem;text-align:center}
+@media (max-width:560px){#splash .tag{font-size:1.15rem;max-width:18ch;line-height:1.3}#splash .word{font-size:2rem}#soundBtn{bottom:calc(env(safe-area-inset-bottom,0px) + 1rem)}}
 #enter{position:relative;z-index:3;pointer-events:auto;margin-top:1.6rem;font:inherit;font-weight:400;font-size:.78rem;letter-spacing:.22em;text-transform:uppercase;color:var(--bronze);background:transparent;border:1px solid var(--bronze);border-radius:999px;padding:.8rem 2.1rem;cursor:pointer;transition:background .3s,color .3s,border-color .3s}
 #enter:hover{background:var(--bronze);color:var(--paper);border-color:var(--bronze)}
 #splash .hold{display:none;flex-direction:column;align-items:center;gap:.35rem;margin-top:1.6rem;font-size:.95rem;color:var(--ink-2)}
@@ -64,7 +71,8 @@ body.holding main,body.holding #menuBtn,body.holding #menu,body.holding #tagFixe
 /* ---------- Site ---------- */
 .wrap{max-width:1120px;margin:0 auto;padding-left:var(--gutter-l);padding-right:var(--gutter-r)}
 .brand{display:flex;align-items:center;gap:.7rem;text-decoration:none}
-.brand svg{width:34px;height:34px;flex:none}
+.brand svg,.brand canvas{width:34px;height:34px;flex:none;display:block}
+#menu .side .brand canvas{width:64px;height:64px}
 .brand b{font-weight:300;font-size:1.05rem;line-height:1.05;letter-spacing:.01em}
 .brand b small{display:block;font-size:.62em;color:var(--mute);letter-spacing:.1em;text-transform:uppercase;margin-top:.15rem}
 nav.main{display:flex;gap:1.6rem;font-size:.76rem;letter-spacing:.14em;text-transform:uppercase;font-weight:400}
@@ -80,8 +88,11 @@ nav.main a:hover{color:var(--ink);border-color:var(--sand)}
 .kv{display:grid;grid-template-columns:auto 1fr;gap:.35rem 1.2rem;font-size:.86rem;border-top:1px solid var(--line);padding-top:1rem}
 .kv dt{color:var(--mute);letter-spacing:.1em;text-transform:uppercase;font-size:.68rem;padding-top:.2em}
 .kv dd{margin:0}
-.btn{display:inline-flex;align-items:center;gap:.6rem;align-self:flex-start;text-decoration:none;font-weight:400;font-size:.78rem;letter-spacing:.2em;text-transform:uppercase;color:var(--paper);background:var(--bronze);padding:.95rem 1.6rem;border-radius:999px;transition:background .3s}
-.btn:hover{background:var(--ink)}
+.btn{display:inline-flex;align-items:center;gap:.6rem;align-self:flex-start;text-decoration:none;font-weight:400;font-size:.78rem;letter-spacing:.2em;text-transform:uppercase;color:var(--paper);background:var(--bronze);padding:.95rem 1.6rem;border-radius:999px;position:relative;overflow:hidden;isolation:isolate;border:0;cursor:pointer;font-family:inherit}
+.btn::before{content:"";position:absolute;inset:0;background:var(--ink);transform:translateX(-101%);transition:transform .55s cubic-bezier(.2,.7,.2,1);z-index:-1;border-radius:inherit}
+.btn:hover::before,.btn:focus-visible::before{transform:none}
+.btn span{display:inline-block;transition:transform .45s cubic-bezier(.2,.7,.2,1)}
+.btn:hover span{transform:translateX(.35rem)}
 @media (max-width:820px){.hero{grid-template-columns:1fr;gap:2rem}}
 
 .svc .stage{font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:var(--mute);font-weight:400}
@@ -94,9 +105,14 @@ nav.main a:hover{color:var(--ink);border-color:var(--sand)}
 @media (max-width:640px){.method.five{grid-template-columns:1fr 1fr}}
 @media (max-width:440px){.method.five{grid-template-columns:1fr}}
 .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.6rem 1.4rem}
-.grid figure{margin:0;display:flex;flex-direction:column;gap:.7rem;min-width:0}
-.grid img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;max-width:100%;background:var(--paper-2)}
-.grid figcaption{display:flex;flex-direction:column;gap:.15rem}
+.grid figure{margin:0;display:flex;flex-direction:column;gap:.7rem;min-width:0;cursor:pointer}
+.grid .im{overflow:hidden;background:var(--paper-2);aspect-ratio:4/3;position:relative}
+.grid img{width:100%;height:100%;object-fit:cover;display:block;max-width:100%;transition:transform 1.6s cubic-bezier(.2,.7,.2,1)}
+.grid figure:hover img{transform:scale(1.05)}
+.grid figcaption{display:flex;flex-direction:column;gap:.15rem;position:relative;padding-bottom:.6rem;transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+.grid figcaption::after{content:"";position:absolute;left:0;bottom:0;height:1px;width:0;background:var(--bronze);transition:width .7s cubic-bezier(.2,.7,.2,1)}
+.grid figure:hover figcaption{transform:translateY(-3px)}
+.grid figure:hover figcaption::after{width:100%}
 .grid figcaption b{font-weight:500;font-size:.98rem}
 .grid figcaption span{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
 @media (max-width:820px){.grid{grid-template-columns:1fr 1fr}}
@@ -124,6 +140,16 @@ nav.main a:hover{color:var(--ink);border-color:var(--sand)}
 #rfpForm label{display:flex;flex-direction:column;gap:.35rem;font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--mute);font-weight:400;min-width:0}
 #rfpForm input,#rfpForm select,#rfpForm textarea{font:inherit;font-size:1rem;letter-spacing:0;text-transform:none;color:var(--ink);background:var(--paper-2);border:1px solid var(--line);border-radius:0;padding:.7rem .8rem;width:100%;min-width:0}
 #rfpForm input:focus,#rfpForm select:focus,#rfpForm textarea:focus{outline:1.5px solid var(--sand-deep);outline-offset:0;border-color:var(--sand)}
+#rfpForm label .err{display:none;font-size:.72rem;color:#9a4a2e;margin-top:.3rem;letter-spacing:.02em}
+#rfpForm label.bad .err{display:block}
+#rfpForm label.bad input{border-color:#b8643f}
+.modal-lede a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line)}
+.f-done{display:none;flex-direction:column;gap:1rem;padding:1rem 0 .4rem}
+.modal-card.done #rfpForm,.modal-card.done .modal-lede{display:none}
+.modal-card.done .f-done{display:flex}
+.f-done canvas{width:84px;height:84px;display:block}
+.f-done p{color:var(--ink-2);max-width:50ch}
+.f-done .k{font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--bronze)}
 #rfpForm input:user-invalid{border-color:#b0533a}
 .f-actions{display:flex;align-items:center;gap:1.2rem;flex-wrap:wrap;margin-top:.4rem}
 .f-msg{font-size:.9rem;color:var(--ink-2)}
@@ -204,8 +230,13 @@ main>section:nth-child(even){background:var(--paper-2)}
 @media (max-width:820px){.svc-row{grid-template-columns:1fr;gap:1rem}.svc-row.principal{padding-left:1rem;margin-left:-1rem;padding-right:1rem;margin-right:-1rem}}
 @media (max-width:560px){.svc-cols{grid-template-columns:1fr}}
 
+#topMark{position:fixed;left:var(--gutter-l);top:calc(env(safe-area-inset-top,0px) + 1.05rem);z-index:21;width:2.6rem;height:2.6rem;display:flex;align-items:center;justify-content:center;border-radius:50%;opacity:0;transform:translateY(-6px);pointer-events:none;transition:opacity .5s ease,transform .5s ease}
+#topMark svg{width:2.1rem;height:2.1rem;transition:transform .8s cubic-bezier(.2,.7,.2,1)}
+#topMark:hover svg{transform:rotate(60deg)}
+#topMark.show{opacity:1;transform:none;pointer-events:auto}
+body.holding #topMark{display:none}
 #tagFixed{position:fixed;left:var(--gutter-l);top:calc(env(safe-area-inset-top,0px) + 1.35rem);z-index:20;font-family:var(--display);font-style:italic;font-size:clamp(1.05rem,1.6vw,1.4rem);line-height:1.25;color:#f5f1ea;text-shadow:0 1px 14px rgba(0,0,0,.45);max-width:calc(100vw - 7rem);white-space:nowrap;pointer-events:none;transition:color .5s,text-shadow .5s}
-#tagFixed.ink{color:var(--ink);text-shadow:none}
+#tagFixed.ink{color:var(--ink);text-shadow:none;left:calc(var(--gutter-l) + 3.2rem)}
 
 .hero-band{padding-block:0;border-top:0}
 
@@ -238,9 +269,9 @@ main>section:nth-child(even){background:var(--paper-2)}
 /* ---------- Project reel (opening screen of the site) ---------- */
 .reel{position:relative;height:100svh;min-height:520px;overflow:hidden;background:var(--charcoal)}
 .reel .slide{position:absolute;inset:0;opacity:0;transition:opacity 1.6s ease}
-.reel .slide img{width:100%;height:100%;object-fit:cover;display:block;transform:scale(1.06);transition:transform 9s linear}
+.reel .slide img{width:100%;height:100%;object-fit:cover;display:block;transform:scale(1.08) translate(1%,0);transition:transform 9s linear}
 .reel .slide.on{opacity:1}
-.reel .slide.on img{transform:scale(1)}
+.reel .slide.on img{transform:scale(1) translate(0,0)}
 .reel .shade{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(20,19,18,.5) 0%,rgba(20,19,18,0) 24%),linear-gradient(to top,rgba(20,19,18,.72) 0%,rgba(20,19,18,.25) 45%,rgba(20,19,18,0) 75%)}
 .reel .cap{position:absolute;left:0;right:0;bottom:0;padding:0 var(--gutter-r) clamp(2rem,5vh,3.5rem) var(--gutter-l);color:#f5f1ea}
 .reel .cap .inner{max-width:1120px;margin:0 auto;display:flex;align-items:flex-end;justify-content:space-between;gap:2rem;flex-wrap:wrap}
@@ -251,13 +282,20 @@ main>section:nth-child(even){background:var(--paper-2)}
 .reel .dots{display:flex;gap:.45rem}
 .reel .dots button{width:1.6rem;height:2px;border:0;padding:0;background:rgba(245,241,234,.35);cursor:pointer;transition:background .3s}
 .reel .dots button.on{background:#f5f1ea}
+.reel .bar{position:absolute;left:0;right:0;bottom:0;height:2px;background:rgba(245,241,234,.15)}
+.reel .bar i{display:block;height:100%;width:0;background:var(--sand)}
+.reel .bar i.run{animation:reelbar 5.2s linear forwards}
+@keyframes reelbar{from{width:0}to{width:100%}}
+@media (prefers-reduced-motion:reduce){.reel .bar{display:none}}
 .reel .cue{position:absolute;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + .9rem);transform:translateX(-50%);width:1px;height:2.2rem;background:linear-gradient(to bottom,rgba(245,241,234,0),rgba(245,241,234,.8));animation:cue 2.2s ease-in-out infinite}
 @keyframes cue{0%,100%{opacity:.2;transform:translateX(-50%) translateY(-4px)}50%{opacity:1;transform:translateX(-50%) translateY(4px)}}
 @media (max-width:640px){.reel .meta{align-items:flex-start}.reel .cue{display:none}}
 @media (prefers-reduced-motion:reduce){.reel .slide{transition:none}.reel .slide img{transition:none;transform:none}.reel .cue{animation:none}}
 
 .eyebrow{font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:var(--bronze);font-weight:400}
-section.band{border-top:1px solid var(--line);padding-block:clamp(3.5rem,8vw,6rem)}
+.eyebrow .num{display:inline-block;margin-right:.9rem;padding-right:.9rem;border-right:1px solid var(--line);color:var(--mute);font-variant-numeric:tabular-nums}
+section.band{border-top:1px solid var(--line);padding-block:clamp(3.5rem,8vw,6rem);scroll-margin-top:1.5rem}
+.svc-row{scroll-margin-top:5rem}
 section.band h2{font-family:var(--display);font-size:clamp(1.8rem,3.4vw,2.7rem);line-height:1.1;margin-top:.8rem;max-width:22ch}
 .intro{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:2rem 4rem;align-items:start;margin-bottom:3rem}
 .intro p{color:var(--ink-2);max-width:58ch;padding-top:.6rem}
@@ -333,6 +371,7 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
   </div>
 </div>
 
+<a id="topMark" href="#top" aria-label="Back to top" title="Back to top"><svg class="ring" viewBox="0 0 100 100" aria-hidden="true"></svg></a>
 <div id="tagFixed" aria-hidden="true">Measured with care.<br>Priced with confidence.</div>
 <button id="menuBtn" type="button" aria-label="Menu" aria-expanded="false" aria-controls="menu"><span></span><span></span><span></span></button>
 <div id="menu" aria-hidden="true">
@@ -341,7 +380,7 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
       <a href="#services">Services</a><a href="#approach">Methodology</a><a href="#work">Projects</a><a href="#about">About</a><a href="#contact">Contact</a>
     </nav>
     <div class="side">
-      <a class="brand" href="#top"><svg class="ring" viewBox="0 0 100 100" aria-hidden="true"></svg><b>Reflect<small>Group</small></b></a>
+      <a class="brand" href="#top"><canvas id="menuMark" width="68" height="68" aria-hidden="true"></canvas><b>Reflect<small>Group</small></b></a>
       <div class="menu-tag">Measured with care. Priced with confidence.</div>
       <div>pdjolic@reflectgroup.com.au</div>
       <div>+61 426 950 040</div>
@@ -356,14 +395,14 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
     <button class="modal-x" type="button" aria-label="Close" data-close-form>&times;</button>
     <div class="eyebrow">Fee proposal</div>
     <h2 id="rfpTitle">Project details.</h2>
-    <p class="modal-lede">A written fee proposal is ordinarily returned within two business days, with a delivery date set ahead of the tender program. Documentation may be forwarded by email or file-sharing link on receipt of the reply.</p>
+    <p class="modal-lede">A written fee proposal is ordinarily returned within two business days, with a delivery date set ahead of the tender program. Drawings may be forwarded as a file-sharing link below, or <a id="rfpMail" href="mailto:pdjolic@reflectgroup.com.au?subject=Fee%20proposal%20request">emailed with the set attached</a>.</p>
     <form id="rfpForm" novalidate>
       <div class="f2">
-        <label>Name<input type="text" id="rf-name" name="name" required autocomplete="name"></label>
+        <label>Name<input type="text" id="rf-name" name="name" required autocomplete="name"><small class="err">Please enter your name</small></label>
         <label>Company<input type="text" id="rf-company" name="company" autocomplete="organization"></label>
       </div>
       <div class="f2">
-        <label>Email<input type="email" id="rf-email" name="email" required autocomplete="email"></label>
+        <label>Email<input type="email" id="rf-email" name="email" required autocomplete="email"><small class="err">Please enter a valid email address</small></label>
         <label>Phone<input type="tel" id="rf-phone" name="phone" autocomplete="tel"></label>
       </div>
       <label>Project address<input type="text" id="rf-address" name="project_address"></label>
@@ -381,7 +420,7 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
       </div>
       <div class="f2">
         <label>Tender or required-by date<input type="date" id="rf-date" name="required_by"></label>
-        <label>Link to drawings (optional)<input type="url" id="rf-link" name="drawings_link" placeholder="Dropbox, Drive, OneDrive…"></label>
+        <label>Link to drawings (optional)<input type="url" id="rf-link" name="drawings_link" placeholder="Dropbox, Drive, OneDrive…"><small class="err">Please enter a full link beginning with https://</small></label>
       </div>
       <label>Anything else<textarea id="rf-notes" name="notes" rows="4"></textarea></label>
       <div class="f-actions">
@@ -389,16 +428,24 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
         <div class="f-msg" id="rfpMsg" aria-live="polite"></div>
       </div>
     </form>
+    <div class="f-done" aria-live="polite">
+      <canvas id="doneMark" width="168" height="168" aria-hidden="true"></canvas>
+      <div class="k">Request received</div>
+      <h3 style="font-family:var(--display);font-weight:400;font-size:1.6rem;line-height:1.15;margin:0">Thank you. A written fee proposal will ordinarily follow within two business days.</h3>
+      <p>If the drawings have not yet been provided, they may be sent to <a href="mailto:pdjolic@reflectgroup.com.au" style="color:var(--ink)">pdjolic@reflectgroup.com.au</a> quoting the project address.</p>
+      <button class="btn" type="button" data-close-form>Close <span aria-hidden="true">&rarr;</span></button>
+    </div>
   </div>
 </div>
 
 <main id="top">
   <section class="reel" id="projects" aria-label="Recent projects">
-    <div class="slide on"><img src="images/project-01.jpg" alt="" loading="eager"></div><div class="slide"><img src="images/project-02.jpg" alt="" loading="eager"></div><div class="slide"><img src="images/project-16.jpg" alt="" loading="lazy"></div><div class="slide"><img src="images/project-04.jpg" alt="" loading="lazy"></div><div class="slide"><img src="images/project-05.jpg" alt="" loading="lazy"></div><div class="slide"><img src="images/project-06.jpg" alt="" loading="lazy"></div><div class="slide"><img src="images/project-08.jpg" alt="" loading="lazy"></div><div class="slide"><img src="images/project-18.jpg" alt="" loading="lazy"></div><div class="slide"><img src="images/project-09.jpg" alt="" loading="lazy"></div><div class="slide"><img src="images/project-10.jpg" alt="" loading="lazy"></div><div class="slide"><img src="images/project-11.jpg" alt="" loading="lazy" style="object-position:50% 85%"></div><div class="slide"><img src="images/project-13.jpg" alt="" loading="lazy"></div><div class="slide"><img src="images/project-17.jpg" alt="" loading="lazy"></div><div class="slide"><img src="images/project-14.jpg" alt="" loading="lazy"></div>
+    <div class="slide on"><img src="images/project-01.jpg" alt="" loading="eager" decoding="async"></div><div class="slide"><img src="images/project-02.jpg" alt="" loading="eager" decoding="async"></div><div class="slide"><img src="images/project-16.jpg" alt="" loading="lazy" decoding="async"></div><div class="slide"><img src="images/project-04.jpg" alt="" loading="lazy" decoding="async"></div><div class="slide"><img src="images/project-05.jpg" alt="" loading="lazy" decoding="async"></div><div class="slide"><img src="images/project-06.jpg" alt="" loading="lazy" decoding="async"></div><div class="slide"><img src="images/project-08.jpg" alt="" loading="lazy" decoding="async"></div><div class="slide"><img src="images/project-18.jpg" alt="" loading="lazy" decoding="async"></div><div class="slide"><img src="images/project-09.jpg" alt="" loading="lazy" decoding="async"></div><div class="slide"><img src="images/project-10.jpg" alt="" loading="lazy" decoding="async"></div><div class="slide"><img src="images/project-11.jpg" alt="" loading="lazy" style="object-position:50% 85%"></div><div class="slide"><img src="images/project-13.jpg" alt="" loading="lazy" decoding="async"></div><div class="slide"><img src="images/project-17.jpg" alt="" loading="lazy" decoding="async"></div><div class="slide"><img src="images/project-14.jpg" alt="" loading="lazy" decoding="async"></div>
     <div class="shade"></div>
     <div class="cap"><div class="inner">
       <h1 id="reelTitle"><span class="name"></span><span class="sub"></span></h1>
       <div class="dots" id="reelDots" hidden></div>
+      <div class="bar" id="reelBar" aria-hidden="true"><i></i></div>
     </div></div>
     <div class="cue" aria-hidden="true"></div>
   </section>
@@ -434,7 +481,7 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
   <section class="band" id="value">
     <div class="wrap">
       <div class="intro" data-fx="fade">
-        <div><div class="eyebrow">The builder's bill of quantities</div><h2>Why tender from a measured bill.</h2></div>
+        <div><div class="eyebrow"><span class="num">01</span>The builder's bill of quantities</div><h2>Why tender from a measured bill.</h2></div>
         <p>A builder's bill of quantities is the measured scope of the project, trade by trade, prepared from the issued documents. It is the basis on which a builder tenders from known quantities rather than from allowances.</p>
       </div>
       <div class="method four" data-fx="left">
@@ -449,7 +496,7 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
   <section class="band" id="services">
     <div class="wrap">
       <div class="intro" data-fx="fade">
-        <div><div class="eyebrow">Services</div><h2>Four services, each with its own deliverables.</h2></div>
+        <div><div class="eyebrow"><span class="num">02</span>Services</div><h2>Four services, each with its own deliverables.</h2></div>
         <p>Each service is quoted as a fixed fee against the documentation issued at the time of the proposal. They may be commissioned individually or in combination as a project progresses from concept design to tender.</p>
       </div>
       <div class="svc-list">
@@ -516,7 +563,7 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
   <section class="band" id="sectors">
     <div class="wrap">
       <div class="intro" data-fx="fade">
-        <div><div class="eyebrow">Sectors</div><h2>Project types.</h2></div>
+        <div><div class="eyebrow"><span class="num">03</span>Sectors</div><h2>Project types.</h2></div>
         <p>The practice measures residential, commercial, industrial and civil work for builders at tender. The same measurement conventions apply at every scale, from a single dwelling to a multi-stage distribution centre.</p>
       </div>
       <ul class="sectors" data-fx="bloom">
@@ -532,7 +579,7 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
   <section class="band" id="approach">
     <div class="wrap">
       <div class="intro" data-fx="fade">
-        <div><div class="eyebrow">Methodology &middot; Bill of quantities</div><h2>A documented basis for every quantity.</h2></div>
+        <div><div class="eyebrow"><span class="num">04</span>Methodology &middot; Bill of quantities</div><h2>A documented basis for every quantity.</h2></div>
         <p>How a builder's bill is prepared. The documentation is fixed, then measured, then qualified. The sequence ensures that every quantity in the bill can be traced to a drawing number and revision, and that the client knows at all times which set of documents the bill represents.</p>
       </div>
       <div class="method five" data-fx="right">
@@ -548,7 +595,7 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
   <section class="band" id="why">
     <div class="wrap">
       <div class="intro" data-fx="fade">
-        <div><div class="eyebrow">Why Reflect Group</div><h2>Faster than the competition. More accurate than the competition.</h2></div>
+        <div><div class="eyebrow"><span class="num">05</span>Why Reflect Group</div><h2>Faster than the competition. More accurate than the competition.</h2></div>
         <p>The objective on every commission is the same: a bill issued ahead of the tender program, and a figure that sits closer to the outcome than any competing estimate. Four things make that possible.</p>
       </div>
       <div class="method four" data-fx="focus">
@@ -563,15 +610,15 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
   <section class="band" id="work">
     <div class="wrap">
       <div class="intro" data-fx="fade">
-        <div><div class="eyebrow">Projects</div><h2>Selected work.</h2></div>
+        <div><div class="eyebrow"><span class="num">06</span>Projects</div><h2>Selected work.</h2></div>
       </div>
       <div class="grid" data-fx="unmask">
-        <figure><img src="images/project-01.jpg" alt="" loading="lazy"><figcaption><b>2-4 Urunga Parade, Miranda</b><span>Residential apartments</span></figcaption></figure>
-        <figure><img src="images/project-02.jpg" alt="" loading="lazy"><figcaption><b>Babylon</b><span>Residential apartments</span></figcaption></figure>
-        <figure><img src="images/project-04.jpg" alt="" loading="lazy"><figcaption><b>48 King Street, King Beach</b><span>Residential apartments</span></figcaption></figure>
-        <figure><img src="images/project-05.jpg" alt="" loading="lazy"><figcaption><b>ESR Westlink</b><span>Industrial and logistics</span></figcaption></figure>
-        <figure><img src="images/project-06.jpg" alt="" loading="lazy"><figcaption><b>29-41 Hutchinson Street, Surry Hills</b><span>Commercial, adaptive re-use</span></figcaption></figure>
-        <figure><img src="images/project-16.jpg" alt="" loading="lazy"><figcaption><b>Forestway Shopping Centre, Frenchs Forest</b><span>Retail</span></figcaption></figure>
+        <figure><div class="im"><img src="images/project-01.jpg" alt="" loading="lazy" decoding="async" width="1273" height="763"></div><figcaption><b>2-4 Urunga Parade, Miranda</b><span>Residential apartments</span></figcaption></figure>
+        <figure><div class="im"><img src="images/project-02.jpg" alt="" loading="lazy" decoding="async" width="1800" height="1026"></div><figcaption><b>Babylon</b><span>Residential apartments</span></figcaption></figure>
+        <figure><div class="im"><img src="images/project-04.jpg" alt="" loading="lazy" decoding="async" width="888" height="889"></div><figcaption><b>48 King Street, King Beach</b><span>Residential apartments</span></figcaption></figure>
+        <figure><div class="im"><img src="images/project-05.jpg" alt="" loading="lazy" decoding="async" width="1540" height="881"></div><figcaption><b>ESR Westlink</b><span>Industrial and logistics</span></figcaption></figure>
+        <figure><div class="im"><img src="images/project-06.jpg" alt="" loading="lazy" decoding="async" width="1152" height="864"></div><figcaption><b>29-41 Hutchinson Street, Surry Hills</b><span>Commercial, adaptive re-use</span></figcaption></figure>
+        <figure><div class="im"><img src="images/project-16.jpg" alt="" loading="lazy" decoding="async" width="1800" height="720"></div><figcaption><b>Forestway Shopping Centre, Frenchs Forest</b><span>Retail</span></figcaption></figure>
       </div>
     </div>
   </section>
@@ -590,7 +637,7 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
   <section class="band" id="faq">
     <div class="wrap">
       <div class="intro" data-fx="fade">
-        <div><div class="eyebrow">Frequently asked questions</div><h2>Before the documents are sent.</h2></div>
+        <div><div class="eyebrow"><span class="num">08</span><span class="num">07</span>Frequently asked questions</div><h2>Before the documents are sent.</h2></div>
       </div>
       <div class="faq-wrap">
       <div class="faq" data-fx="left">
@@ -611,7 +658,7 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
   <section class="band" id="contact">
     <div class="wrap">
       <div class="intro" data-fx="fade">
-        <div data-fx="settle"><div class="eyebrow">Contact</div><h2><span style="white-space:nowrap">Measured with care.</span><br><span style="white-space:nowrap">Priced with confidence.</span></h2></div>
+        <div data-fx="settle"><div class="eyebrow"><span class="num">09</span>Contact</div><h2><span style="white-space:nowrap">Measured with care.</span><br><span style="white-space:nowrap">Priced with confidence.</span></h2></div>
         <p>Forward the design documentation together with the tender date, or complete the request form. A written fee proposal is ordinarily returned within two business days.</p>
       </div>
       <div class="contact" data-fx="rise">
@@ -620,7 +667,7 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
         <div class="c"><div class="l">Practice</div><div class="v">Services provided<br>Australia wide</div><div class="s">Reflect Group Pty Ltd &middot; ABN 33 647 782 947</div></div>
       </div>
       <p style="margin-top:2.5rem"><button class="btn" type="button" data-open-form>Request a fee proposal <span aria-hidden="true">&rarr;</span></button></p>
-      <p class="fine">&copy; 2026 Reflect Group Pty Ltd &middot; reflectgroup.com.au</p>
+      <p class="fine">&copy; 2026 Reflect Group Pty Ltd &middot; ABN 33 647 782 947 &middot; <a href="/legal" style="color:inherit">Privacy and terms</a></p>
     </div>
   </section>
 </main>
@@ -690,6 +737,7 @@ function startMark(canvas, wordEl, opts){ opts=opts||{};
   }
   function frame(now){
     if(!running) return;
+    if(document.hidden){ raf=requestAnimationFrame(frame); return; }
     const t=now-t0;
     ctx.clearRect(0,0,W,H);
     const bw=(2*Math.PI*R/BARS)*0.46; ctx.lineCap='butt';
@@ -788,7 +836,9 @@ addEventListener('keydown',e=>{ if(!splash.hidden && (e.key==='Enter'||e.key==='
   const setTitle=k=>{const [nm,sub]=PROJECTS[k]||['','']; title.querySelector('.name').textContent=nm; title.querySelector('.sub').textContent=sub;};
   slides.forEach((_,k)=>{const b=document.createElement('button');b.type='button';b.setAttribute('aria-label','Project '+(k+1));b.addEventListener('click',()=>{go(k);restart();});dots.appendChild(b);});
   function go(k){slides[i].classList.remove('on');dots.children[i].classList.remove('on');i=(k+slides.length)%slides.length;slides[i].classList.add('on');dots.children[i].classList.add('on');title.classList.add('fade');setTimeout(()=>{setTitle(i);title.classList.remove('fade');},reduce?0:600);}
-  function restart(){clearInterval(t); if(!reduce) t=setInterval(()=>go(i+1),5200);}
+  const bar=document.getElementById('reelBar')?.firstElementChild;
+  const runBar=()=>{ if(!bar) return; bar.classList.remove('run'); void bar.offsetWidth; bar.classList.add('run'); };
+  function restart(){clearInterval(t); runBar(); if(!reduce) t=setInterval(()=>{go(i+1); runBar();},5200);}
   dots.children[0].classList.add('on'); setTitle(0); restart();
   document.addEventListener('visibilitychange',()=>{ if(document.hidden) clearInterval(t); else restart(); });
 })();
@@ -798,7 +848,8 @@ addEventListener('keydown',e=>{ if(!splash.hidden && (e.key==='Enter'||e.key==='
 (function(){
   const btn=document.getElementById('menuBtn'), menu=document.getElementById('menu');
   const set=o=>{btn.classList.toggle('open',o);menu.classList.toggle('open',o);btn.setAttribute('aria-expanded',o);menu.setAttribute('aria-hidden',!o);document.body.classList.toggle('locked',o);};
-  btn.addEventListener('click',()=>set(!menu.classList.contains('open')));
+  let mm=null; const mc=document.getElementById('menuMark');
+  btn.addEventListener('click',()=>{ const o=!menu.classList.contains('open'); set(o); if(o&&mc){ if(!mm) mm=startMark(mc,null,{fill:true}); else mm.replay(); } });
   menu.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>set(false)));
   addEventListener('keydown',e=>{ if(e.key==='Escape'&&menu.classList.contains('open')) set(false); });
 })();
@@ -811,15 +862,20 @@ addEventListener('keydown',e=>{ if(!splash.hidden && (e.key==='Enter'||e.key==='
   const ACCESS_KEY='f416c5c5-2760-4c4e-8111-92a2a8a6f005';
   const TO='pdjolic@reflectgroup.com.au';
   const modal=document.getElementById('rfp'), form=document.getElementById('rfpForm'), msg=document.getElementById('rfpMsg'), submit=document.getElementById('rfpSubmit');
-  const set=o=>{modal.classList.toggle('open',o);modal.setAttribute('aria-hidden',!o);document.body.classList.toggle('locked',o);if(o)setTimeout(()=>document.getElementById('rf-name').focus(),350);};
+  const set=o=>{modal.classList.toggle('open',o);modal.setAttribute('aria-hidden',!o);document.body.classList.toggle('locked',o);if(o){ modal.querySelector('.modal-card').classList.remove('done'); setTimeout(()=>document.getElementById('rf-name').focus(),350);} };
   document.querySelectorAll('[data-open-form]').forEach(b=>b.addEventListener('click',()=>set(true)));
   document.querySelectorAll('[data-close-form]').forEach(b=>b.addEventListener('click',()=>set(false)));
   modal.addEventListener('click',e=>{ if(e.target===modal) set(false); });
+  const ml=document.getElementById('rfpMail'), ad=document.getElementById('rf-address');
+  if(ml&&ad) ad.addEventListener('input',()=>{ ml.href='mailto:'+TO+'?subject='+encodeURIComponent('Fee proposal request: '+(ad.value||''))+'&body='+encodeURIComponent('Project address: '+ad.value+'\n\nPlease find the drawings attached.\n'); });
   addEventListener('keydown',e=>{ if(e.key==='Escape'&&modal.classList.contains('open')) set(false); });
   const fields=[['name','Name'],['company','Company'],['email','Email'],['phone','Phone'],['project_address','Project address'],['project_type','Project type'],['service','Service required'],['required_by','Required by'],['drawings_link','Drawings link'],['notes','Notes']];
+  const check=el=>{ const l=el.closest('label'); if(!l) return true; const ok=el.checkValidity(); l.classList.toggle('bad',!ok); return ok; };
+  form.querySelectorAll('input').forEach(el=>{ el.addEventListener('blur',()=>check(el)); el.addEventListener('input',()=>{ if(el.closest('label')?.classList.contains('bad')) check(el); }); });
+  const card=modal.querySelector('.modal-card');
   form.addEventListener('submit',async e=>{
     e.preventDefault(); msg.className='f-msg'; msg.textContent='';
-    if(!form.reportValidity()) return;
+    let ok=true; form.querySelectorAll('input').forEach(el=>{ if(!check(el)) ok=false; }); if(!ok){ form.querySelector('label.bad input')?.focus(); return; }
     const d=Object.fromEntries(new FormData(form).entries());
     const subject='Fee proposal request: '+(d.project_address||d.company||d.name);
     const body=fields.map(([k,l])=>l+': '+(d[k]||'-')).join('\n');
@@ -828,7 +884,7 @@ addEventListener('keydown',e=>{ if(!splash.hidden && (e.key==='Enter'||e.key==='
       try{
         const r=await fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({access_key:ACCESS_KEY,subject,from_name:'Reflect Group website',replyto:d.email,...d})});
         const j=await r.json();
-        if(j.success){ msg.className='f-msg ok'; msg.textContent='Request received. A fee proposal will ordinarily follow within two business days.'; form.reset(); }
+        if(j.success){ form.reset(); card.classList.add('done'); const dc=document.getElementById('doneMark'); if(dc&&!dc.dataset.on){ dc.dataset.on=1; startMark(dc,null,{fill:true}); } }
         else throw new Error(j.message||'failed');
       }catch(err){ msg.className='f-msg err'; msg.textContent='The request could not be sent. Please email '+TO+' directly.'; }
       submit.disabled=false;
@@ -843,7 +899,8 @@ addEventListener('keydown',e=>{ if(!splash.hidden && (e.key==='Enter'||e.key==='
 /* Fixed tagline: light over the reel, ink over the page */
 (function(){
   const t=document.getElementById('tagFixed'), reel=document.querySelector('.reel'); if(!t||!reel) return;
-  const upd=()=>{ t.classList.toggle('ink', scrollY > reel.offsetHeight - 40); };
+  const tm=document.getElementById('topMark');
+  const upd=()=>{ const past=scrollY > reel.offsetHeight - 40; t.classList.toggle('ink', past); if(tm) tm.classList.toggle('show', past); };
   addEventListener('scroll',upd,{passive:true}); addEventListener('resize',upd); upd();
 })();
 

@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Page not found · Reflect Group</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;1,6..72,300&display=swap">
+<style>
+:root{--paper:#faf8f4;--ink:#2b2926;--ink-2:#5f5750;--mute:#857868;--bronze:#8a7557;--line:#c9b9a0;--body:'Manrope',system-ui,sans-serif;--display:'Newsreader',Georgia,serif;color-scheme:light}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--paper);color:var(--ink);font-family:var(--body);font-weight:300;text-align:center;padding:2rem max(16px,env(safe-area-inset-right,0px)) 2rem max(16px,env(safe-area-inset-left,0px));-webkit-font-smoothing:antialiased}
+.in{display:flex;flex-direction:column;align-items:center;gap:1rem;max-width:40ch}
+canvas{width:140px;height:140px;display:block}
+.eyebrow{font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:var(--bronze)}
+h1{font-family:var(--display);font-weight:400;font-size:clamp(1.8rem,4vw,2.6rem);line-height:1.1;margin:0}
+p{color:var(--ink-2);margin:0;line-height:1.55}
+a{display:inline-flex;align-items:center;gap:.6rem;margin-top:.6rem;text-decoration:none;font-size:.78rem;letter-spacing:.2em;text-transform:uppercase;color:var(--paper);background:var(--bronze);padding:.95rem 1.6rem;border-radius:999px;transition:background .3s}
+a:hover{background:var(--ink)}
+:focus-visible{outline:2px solid var(--bronze);outline-offset:3px}
+</style>
+</head>
+<body>
+<div class="in">
+  <canvas id="mark" width="280" height="280" aria-hidden="true"></canvas>
+  <div class="eyebrow">Not measured here</div>
+  <h1>That page is not in the set.</h1>
+  <p>The address may have changed or been typed incorrectly. The site itself is one page.</p>
+  <a href="/">Return to the site <span aria-hidden="true">&rarr;</span></a>
+</div>
+<script src="/mark.js"></script>
+<script>if(window.reflectMark) reflectMark(document.getElementById('mark'));</script>
+</body>
+</html>
