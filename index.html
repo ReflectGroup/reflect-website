@@ -168,16 +168,6 @@ main>section:nth-child(even){background:var(--paper-2)}
   .svc-body .svc-cols{opacity:0;transform:translateY(16px);transition:opacity .8s ease .25s,transform .9s cubic-bezier(.2,.7,.2,1) .25s}
   .svc-body.in .svc-cols{opacity:1;transform:none}
 }
-/* Closing mark: the wave mark assembles again at the foot of the page, as on the splash, when it is scrolled into view */
-.end{position:relative;height:100vh;min-height:560px;border-top:1px solid var(--line);background:var(--paper);overflow:hidden}
-.end canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
-.end .mark{position:absolute;left:0;right:0;top:calc(50% + min(13vw,11vh) + 1.2rem);text-align:center;pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:.4rem;padding:0 var(--gutter-r) 0 var(--gutter-l)}
-.end .word{font-family:var(--body);font-weight:200;font-size:clamp(2rem,4.6vw,3.1rem);letter-spacing:.02em;line-height:1;color:var(--ink)}
-.end .word small{display:block;font-size:.38em;font-weight:300;color:var(--mute);letter-spacing:.14em;text-transform:uppercase;margin-top:.55rem}
-.end .tag{font-family:var(--display);font-style:italic;font-size:clamp(1rem,1.6vw,1.3rem);color:var(--bronze);margin-top:.6rem}
-.end .mark>*{opacity:0;transform:translateY(10px);transition:opacity 1.2s ease,transform 1.2s ease}
-.end .mark.in>*{opacity:1;transform:none}.end .mark.in .tag{transition-delay:.35s}
-
 /* Scroll reveals. Each section has its own entrance; nothing is hidden unless scripting is on, and reduced-motion shows
    everything at once. [data-fx] is the trigger element; its direct children (or [data-fx-item]s) are staggered by --i. */
 @media (prefers-reduced-motion:no-preference){
@@ -221,9 +211,9 @@ main>section:nth-child(even){background:var(--paper-2)}
 
 .faq-wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:2rem 4rem;align-items:stretch}
 .faq-mark{display:flex;justify-content:center;align-items:center;min-width:0}
-.faq-mark svg{width:100%;max-width:560px;max-height:100%;height:auto;aspect-ratio:1}
+.faq-mark svg,.faq-mark canvas{width:100%;max-width:560px;max-height:100%;height:auto;aspect-ratio:1;display:block}
 .faq-mark svg line{stroke-width:1.4}
-@media (max-width:820px){.faq-wrap{grid-template-columns:1fr}.faq-mark svg{width:min(70%,320px)}}
+@media (max-width:820px){.faq-wrap{grid-template-columns:1fr}.faq-mark svg,.faq-mark canvas{width:min(70%,320px)}}
 
 /* ---------- Menu (three lines, top right) ---------- */
 #menuBtn{position:fixed;top:calc(env(safe-area-inset-top,0px) + 1.1rem);right:calc(env(safe-area-inset-right,0px) + 1.1rem);z-index:30;width:3rem;height:3rem;border:0;border-radius:50%;background:color-mix(in srgb,var(--paper) 72%,transparent);backdrop-filter:blur(8px);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:0}
@@ -613,7 +603,7 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
         <details><summary>How are fees determined?</summary><p>Bills of quantities, estimates and cost plans are quoted as a fixed fee for each project, based on the documentation and scope at the date of the proposal. Reviews, revisions and advice outside that scope are quoted separately or charged at an hourly rate stated in the proposal.</p></details>
         <details><summary>Does the location of the project matter?</summary><p>No. Measurement is undertaken from the issued documentation and does not depend on where the project is located.</p></details>
       </div>
-      <div class="faq-mark" aria-hidden="true"><svg class="ring" viewBox="0 0 100 100"></svg></div>
+      <div class="faq-mark" aria-hidden="true"><canvas id="faqMark"></canvas></div>
       </div>
     </div>
   </section>
@@ -632,11 +622,6 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
       <p style="margin-top:2.5rem"><button class="btn" type="button" data-open-form>Request a fee proposal <span aria-hidden="true">&rarr;</span></button></p>
       <p class="fine">&copy; 2026 Reflect Group Pty Ltd &middot; reflectgroup.com.au</p>
     </div>
-  </section>
-
-  <section class="end" id="end" aria-label="Reflect Group">
-    <canvas id="endMark" aria-hidden="true"></canvas>
-    <div class="mark"><div class="word">Reflect<small>Group</small></div><div class="tag">Measured with care. Priced with confidence.</div></div>
   </section>
 </main>
 
@@ -682,7 +667,7 @@ const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /* startMark(canvas, wordEl): the wave mark assembling on a canvas and then breathing; wordEl gets .in when the ring has closed.
    Returns {replay, stop, theme}. Used for the splash and again for the closing mark at the foot of the page. */
-function startMark(canvas, wordEl){
+function startMark(canvas, wordEl, opts){ opts=opts||{};
   let running=false, raf=0;
   const ctx=canvas.getContext('2d'); if(!ctx){ if(wordEl) wordEl.classList.add('in'); return {replay(){},stop(){},theme(){}}; }
   let W,H,dpr,R,cx,cy,stops,bars=[],t0=performance.now(),ptr={x:-1e4,y:-1e4};
@@ -693,7 +678,7 @@ function startMark(canvas, wordEl){
   function layout(){
     dpr=Math.min(devicePixelRatio||1,2); W=canvas.clientWidth; H=canvas.clientHeight;
     canvas.width=Math.round(W*dpr); canvas.height=Math.round(H*dpr); ctx.setTransform(dpr,0,0,dpr,0,0);
-    R=Math.min(W*0.24,H*0.19); cx=W/2; cy=H/2-R*0.52; stops=ringStops();
+    if(opts.fill){ R=Math.min(W,H)*0.33; cx=W/2; cy=H/2; } else { R=Math.min(W*0.24,H*0.19); cx=W/2; cy=H/2-R*0.52; } stops=ringStops();
   }
   function seed(){
     bars=[]; const D=Math.hypot(W,H);
@@ -714,7 +699,7 @@ function startMark(canvas, wordEl){
     const outPhase=1.2+spin, inPhase=1.2-spin;
     const prof=(base,op,ip)=>{ const wo=0.5+0.5*Math.sin(3*base+op), wi=0.5+0.5*Math.sin(3*base+ip); return [0.69*(1-0.12*wi), 1+0.18*wo]; };
     /* ghost ring, lower right, mirrors the mark in the opposite direction, fades in as the mark assembles */
-    { const gR=R*0.78, gx=cx+R*1.05, gy=cy+R*0.95, ga=Math.min(1,Math.max(0,(t-ASSEMBLE*0.6)/ASSEMBLE))*0.13;
+    if(!opts.fill){ const gR=R*0.78, gx=cx+R*1.05, gy=cy+R*0.95, ga=Math.min(1,Math.max(0,(t-ASSEMBLE*0.6)/ASSEMBLE))*0.13;
       if(ga>0){ ctx.globalAlpha=ga; ctx.lineWidth=(2*Math.PI*gR/BARS)*0.46;
         for(let i=0;i<BARS;i++){ const base=i*Math.PI*2/BARS, deg=i*360/BARS+8, r=deg*Math.PI/180; const [ri,ro]=prof(base,-outPhase,-inPhase); let gc=ringColor(stops,deg); if(ptw>0){ let sd=base+ptw*0.8; sd=Math.atan2(Math.sin(sd),Math.cos(sd)); const g=Math.exp(-(sd*sd)/(2*0.45*0.45)); gc=gc.map(v=>v+(1-v)*0.5*g); } ctx.strokeStyle=toCss(gc);
           ctx.beginPath(); ctx.moveTo(gx+Math.cos(r)*gR*ri,gy-Math.sin(r)*gR*ri); ctx.lineTo(gx+Math.cos(r)*gR*ro,gy-Math.sin(r)*gR*ro); ctx.stroke(); }
@@ -920,13 +905,13 @@ document.documentElement.classList.add('js');
   blocks.forEach(b=>io.observe(b));
 })();
 
-/* Closing mark: assembles when the foot of the page comes into view, and again each time it is returned to */
+/* FAQ mark: the wave mark beside the questions assembles when it comes into view, then breathes and glows as on the splash */
 (function(){
-  const c=document.getElementById('endMark'), word=document.querySelector('#end .mark'); if(!c||!('IntersectionObserver' in window)) return;
+  const c=document.getElementById('faqMark'); if(!c) return;
   let mark=null;
-  const io=new IntersectionObserver(es=>es.forEach(e=>{
-    if(e.isIntersecting){ if(!mark) mark=startMark(c,word); else mark.replay(); }
-  }),{threshold:0.35});
+  const begin=()=>{ if(!mark) mark=startMark(c,null,{fill:true}); };
+  if(!('IntersectionObserver' in window)){ begin(); return; }
+  const io=new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ begin(); io.disconnect(); } }),{threshold:0.3});
   io.observe(c);
   const prev=window.__markTheme; window.__markTheme=()=>{ if(prev) prev(); if(mark) mark.theme(); };
 })();
