@@ -926,7 +926,7 @@ addEventListener('keydown',e=>{ if(!splash.hidden && (e.key==='Enter'||e.key==='
   const mb=document.getElementById('menuBtn');
   const wrap=document.querySelector('main .wrap');
   const upd=()=>{ const past=scrollY > reel.offsetHeight - 40; t.classList.toggle('ink', past);
-    if(past&&wrap){ const col=wrap.getBoundingClientRect().left+parseFloat(getComputedStyle(wrap).paddingLeft); const tr=t.getBoundingClientRect().right; t.classList.toggle('tuck', tr > col - 4); } else t.classList.remove('tuck'); if(tm) tm.classList.toggle('show', past); if(mb) mb.classList.toggle('ink', past||mb.classList.contains('open')); };
+    if(past&&wrap){ const col=wrap.getBoundingClientRect().left+parseFloat(getComputedStyle(wrap).paddingLeft); const tr=t.getBoundingClientRect().right; t.classList.toggle('tuck', tr > col); } else t.classList.remove('tuck'); if(tm) tm.classList.toggle('show', past); if(mb) mb.classList.toggle('ink', past||mb.classList.contains('open')); };
   addEventListener('scroll',upd,{passive:true}); addEventListener('resize',upd); upd();
 })();
 
