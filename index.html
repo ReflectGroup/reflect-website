@@ -236,7 +236,7 @@ main>section:nth-child(even){background:var(--paper-2)}
 #topMark.show{opacity:1;transform:none;pointer-events:auto}
 body.holding #topMark{display:none}
 #tagFixed{position:fixed;left:max(8px,calc(var(--gutter-l) - 8px));top:calc(env(safe-area-inset-top,0px) + 1.35rem);z-index:20;font-family:var(--display);font-style:italic;font-size:clamp(1.05rem,1.6vw,1.4rem);line-height:1.25;color:#f5f1ea;text-shadow:0 1px 14px rgba(0,0,0,.45);max-width:calc(100vw - 7rem);white-space:nowrap;pointer-events:auto;cursor:default;--tc:#f5f1ea;transition:color .5s,text-shadow .5s,left .5s,font-size .5s,opacity .4s,top .5s}
-#tagFixed.ink{color:var(--ink);text-shadow:none;left:calc(max(8px,calc(var(--gutter-l) - 8px)) + 2.7rem);--tc:var(--ink);font-size:.95rem;top:calc(env(safe-area-inset-top,0px) + 1.35rem + 1.25 * clamp(1.05rem,1.6vw,1.4rem) - 1.1875rem)}
+#tagFixed.ink{color:var(--ink);text-shadow:none;left:calc(max(8px,calc(var(--gutter-l) - 8px)) + 2.6rem);--tc:var(--ink);font-size:1.05rem;top:calc(env(safe-area-inset-top,0px) + 1.35rem + 1.25 * clamp(1.05rem,1.6vw,1.4rem) - 1.3125rem)}
 #tagFixed.ink.tuck{opacity:0;pointer-events:none}
 #tagFixed:hover{color:transparent;text-shadow:none;background:linear-gradient(90deg,var(--tc) 0%,var(--tc) 35%,#c9a97a 50%,var(--tc) 65%,var(--tc) 100%);background-size:250% 100%;background-position:100% 0;-webkit-background-clip:text;background-clip:text;animation:shine 1.2s cubic-bezier(.4,0,.2,1) forwards;filter:drop-shadow(0 0 6px rgba(184,157,120,.7))}
 body.holding #tagFixed{display:none}
@@ -926,7 +926,7 @@ addEventListener('keydown',e=>{ if(!splash.hidden && (e.key==='Enter'||e.key==='
   const mb=document.getElementById('menuBtn');
   const wrap=document.querySelector('main .wrap');
   const upd=()=>{ const past=scrollY > reel.offsetHeight - 40; t.classList.toggle('ink', past);
-    if(past&&wrap){ const col=wrap.getBoundingClientRect().left+parseFloat(getComputedStyle(wrap).paddingLeft); const tr=t.getBoundingClientRect().right; t.classList.toggle('tuck', tr > col - 8); } else t.classList.remove('tuck'); if(tm) tm.classList.toggle('show', past); if(mb) mb.classList.toggle('ink', past||mb.classList.contains('open')); };
+    if(past&&wrap){ const col=wrap.getBoundingClientRect().left+parseFloat(getComputedStyle(wrap).paddingLeft); const tr=t.getBoundingClientRect().right; t.classList.toggle('tuck', tr > col - 4); } else t.classList.remove('tuck'); if(tm) tm.classList.toggle('show', past); if(mb) mb.classList.toggle('ink', past||mb.classList.contains('open')); };
   addEventListener('scroll',upd,{passive:true}); addEventListener('resize',upd); upd();
 })();
 
