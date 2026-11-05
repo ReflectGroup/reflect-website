@@ -117,11 +117,11 @@ nav.main a:hover{color:var(--ink);border-color:var(--sand)}
 .grid img{width:100%;height:100%;object-fit:cover;display:block;max-width:100%;transition:transform 1.6s cubic-bezier(.2,.7,.2,1)}
 .grid figure:hover img,.grid figure:focus-within img,.grid figure.on img{transform:scale(1.05);filter:grayscale(1)}
 .grid img{transition:transform 1.6s cubic-bezier(.2,.7,.2,1),filter .7s ease}
-.grid .meta{position:absolute;inset:0;display:flex;align-items:flex-end;padding:1.1rem 1.2rem;background:linear-gradient(180deg,rgba(43,41,38,0) 30%,rgba(43,41,38,.78) 100%);opacity:0;transition:opacity .6s ease;pointer-events:none}
+.grid .meta{position:absolute;inset:0;display:flex;align-items:flex-end;padding:1.1rem 1.2rem;background:linear-gradient(180deg,rgba(43,41,38,.05) 0%,rgba(43,41,38,.55) 45%,rgba(43,41,38,.9) 100%);opacity:0;transition:opacity .6s ease;pointer-events:none}
 .grid figure:hover .meta,.grid figure:focus-within .meta,.grid figure.on .meta{opacity:1}
-.grid .meta dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:.3rem .9rem;color:#f5f1ea;font-size:.8rem;line-height:1.4;transform:translateY(8px);transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+.grid .meta dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:.45rem 1rem;color:#fff;font-size:1rem;font-weight:500;line-height:1.4;text-shadow:0 1px 6px rgba(0,0,0,.5);transform:translateY(8px);transition:transform .6s cubic-bezier(.2,.7,.2,1)}
 .grid figure:hover .meta dl,.grid figure:focus-within .meta dl,.grid figure.on .meta dl{transform:none}
-.grid .meta dt{font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:#c9a97a;padding-top:.15em}
+.grid .meta dt{font-size:.7rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:#d9bc8e;padding-top:.3em}
 .grid .meta dd{margin:0}
 .grid figure:focus-visible{outline:2px solid var(--bronze);outline-offset:3px}
 .grid figcaption{display:flex;flex-direction:column;gap:.15rem;position:relative;padding-bottom:.6rem;transition:transform .6s cubic-bezier(.2,.7,.2,1)}
