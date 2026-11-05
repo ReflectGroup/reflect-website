@@ -208,6 +208,11 @@ nav.main a:hover{color:var(--ink);border-color:var(--sand)}
 .tag-cols>div:last-child p{color:#e6dfd3}
 .tag-cols>div:last-child p:first-of-type{font-family:var(--display);font-size:1.3rem;line-height:1.3;color:var(--paper);padding-bottom:1rem;border-bottom:1px solid rgba(214,185,138,.35)}
 .tag-cols>div p{max-width:none}
+/* Cards lift a touch on hover */
+.tag-cols>div,.method article,.svc-cols>div{transition:transform .5s cubic-bezier(.2,.7,.2,1),box-shadow .5s ease,border-color .5s ease}
+@media (hover:hover){.tag-cols>div:hover,.method article:hover,.svc-cols>div:hover{transform:translateY(-4px);box-shadow:0 2px 4px rgba(43,41,38,.05),0 18px 36px -12px rgba(43,41,38,.22),0 24px 48px -20px rgba(138,117,87,.2);border-color:var(--bronze)}
+.tag-cols>div:last-child:hover{border-color:#d6b98a}}
+@media (prefers-reduced-motion:reduce){.tag-cols>div,.method article,.svc-cols>div{transition:none}.tag-cols>div:hover,.method article:hover,.svc-cols>div:hover{transform:none}}
 .tag-cols .eyebrow{font-size:.8rem;font-weight:600;letter-spacing:.18em}
 .tag-cols p{color:var(--ink-2);font-size:.95rem;margin-top:.6rem;max-width:40ch}
 .tag-cols p+p{margin-top:.85rem}
