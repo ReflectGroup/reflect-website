@@ -119,9 +119,10 @@ nav.main a:hover{color:var(--ink);border-color:var(--sand)}
 .grid img{transition:transform 1.6s cubic-bezier(.2,.7,.2,1),filter .7s ease}
 .grid .meta{position:absolute;inset:0;display:flex;align-items:flex-end;padding:1.1rem 1.2rem;background:linear-gradient(180deg,rgba(43,41,38,.05) 0%,rgba(43,41,38,.55) 45%,rgba(43,41,38,.9) 100%);opacity:0;transition:opacity .6s ease;pointer-events:none}
 .grid figure:hover .meta,.grid figure:focus-within .meta,.grid figure.on .meta{opacity:1}
-.grid .meta dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:.45rem 1rem;color:#fff;font-size:1rem;font-weight:500;line-height:1.4;background:rgba(43,41,38,.86);padding:.85rem 1rem;border-left:2px solid #c9a97a;transform:translateY(8px);transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+.grid .meta dl{margin:0;width:100%;display:grid;grid-template-columns:1fr;gap:.15rem;color:#fff;font-size:.84rem;font-weight:500;line-height:1.35;background:rgba(43,41,38,.86);padding:.85rem 1rem;border-left:2px solid #c9a97a;transform:translateY(8px);transition:transform .6s cubic-bezier(.2,.7,.2,1)}
 .grid figure:hover .meta dl,.grid figure:focus-within .meta dl,.grid figure.on .meta dl{transform:none}
-.grid .meta dt{font-size:.7rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:#d9bc8e;padding-top:.3em}
+.grid .meta dt{font-size:.62rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:#d9bc8e;padding-top:.3em}
+.grid .meta dd+dt{margin-top:.5rem}
 .grid .meta dd{margin:0}
 .grid figure:focus-visible{outline:2px solid var(--bronze);outline-offset:3px}
 .grid figcaption{display:flex;flex-direction:column;gap:.15rem;position:relative;padding-bottom:.6rem;transition:transform .6s cubic-bezier(.2,.7,.2,1)}
