@@ -1,4 +1,19 @@
-<title>Reflect Group</title>
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Reflect Group · Quantity Surveying and Estimating</title>
+<meta name="description" content="Reflect Group is a quantity surveying and estimating practice serving builders, subcontractors, developers and architects: cost planning, bills of quantities, estimating and subcontractor quote comparison, prepared to manage the final cost and convert the tender into a contract.">
+<link rel="canonical" href="https://www.reflectgroup.com.au/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Reflect Group">
+<meta property="og:title" content="Reflect Group · Quantity Surveying and Estimating">
+<meta property="og:description" content="Reflect Group is a quantity surveying and estimating practice serving builders, subcontractors, developers and architects: cost planning, bills of quantities, estimating and subcontractor quote comparison, prepared to manage the final cost and convert the tender into a contract.">
+<meta property="og:url" content="https://www.reflectgroup.com.au/">
+<meta property="og:image" content="https://www.reflectgroup.com.au/images/project-20.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#faf8f4">
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="icon" href="favicon.ico" sizes="32x32">
@@ -385,7 +400,8 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
 
 @media (prefers-reduced-motion:reduce){#splash{transition:none}html{scroll-behavior:auto}}
 </style>
-
+</head>
+<body>
 <div id="splash" aria-label="Reflect Group">
   <canvas id="fluid"></canvas>
   <div id="hint">Estimating</div>
@@ -816,7 +832,7 @@ function startMark(canvas, wordEl, opts){ opts=opts||{};
 /* ---------------- Boot ---------------- */
 /* HOLDING: true = public visitors see the splash only (contact details, no Enter).
    The full site stays reachable at /#preview for review. Set to false to open the site. */
-const HOLDING=true;
+const HOLDING=false;
 if(HOLDING && location.hash!=='#preview') document.body.classList.add('holding');
 document.body.classList.add('locked');
 buildSvgRings();
@@ -1047,3 +1063,5 @@ document.querySelectorAll('.copy').forEach(b=>b.addEventListener('click',()=>{
 }));
 })();
 </script>
+</body>
+</html>
