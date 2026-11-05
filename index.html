@@ -339,7 +339,8 @@ body.holding #tagFixed{display:none}
 .eyebrow{font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:var(--bronze);font-weight:400}
 .eyebrow .num{display:inline-block;margin-right:.9rem;padding-right:.9rem;border-right:1px solid var(--line);color:var(--mute);font-variant-numeric:tabular-nums}
 section.band{border:1px solid var(--bronze);border-radius:clamp(18px,2.4vw,32px);margin:clamp(.6rem,1.2vw,1rem) var(--gutter-r) clamp(.6rem,1.2vw,1rem) var(--gutter-l);padding-block:clamp(3.5rem,8vw,6rem);scroll-margin-top:1.5rem;background:var(--paper)}
-main{background:var(--paper-2)}
+main>section.band:nth-child(even){background:var(--paper-2)}
+main{background:#fff}
 .svc-row{scroll-margin-top:5rem}
 section.band h2{font-family:var(--display);font-size:clamp(1.9rem,4.6vw,4.2rem);line-height:1.1;margin-top:.8rem;max-width:22ch}
 .intro{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:2rem 4rem;align-items:start;margin-bottom:3rem}
