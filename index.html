@@ -835,7 +835,7 @@ function enter(){
 document.getElementById('enter').addEventListener('click',enter);
 /* Returning visitors: the splash is shown once, then skipped for 2 hours (per browser); after that it plays again.
    Not applied in holding mode, where the splash is the page. Add #splash to the address to force it. */
-const SPLASH_SKIP_MS=2*60*60*1000, SPLASH_KEY='rg-splash-seen';
+const SPLASH_SKIP_MS=8*60*60*1000, SPLASH_KEY='rg-splash-seen';
 (function(){
   if(document.body.classList.contains('holding')) return;
   let seen=0; try{ seen=+localStorage.getItem(SPLASH_KEY)||0; }catch(e){}
