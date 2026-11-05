@@ -195,7 +195,7 @@ nav.main a:hover{color:var(--ink);border-color:var(--sand)}
 .inc li{padding-left:1rem;position:relative}
 .inc li::before{content:"";position:absolute;left:0;top:.6em;width:.35rem;height:1px;background:var(--bronze)}
 
-main>section:nth-child(even){background:var(--paper-2)}
+
 .tag-big{font-family:var(--display);font-size:clamp(1.9rem,4.6vw,4.2rem);line-height:1.1;letter-spacing:-.01em;text-wrap:nowrap;max-width:none}
 .tag-big span{white-space:nowrap}
 @media (max-width:480px){.tag-big{font-size:clamp(1.6rem,8.6vw,2rem)}}
@@ -273,7 +273,7 @@ body.holding #topMark{display:none}
 #tagFixed:hover{color:transparent;text-shadow:none;background:linear-gradient(90deg,var(--tc) 0%,var(--tc) 35%,#c9a97a 50%,var(--tc) 65%,var(--tc) 100%);background-size:250% 100%;background-position:100% 0;-webkit-background-clip:text;background-clip:text;animation:shine 1.2s cubic-bezier(.4,0,.2,1) forwards;filter:drop-shadow(0 0 6px rgba(184,157,120,.7))}
 body.holding #tagFixed{display:none}
 
-.hero-band{padding-block:0;border-top:0}
+.hero-band{padding-block:0}
 
 .faq-wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:2rem 4rem;align-items:stretch}
 .faq-mark{display:flex;justify-content:center;align-items:center;min-width:0}
@@ -338,7 +338,8 @@ body.holding #tagFixed{display:none}
 
 .eyebrow{font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:var(--bronze);font-weight:400}
 .eyebrow .num{display:inline-block;margin-right:.9rem;padding-right:.9rem;border-right:1px solid var(--line);color:var(--mute);font-variant-numeric:tabular-nums}
-section.band{border-top:1px solid var(--line);padding-block:clamp(3.5rem,8vw,6rem);scroll-margin-top:1.5rem}
+section.band{border:1px solid var(--bronze);border-radius:clamp(18px,2.4vw,32px);margin:clamp(.6rem,1.2vw,1rem) var(--gutter-r) clamp(.6rem,1.2vw,1rem) var(--gutter-l);padding-block:clamp(3.5rem,8vw,6rem);scroll-margin-top:1.5rem;background:var(--paper)}
+main{background:var(--paper-2)}
 .svc-row{scroll-margin-top:5rem}
 section.band h2{font-family:var(--display);font-size:clamp(1.9rem,4.6vw,4.2rem);line-height:1.1;margin-top:.8rem;max-width:22ch}
 .intro{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:2rem 4rem;align-items:start;margin-bottom:3rem}
