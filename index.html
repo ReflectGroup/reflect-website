@@ -283,6 +283,13 @@ main>section.band:nth-child(even) .svc-cols>div,main>section.band:nth-child(even
 #topMark:hover svg{transform:rotate(60deg)}
 #topMark.show{opacity:1;transform:none;pointer-events:auto}
 body.holding #topMark{display:none}
+#topVeil{display:none}
+@media (max-width:600px){
+  #topVeil{display:block;position:fixed;left:0;right:0;top:0;height:calc(env(safe-area-inset-top,0px) + 4.8rem);z-index:19;pointer-events:none;background:linear-gradient(180deg,rgba(250,248,244,.97) 0%,rgba(250,248,244,.9) 55%,rgba(250,248,244,0) 100%);opacity:0;transition:opacity .5s ease}
+  #topVeil.on{opacity:1}
+  #topMark{width:2.2rem}
+  #topMark svg{width:1.8rem;height:1.8rem}
+}
 #tagFixed{position:fixed;left:calc(var(--gutter-l) + 10px);top:calc(env(safe-area-inset-top,0px) + 1.35rem);z-index:20;font-family:var(--display);font-style:italic;font-size:clamp(1.05rem,1.6vw,1.4rem);line-height:1.25;color:#f5f1ea;text-shadow:0 1px 14px rgba(0,0,0,.45);max-width:calc(100vw - 7rem);white-space:nowrap;pointer-events:auto;cursor:default;--tc:#f5f1ea;transition:color .5s,text-shadow .5s,left .5s,font-size .5s,opacity .4s,top .5s}
 #tagFixed.ink{color:var(--ink);text-shadow:none;left:calc(calc(var(--gutter-l) + 10px) + 2.6rem);--tc:var(--ink);font-size:1.05rem;top:calc(env(safe-area-inset-top,0px) + 1.35rem + 1.25 * clamp(1.05rem,1.6vw,1.4rem) - 1.3125rem)}
 #tagFixed.ink.tuck{opacity:0;pointer-events:none}
@@ -438,6 +445,7 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
   </div>
 </div>
 
+<div id="topVeil" aria-hidden="true"></div>
 <a id="topMark" href="#top" aria-label="Back to top" title="Back to top"><svg class="ring" viewBox="0 0 100 100" aria-hidden="true"></svg></a>
 <div id="tagFixed" aria-hidden="true">Measured with care.<br>Priced with confidence.</div>
 <button id="menuBtn" type="button" aria-label="Menu" aria-expanded="false" aria-controls="menu"><span></span><span></span><span></span></button>
@@ -975,7 +983,7 @@ addEventListener('keydown',e=>{ if(!splash.hidden && (e.key==='Enter'||e.key==='
   const tm=document.getElementById('topMark');
   const mb=document.getElementById('menuBtn');
   const wrap=document.querySelector('main .wrap');
-  const upd=()=>{ const past=scrollY > reel.offsetHeight - 40; t.classList.toggle('ink', past);
+  const upd=()=>{ const past=scrollY > reel.offsetHeight - 40; t.classList.toggle('ink', past); const v=document.getElementById('topVeil'); if(v) v.classList.toggle('on', past);
     if(past&&wrap){ const col=wrap.getBoundingClientRect().left+parseFloat(getComputedStyle(wrap).paddingLeft); const tr=t.getBoundingClientRect().right; t.classList.toggle('tuck', tr > col); } else t.classList.remove('tuck'); if(tm) tm.classList.toggle('show', past); if(mb) mb.classList.toggle('ink', past||mb.classList.contains('open')); };
   addEventListener('scroll',upd,{passive:true}); addEventListener('resize',upd); upd();
 })();
