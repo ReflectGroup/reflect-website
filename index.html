@@ -210,7 +210,8 @@ main>section.band:nth-child(even) .grid figure{background:var(--paper)}
 .tag-cols>div:last-child p:first-of-type{font-family:var(--display);font-size:1.3rem;line-height:1.3;color:var(--paper);padding-bottom:1rem;border-bottom:1px solid rgba(214,185,138,.35)}
 .tag-cols>div p{max-width:none}
 /* Cards lift a touch on hover */
-.tag-cols>div,.method article,.svc-cols>div,.sectors li,.grid figure{transition:transform .5s cubic-bezier(.2,.7,.2,1),box-shadow .5s ease,border-color .5s ease}
+.tag-cols.in>div,.method.in article,.sectors.in li,.grid.in figure,.svc-cols>div{transition-delay:0s}
+.tag-cols>div,.method article,.svc-cols>div,.sectors li,.grid figure{transition:transform .45s cubic-bezier(.2,.7,.2,1),box-shadow .45s ease,border-color .45s ease,opacity .9s ease,filter .9s ease}
 @media (hover:hover){.tag-cols>div:hover,.method article:hover,.svc-cols>div:hover,.sectors li:hover,.grid figure:hover{transform:translateY(-4px);box-shadow:0 2px 4px rgba(43,41,38,.05),0 18px 36px -12px rgba(43,41,38,.22),0 24px 48px -20px rgba(138,117,87,.2);border-color:var(--bronze)}
 .tag-cols>div:last-child:hover{border-color:#d6b98a}}
 @media (prefers-reduced-motion:reduce){.tag-cols>div,.method article,.svc-cols>div,.sectors li,.grid figure{transition:none}.tag-cols>div:hover,.method article:hover,.svc-cols>div:hover,.sectors li:hover,.grid figure:hover{transform:none}}
@@ -637,10 +638,10 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
         <p>Four commitments hold on every engagement, whatever the service commissioned.</p>
       </div>
       <div class="method four" data-fx="focus">
-        <article><h3>Director involvement</h3><p>Every engagement is led by the Managing Director from the first review of the documents to the issue of the bill, estimate or cost plan. The person who quotes the work is the person responsible for its accuracy.</p></article>
-        <article><h3>Fixed fees</h3><p>The fee for each bill, estimate or cost plan is quoted in writing before the drawings are opened, and is fixed against the document set listed in the proposal. Later revisions are measured under a separate instruction. Clients are not exposed to hourly charges for the core service.</p></article>
-        <article><h3>Delivery to program</h3><p>Delivery dates are set to suit the tender period and held. The date is stated in the fee proposal, and the bill is issued on it.</p></article>
-        <article><h3>Independence</h3><p>Reflect Group acts for the client alone. The practice has no interest in any builder, subcontractor or supplier, and its quantities and recommendations are prepared without regard to who will ultimately perform the work.</p></article>
+        <article><div class="n">1</div><h3>Director involvement</h3><p>Every engagement is led by the Managing Director from the first review of the documents to the issue of the bill, estimate or cost plan. The person who quotes the work is the person responsible for its accuracy.</p></article>
+        <article><div class="n">2</div><h3>Fixed fees</h3><p>The fee for each bill, estimate or cost plan is quoted in writing before the drawings are opened, and is fixed against the document set listed in the proposal. Later revisions are measured under a separate instruction. Clients are not exposed to hourly charges for the core service.</p></article>
+        <article><div class="n">3</div><h3>Delivery to program</h3><p>Delivery dates are set to suit the tender period and held. The date is stated in the fee proposal, and the bill is issued on it.</p></article>
+        <article><div class="n">4</div><h3>Independence</h3><p>Reflect Group acts for the client alone. The practice has no interest in any builder, subcontractor or supplier, and its quantities and recommendations are prepared without regard to who will ultimately perform the work.</p></article>
       </div>
     </div>
   </section>
