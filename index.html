@@ -368,12 +368,12 @@ main{background:var(--paper)}
 section.band h2{font-family:var(--display);font-size:clamp(1.9rem,4.6vw,4.2rem);line-height:1.1;margin-top:.8rem;max-width:22ch}
 .clients{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--line);border-left:1px solid var(--line)}
 .clients li{border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
-.clients a{display:flex;align-items:center;justify-content:center;height:clamp(7rem,11vw,9.5rem);padding:1rem;color:var(--mute);transition:color .35s ease,background-color .35s ease}
-.clients a:hover,.clients a:focus-visible{color:var(--ink);background:rgba(184,157,120,.08)}
-.clients .lg{display:block;width:var(--w);height:var(--h);max-width:100%;background:currentColor;-webkit-mask:var(--m) center/contain no-repeat;mask:var(--m) center/contain no-repeat;transition:transform .35s ease}
-.clients a:hover .lg,.clients a:focus-visible .lg{transform:scale(1.05)}
+.clients a{display:flex;align-items:center;justify-content:center;height:clamp(7rem,11vw,9.5rem);padding:1rem;transition:background-color .35s ease}
+.clients a:hover,.clients a:focus-visible{background:rgba(184,157,120,.08)}
+.clients img{display:block;max-width:100%;object-fit:contain;transition:transform .35s ease}
+.clients a:hover img,.clients a:focus-visible img{transform:scale(1.05)}
 .clients-note{margin-top:1rem;font-size:.72rem;color:var(--mute)}
-@media (max-width:820px){.clients{grid-template-columns:repeat(2,minmax(0,1fr))}.clients .lg{width:calc(var(--w)*.85);height:calc(var(--h)*.85)}}
+@media (max-width:820px){.clients{grid-template-columns:repeat(2,minmax(0,1fr))}.clients img{transform:scale(.85)}.clients a:hover img{transform:scale(.9)}}
 .intro{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:2rem 4rem;align-items:start;margin-bottom:3rem}
 .intro p{color:var(--ink-2);max-width:58ch;padding-top:.6rem}
 #contact .intro{grid-template-columns:1fr;gap:1.2rem}
@@ -697,18 +697,18 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
   <section class="band" id="clients">
     <div class="wrap">
       <div class="intro" data-fx="fade">
-        <div><div class="eyebrow"><span class="num">06</span>Clients</div><h2>Builders we have worked for.</h2></div>
+        <div><div class="eyebrow"><span class="num">06</span>Clients</div><h2>Our clients.</h2></div>
         <p>A selection of the builders for whom Reflect Group has prepared bills of quantities, estimates and subcontractor quote comparisons.</p>
       </div>
       <ul class="clients" data-fx="fade">
-        <li><a href="https://www.richardcrookes.com.au/" target="_blank" rel="noopener" aria-label="Richard Crookes Constructions (opens in a new tab)" title="Richard Crookes Constructions"><span class="lg" style="--m:url(images/clients/richard-crookes.png);--w:10.24rem;--h:1.66rem"></span></a></li>
-        <li><a href="https://www.hutchinsonbuilders.com.au/" target="_blank" rel="noopener" aria-label="Hutchinson Builders (opens in a new tab)" title="Hutchinson Builders"><span class="lg" style="--m:url(images/clients/hutchinson.svg);--w:7.11rem;--h:1.98rem"></span></a></li>
-        <li><a href="https://www.kane.com.au/" target="_blank" rel="noopener" aria-label="Kane Constructions (opens in a new tab)" title="Kane Constructions"><span class="lg" style="--m:url(images/clients/kane.png);--w:8.63rem;--h:1.29rem"></span></a></li>
-        <li><a href="https://www.taylorau.com.au/" target="_blank" rel="noopener" aria-label="Taylor (opens in a new tab)" title="Taylor"><span class="lg" style="--m:url(images/clients/taylor.svg);--w:6.95rem;--h:1.48rem"></span></a></li>
-        <li><a href="https://www.buildcorp.com.au/" target="_blank" rel="noopener" aria-label="Buildcorp (opens in a new tab)" title="Buildcorp"><span class="lg" style="--m:url(images/clients/buildcorp.svg);--w:7.11rem;--h:1.65rem"></span></a></li>
-        <li><a href="https://www.hacer.com.au/" target="_blank" rel="noopener" aria-label="Hacer Group (opens in a new tab)" title="Hacer Group"><span class="lg" style="--m:url(images/clients/hacer.png);--w:5.37rem;--h:2.18rem"></span></a></li>
-        <li><a href="https://www.pattersonbuild.com.au/" target="_blank" rel="noopener" aria-label="Patterson Building Group (opens in a new tab)" title="Patterson Building Group"><span class="lg" style="--m:url(images/clients/patterson.svg);--w:8.65rem;--h:1.36rem"></span></a></li>
-        <li><a href="https://baselineprojects.com.au/" target="_blank" rel="noopener" aria-label="Baseline Projects (opens in a new tab)" title="Baseline Projects"><span class="lg" style="--m:url(images/clients/baseline-projects.svg);--w:6.89rem;--h:1.45rem"></span></a></li>
+        <li><a href="https://www.richardcrookes.com.au/" target="_blank" rel="noopener" title="Richard Crookes Constructions"><img src="images/clients/richard-crookes.svg" alt="Richard Crookes Constructions" loading="lazy" decoding="async" style="width:8.07rem;height:1.82rem"></a></li>
+        <li><a href="https://www.hutchinsonbuilders.com.au/" target="_blank" rel="noopener" title="Hutchinson Builders"><img src="images/clients/hutchinson.svg" alt="Hutchinson Builders" loading="lazy" decoding="async" style="width:7.11rem;height:1.98rem"></a></li>
+        <li><a href="https://www.kane.com.au/" target="_blank" rel="noopener" title="Kane Constructions"><img src="images/clients/kane.png" alt="Kane Constructions" loading="lazy" decoding="async" style="width:8.40rem;height:1.26rem"></a></li>
+        <li><a href="https://www.taylorau.com.au/" target="_blank" rel="noopener" title="Taylor"><img src="images/clients/taylor.svg" alt="Taylor" loading="lazy" decoding="async" style="width:6.95rem;height:1.48rem"></a></li>
+        <li><a href="https://www.buildcorp.com.au/" target="_blank" rel="noopener" title="Buildcorp"><img src="images/clients/buildcorp.svg" alt="Buildcorp" loading="lazy" decoding="async" style="width:7.11rem;height:1.65rem"></a></li>
+        <li><a href="https://www.hacer.com.au/" target="_blank" rel="noopener" title="Hacer Group"><img src="images/clients/hacer.jpg" alt="Hacer Group" loading="lazy" decoding="async" style="width:3.50rem;height:3.68rem"></a></li>
+        <li><a href="https://www.pattersonbuild.com.au/" target="_blank" rel="noopener" title="Patterson Building Group"><img src="images/clients/patterson.svg" alt="Patterson Building Group" loading="lazy" decoding="async" style="width:8.65rem;height:1.35rem"></a></li>
+        <li><a href="https://baselineprojects.com.au/" target="_blank" rel="noopener" title="Baseline Projects"><img src="images/clients/baseline-projects.svg" alt="Baseline Projects" loading="lazy" decoding="async" style="width:6.88rem;height:1.45rem"></a></li>
       </ul>
       <p class="clients-note">Logos are the trademarks of their respective owners.</p>
     </div>
