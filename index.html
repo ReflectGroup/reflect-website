@@ -34,7 +34,8 @@
 }
 
 html{scroll-behavior:smooth;color-scheme:light}
-body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-weight:300;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+html{overflow-x:clip}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-weight:300;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:clip}
 body.locked{overflow:hidden}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--paper)}
 *{box-sizing:border-box}
@@ -437,9 +438,8 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
 <body>
 <div id="splash" aria-label="Reflect Group">
   <canvas id="fluid"></canvas>
-  <div id="hint">Estimating</div>
-  <div class="mid">Cost management</div>
-  <div class="corner">Quantity surveying</div>
+  <div id="hint">Cost management</div>
+  <div class="corner">Conversion strategy</div>
   <button id="soundBtn" type="button" aria-pressed="false" aria-label="Sound"><span class="ic" aria-hidden="true"></span><span class="lbl">Sound off</span></button>
   <div class="mark">
     <div class="word">Reflect<small>Group</small></div>
