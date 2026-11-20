@@ -21,7 +21,7 @@ header{padding:2rem 0 0}
 .brand canvas{width:40px;height:40px;display:block}
 .rg{display:inline-grid;grid-template-columns:auto auto;grid-template-areas:"a b" "a s";align-items:start;justify-content:start;--sw:.0575em;--sr:.08em;--gb:.09em;--la:.2175em;--bl:.908em}
 .rg .rg-a{grid-area:a;position:relative;align-self:stretch}
-.rg .rg-a:after{content:"";position:absolute;right:var(--sr);width:var(--sw);top:calc(var(--bl) - .735em);bottom:var(--gb);background:currentColor}
+.rg .rg-a:after{content:"";position:absolute;right:var(--sr);width:var(--sw);top:calc(var(--bl) - var(--asc,.735em));bottom:var(--gb);background:currentColor}
 .rg .rg-l{display:inline-block;width:var(--la)}
 .rg .rg-b{grid-area:b}
 .rg small{grid-area:s}
@@ -74,5 +74,7 @@ a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line)}a:ho
 </main>
 <script src="mark.js"></script>
 <script>if(window.reflectMark) reflectMark(document.getElementById('mark'));</script>
+<script>/* match the long l stem to the real l glyph of the loaded font */
+(function(){function fit(){document.querySelectorAll('.rg').forEach(function(el){var cs=getComputedStyle(el),c=document.createElement('canvas').getContext('2d');c.font=cs.fontWeight+' 100px '+cs.fontFamily;var m=c.measureText('l');if(!m.actualBoundingBoxRight)return;var r=m.actualBoundingBoxRight/100,l=m.actualBoundingBoxLeft/100,a=m.width/100;el.style.setProperty('--sw',(r+l).toFixed(4)+'em');el.style.setProperty('--sr',(a-r).toFixed(4)+'em');el.style.setProperty('--la',a.toFixed(4)+'em');el.style.setProperty('--asc',(m.actualBoundingBoxAscent/100).toFixed(4)+'em')})}if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fit);else fit()})();</script>
 </body>
 </html>

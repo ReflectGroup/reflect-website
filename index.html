@@ -54,7 +54,7 @@ p{margin:0}
 #splash.leaving{opacity:0;transform:scale(1.03);pointer-events:none}
 #fluid{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
 #splash .mark{position:absolute;left:0;right:0;top:calc(50% + min(13vw,11vh) + 1.2rem);z-index:2;text-align:center;pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:.4rem}
-#splash .word{font-family:var(--body);font-weight:200;font-size:clamp(2.7rem,6.2vw,4.2rem);letter-spacing:.02em;line-height:1;color:var(--ink)}
+#splash .word{font-family:var(--body);font-weight:300;font-size:clamp(2.7rem,6.2vw,4.2rem);letter-spacing:.02em;line-height:1;color:var(--ink)}
 #splash .word small{display:block;font-size:.38em;font-weight:300;color:var(--mute);letter-spacing:.14em;text-transform:uppercase;margin-top:.55rem}
 #splash .tag{font-family:var(--display);font-style:italic;font-weight:300;font-size:clamp(1.35rem,2.4vw,1.9rem);color:var(--bronze);margin-top:.6rem;text-align:center}
 @media (max-width:560px){#splash .tag{font-size:1.15rem;max-width:18ch;line-height:1.3}#splash .word{font-size:2.7rem}#soundBtn{bottom:calc(env(safe-area-inset-bottom,0px) + 1rem)}}
@@ -89,12 +89,12 @@ body.holding main,body.holding #menuBtn,body.holding #menu,body.holding #tagFixe
 /* Reflect lockup: long l as the mirror line, ect reflected, Group beside the stem */
 .rg{display:inline-grid;grid-template-columns:auto auto;grid-template-areas:"a b" "a s";align-items:start;justify-content:start;--sw:.0575em;--sr:.08em;--gb:.09em;--ls:.01em;--la:.2175em;--bl:.908em}
 .rg .rg-a{grid-area:a;position:relative;align-self:stretch}
-.rg .rg-a:after{content:"";position:absolute;right:var(--sr);width:var(--sw);top:calc(var(--bl) - .735em);bottom:var(--gb);background:currentColor}
+.rg .rg-a:after{content:"";position:absolute;right:var(--sr);width:var(--sw);top:calc(var(--bl) - var(--asc,.735em));bottom:var(--gb);background:currentColor}
 .rg .rg-l{display:inline-block;width:var(--la)}
 .rg .rg-b{grid-area:b}
 .rg small{grid-area:s}
 .rg .m{display:inline-block;transform:scaleX(-1)}
-#splash .word.rg,.hero-word.rg{--sw:.042em;--gb:.045em;--ls:.02em;--la:.202em;--bl:.883em}
+#splash .word.rg,.hero-word.rg{--gb:.045em;--ls:.02em;--bl:.883em}
 .brand{display:flex;align-items:center;gap:.7rem;text-decoration:none}
 .brand svg,.brand canvas{width:34px;height:34px;flex:none;display:block}
 #menu .side .brand canvas{width:84px;height:84px}
@@ -112,7 +112,7 @@ nav.main a:hover{color:var(--ink);border-color:var(--sand)}
 .hero .side{display:flex;flex-direction:column;gap:1.3rem;padding-bottom:.4rem;align-self:center}
 .hero-mark{display:flex;justify-content:flex-start;align-items:center;gap:1.1rem;margin-bottom:0}
 .hero-mark canvas{width:clamp(140px,13vw,190px);aspect-ratio:1;height:auto;display:block;flex:none}
-.hero-word{font-family:var(--body);font-weight:200;font-size:clamp(2.5rem,4.2vw,3.7rem);letter-spacing:.02em;line-height:1;color:var(--ink);opacity:0;transform:translateX(10px);transition:opacity 1.2s ease,transform 1.2s ease}
+.hero-word{font-family:var(--body);font-weight:300;font-size:clamp(2.5rem,4.2vw,3.7rem);letter-spacing:.02em;line-height:1;color:var(--ink);opacity:0;transform:translateX(10px);transition:opacity 1.2s ease,transform 1.2s ease}
 .hero-word small{display:block;font-size:.38em;font-weight:300;color:var(--mute);letter-spacing:.14em;text-transform:uppercase;margin-top:.5rem}
 .hero-word.in{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){.hero-word{opacity:1;transform:none;transition:none}}
@@ -1126,5 +1126,7 @@ document.querySelectorAll('.copy').forEach(b=>b.addEventListener('click',()=>{
 }));
 })();
 </script>
+<script>/* match the long l stem to the real l glyph of the loaded font */
+(function(){function fit(){document.querySelectorAll('.rg').forEach(function(el){var cs=getComputedStyle(el),c=document.createElement('canvas').getContext('2d');c.font=cs.fontWeight+' 100px '+cs.fontFamily;var m=c.measureText('l');if(!m.actualBoundingBoxRight)return;var r=m.actualBoundingBoxRight/100,l=m.actualBoundingBoxLeft/100,a=m.width/100;el.style.setProperty('--sw',(r+l).toFixed(4)+'em');el.style.setProperty('--sr',(a-r).toFixed(4)+'em');el.style.setProperty('--la',a.toFixed(4)+'em');el.style.setProperty('--asc',(m.actualBoundingBoxAscent/100).toFixed(4)+'em')})}if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fit);else fit()})();</script>
 </body>
 </html>
