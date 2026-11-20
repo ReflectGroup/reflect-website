@@ -18,6 +18,13 @@
 header.top{padding:1.6rem 0;display:flex;align-items:center;justify-content:space-between;gap:1rem}
 .brand{display:inline-flex;align-items:center;gap:.7rem;text-decoration:none;color:inherit;border:0}
 .brand canvas{width:40px;height:40px;display:block}
+.rg{display:inline-grid;grid-template-columns:auto auto;grid-template-areas:"a b" "a s";align-items:start;justify-content:start;--sw:.0575em;--sr:.08em;--gb:.09em;--la:.2175em;--bl:.908em}
+.rg .rg-a{grid-area:a;position:relative;align-self:stretch}
+.rg .rg-a:after{content:"";position:absolute;right:var(--sr);width:var(--sw);top:calc(var(--bl) - .735em);bottom:var(--gb);background:currentColor}
+.rg .rg-l{display:inline-block;width:var(--la)}
+.rg .rg-b{grid-area:b}
+.rg small{grid-area:s}
+.rg .m{display:inline-block;transform:scaleX(-1)}
 .brand b{font-weight:300;font-size:1.05rem;line-height:1.05;letter-spacing:.01em}
 .brand b small{display:block;font-size:.62em;color:var(--mute);letter-spacing:.1em;text-transform:uppercase;margin-top:.15rem}
 .toplinks a{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-2);border:0;margin-left:1.2rem}
@@ -56,7 +63,7 @@ footer{padding:2rem 0 3rem;font-size:.78rem;color:var(--mute)} footer a{color:in
 </style>
 </head>
 <body>
-<header class="wrap top"><a class="brand" href="/"><canvas class="rgmark" width="80" height="80" aria-hidden="true"></canvas><b>Reflect<small>Group</small></b></a><nav class="toplinks"><a href="/insights/">Insights</a><a href="/#contact">Contact</a></nav></header>
+<header class="wrap top"><a class="brand" href="/" aria-label="Reflect Group"><canvas class="rgmark" width="80" height="80" aria-hidden="true"></canvas><b class="rg" aria-hidden="true"><span class="rg-a">Ref<span class="rg-l"></span></span><span class="rg-b"><span class="m">e</span><span class="m">c</span><span class="m">t</span></span><small>Group</small></b></a><nav class="toplinks"><a href="/insights/">Insights</a><a href="/#contact">Contact</a></nav></header>
 <main>
 <section class="sheet"><div class="wrap">
   <div class="eyebrow">Insights</div>
