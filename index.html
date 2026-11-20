@@ -87,14 +87,15 @@ body.holding main,body.holding #menuBtn,body.holding #menu,body.holding #tagFixe
 /* ---------- Site ---------- */
 .wrap{max-width:1360px;margin:0 auto;padding-left:var(--gutter-l);padding-right:var(--gutter-r)}
 /* Reflect lockup: long l as the mirror line, ect reflected, Group beside the stem */
-.rg{display:inline-grid;grid-template-columns:auto auto;grid-template-areas:"a b" "a s";align-items:start;justify-content:start;--sw:.0575em;--sr:.08em;--gb:.09em;--ls:.01em;--la:.2175em;--bl:.908em}
-.rg .rg-a{grid-area:a;position:relative;align-self:stretch}
-.rg .rg-a:after{content:"";position:absolute;right:var(--sr);width:var(--sw);top:calc(var(--bl) - var(--asc,.735em));bottom:var(--gb);background:currentColor}
-.rg .rg-l{display:inline-block;width:var(--la)}
+.rg{display:inline-grid;grid-template-columns:auto auto;grid-template-areas:"a b" "a s";align-items:start;justify-content:start;--bl:.908em;--d:calc(.705em + .15rem)}
+.rg .rg-a{grid-area:a}
+.rg .rg-l{display:inline-block;position:relative}
+.rg .rg-l:after{content:"l\Al\Al\Al\Al";white-space:pre;position:absolute;left:0;top:calc(var(--bl) - .05em);height:calc(var(--d) + .05em);overflow:hidden;line-height:.7em;pointer-events:none}
 .rg .rg-b{grid-area:b}
 .rg small{grid-area:s}
 .rg .m{display:inline-block;transform:scaleX(-1)}
-#splash .word.rg,.hero-word.rg{--gb:.045em;--ls:.02em;--bl:.883em}
+#splash .word.rg,.hero-word.rg{--bl:.883em;--d:calc(.4525em + .5rem)}
+#splash .word.rg{--d:calc(.4525em + .55rem)}
 .brand{display:flex;align-items:center;gap:.7rem;text-decoration:none}
 .brand svg,.brand canvas{width:34px;height:34px;flex:none;display:block}
 #menu .side .brand canvas{width:84px;height:84px}
@@ -451,7 +452,7 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
   <div class="corner">Conversion strategy</div>
   <button id="soundBtn" type="button" aria-pressed="false" aria-label="Sound"><span class="ic" aria-hidden="true"></span><span class="lbl">Sound off</span></button>
   <div class="mark">
-    <div class="word rg" role="img" aria-label="Reflect Group"><span class="rg-a">Ref<span class="rg-l"></span></span><span class="rg-b"><span class="m">e</span><span class="m">c</span><span class="m">t</span></span><small>Group</small></div>
+    <div class="word rg" role="img" aria-label="Reflect Group"><span class="rg-a">Ref<span class="rg-l">l</span></span><span class="rg-b"><span class="m">e</span><span class="m">c</span><span class="m">t</span></span><small>Group</small></div>
     <div class="tag">Measured with care. Priced with confidence.</div>
     <button id="enter" type="button">Enter</button>
     <div class="hold">
@@ -472,7 +473,7 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
       <a href="#services">Services</a><a href="#approach">Methodology</a><a href="#work">Projects</a><a href="#about">About</a><a href="#contact">Contact</a>
     </nav>
     <div class="side">
-      <a class="brand" href="#top" aria-label="Reflect Group"><canvas id="menuMark" width="68" height="68" aria-hidden="true"></canvas><b class="rg" aria-hidden="true"><span class="rg-a">Ref<span class="rg-l"></span></span><span class="rg-b"><span class="m">e</span><span class="m">c</span><span class="m">t</span></span><small>Group</small></b></a>
+      <a class="brand" href="#top" aria-label="Reflect Group"><canvas id="menuMark" width="68" height="68" aria-hidden="true"></canvas><b class="rg" aria-hidden="true"><span class="rg-a">Ref<span class="rg-l">l</span></span><span class="rg-b"><span class="m">e</span><span class="m">c</span><span class="m">t</span></span><small>Group</small></b></a>
       <div class="menu-tag">Measured with care. Priced with confidence.</div>
       <div>pdjolic@reflectgroup.com.au</div>
       <div>+61 426 950 040</div>
@@ -550,7 +551,7 @@ table.rates td:last-child{font-family:var(--display);font-size:1.25rem}
       <p class="lede">A quantity surveying and estimating practice that serves builders, subcontractors, developers and architects on public and private projects.</p>
     </div>
     <div class="side" data-fx="right">
-      <div class="hero-mark" aria-hidden="true"><canvas id="heroMark"></canvas><div class="hero-word rg" id="heroWord"><span class="rg-a">Ref<span class="rg-l"></span></span><span class="rg-b"><span class="m">e</span><span class="m">c</span><span class="m">t</span></span><small>Group</small></div></div>
+      <div class="hero-mark" aria-hidden="true"><canvas id="heroMark"></canvas><div class="hero-word rg" id="heroWord"><span class="rg-a">Ref<span class="rg-l">l</span></span><span class="rg-b"><span class="m">e</span><span class="m">c</span><span class="m">t</span></span><small>Group</small></div></div>
       <dl class="kv">
         <dt>Experience</dt><dd>More than twenty years in cost management, quantity surveying, commercial tendering and estimating</dd>
         <dt>Services</dt><dd>Cost planning, quantity surveying, estimating and tendering</dd>
@@ -1126,7 +1127,5 @@ document.querySelectorAll('.copy').forEach(b=>b.addEventListener('click',()=>{
 }));
 })();
 </script>
-<script>/* match the long l stem to the real l glyph of the loaded font */
-(function(){function fit(){document.querySelectorAll('.rg').forEach(function(el){var cs=getComputedStyle(el),c=document.createElement('canvas').getContext('2d');c.font=cs.fontWeight+' 100px '+cs.fontFamily;var m=c.measureText('l');if(!m.actualBoundingBoxRight)return;var r=m.actualBoundingBoxRight/100,l=m.actualBoundingBoxLeft/100,a=m.width/100;el.style.setProperty('--sw',(r+l).toFixed(4)+'em');el.style.setProperty('--sr',(a-r).toFixed(4)+'em');el.style.setProperty('--la',a.toFixed(4)+'em');el.style.setProperty('--asc',(m.actualBoundingBoxAscent/100).toFixed(4)+'em')})}if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fit);else fit()})();</script>
 </body>
 </html>
